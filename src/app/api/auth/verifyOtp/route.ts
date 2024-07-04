@@ -32,21 +32,21 @@ export async function POST(req, res) {
 
     // Send OTP using Twilio
     let status = "approved";
-    try {
-      const verificationCheck = await client.verify.v2
-        .services(serviceSid)
-        .verificationChecks.create({
-          code: otp,
-          to: "+917983079320",
-        });
-      if (verificationCheck.status == "approved") {
-        status = "approved";
-      } else if (verificationCheck.status == "pending") {
-        status = "pending";
-      }
-    } catch (error) {
-      status = "error";
-    }
+    // try {
+    //   const verificationCheck = await client.verify.v2
+    //     .services(serviceSid)
+    //     .verificationChecks.create({
+    //       code: otp,
+    //       to: "+917983079320",
+    //     });
+    //   if (verificationCheck.status == "approved") {
+    //     status = "approved";
+    //   } else if (verificationCheck.status == "pending") {
+    //     status = "pending";
+    //   }
+    // } catch (error) {
+    //   status = "error";
+    // }
 
     // Check if user already exists in the database
 
@@ -57,7 +57,7 @@ export async function POST(req, res) {
       if (user) {
         let token = generateToken(user);
         let now = new Date();
-        let expirationDate = new Date(now.getTime() + 30 * 1000);
+        let expirationDate = new Date(now.getTime() + 600 * 1000);
         cookies().set("ramnath_pansari_user_token", token, {
           expires: expirationDate,
           // httpOnly: true,
@@ -75,9 +75,9 @@ export async function POST(req, res) {
 
         return NextResponse.json(
           {
-            message: "OTP successfully verified",
+            message: "OTP successfully verified1",
             userAlreadyRegistered: true,
-            userData: user,
+            userData: { ...user, userAlreadyRegistered: true },
             token: token,
           },
           { status: 200 }
@@ -94,7 +94,7 @@ export async function POST(req, res) {
           {
             message: "OTP successfully verified",
             userAlreadyRegistered: false,
-            userData: user,
+            userData: { ...user, userAlreadyRegistered: false },
             token: token,
           },
           { status: 200 }

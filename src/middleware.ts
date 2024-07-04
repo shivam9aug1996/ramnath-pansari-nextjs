@@ -4,13 +4,18 @@ import { checkRateLimitForAPI } from "./json";
 
 export async function middleware(request: NextRequest) {
   const userToken = request.cookies.get("ramnath_pansari_user_token")?.value;
+  const authorization = request.headers.get("authorization");
+  console.log(request);
   let fp = request.headers.get("user-fingerprint");
   const currentPath = request.nextUrl.pathname;
   // if (currentPath === "/whatsapp-script.js") {
   //   return NextResponse.next();
   // }
-  console.log("876543456789", userToken);
+  console.log("6543edfghjyt543456", userToken, authorization);
+
   if (!userToken) {
+    console.log("876543456789", userToken, authorization);
+
     // if (currentPath.startsWith("/dashboard")) {
     //   let message = "token not exists";
     //   // User is not authenticated and trying to access a dashboard route, redirect to login
@@ -60,5 +65,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/:path*", "/api/private", "/logout"],
+  matcher: ["/api/:path*"],
 };
