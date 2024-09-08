@@ -1,20 +1,25 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { checkRateLimitForAPI } from "./json";
+import jwt from "jsonwebtoken";
 
 export async function middleware(request: NextRequest) {
-  const userToken = request.cookies.get("ramnath_pansari_user_token")?.value;
+  let userToken = request.cookies.get("ramnath_pansari_user_token")?.value;
   const authorization = request.headers.get("authorization");
-  console.log(request);
+  // console.log(request);
   let fp = request.headers.get("user-fingerprint");
   const currentPath = request.nextUrl.pathname;
   // if (currentPath === "/whatsapp-script.js") {
   //   return NextResponse.next();
   // }
-  console.log("6543edfghjyt543456", userToken, authorization);
-
+  // console.log("liuy654ertyui987654567890", currentPath);
+  // console.log("6543edfghjyt543456", userToken, authorization);
+  userToken = authorization?.split(" ")[1];
+  // const decoded = await jwt.verify(userToken, "secretkey");
+  // console.log("decoded8765434567890", decoded);
   if (!userToken) {
-    console.log("876543456789", userToken, authorization);
+    //return NextResponse.next();
+    // console.log("876543456789", userToken, authorization);
 
     // if (currentPath.startsWith("/dashboard")) {
     //   let message = "token not exists";

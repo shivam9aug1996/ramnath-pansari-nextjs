@@ -2,6 +2,7 @@ import { isTokenVerified } from "@/json";
 import { MongoClient } from "mongodb";
 import { dbUrl } from "./keys";
 import AsyncLock from "async-lock";
+import { NextResponse } from "next/server";
 
 let cachedClient;
 let db;
@@ -11,15 +12,16 @@ const uri = dbUrl;
 const lock = new AsyncLock();
 
 export const connectDB = async (req) => {
+  console.log("`kjhtrer567890`-", req?.url, req?.method);
   try {
-    let isToken;
-    if (req) {
-      isToken = await isTokenVerified(req);
-
-      if (!isToken) {
-        return;
-      }
-    }
+    // let isToken;
+    // if (req) {
+    //   isToken = await isTokenVerified(req);
+    //   console.log("8765redfghjkl", isToken);
+    //   if (!isToken) {
+    //     return "401";
+    //   }
+    // }
     console.log("123456789 connectDB starting");
 
     const client = await lock.acquire("connection", async () => {
@@ -71,6 +73,7 @@ const connectDatabase = async (client) => {
       if (client?.db) {
         console.log("123456789 db connecting");
         db = await client.db("basic-crud");
+        // await db.collection("products").createIndex({ name: "text" });
         console.log("123456789 db connected");
         return db;
       } else {

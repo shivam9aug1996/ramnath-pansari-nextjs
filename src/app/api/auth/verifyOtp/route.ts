@@ -4,12 +4,16 @@ import { connectDB } from "../../lib/dbconnection";
 import { secretKey } from "../../lib/keys";
 import { client, serviceSid } from "../../lib/twilioClient";
 import { cookies } from "next/headers";
+import { ObjectId } from "mongodb";
 
 const generateToken = (user: any) => {
-  const payload = { id: user?._id, mobileNumber: user?.mobileNumber };
-  const secret = "your_secret_key"; // Replace with your secret key
-  const options = { expiresIn: "1h" };
-  return jwt.sign(payload, secret, options);
+  const payload = {
+    id: user?._id?.toString(),
+    mobileNumber: user?.mobileNumber,
+  };
+  console.log("oiuytrdfghjkl", payload);
+  const options = { expiresIn: "1d" };
+  return jwt.sign(payload, secretKey, options);
 };
 
 export async function POST(req, res) {
@@ -56,8 +60,9 @@ export async function POST(req, res) {
 
       if (user) {
         let token = generateToken(user);
+        console.log("jhgfdsdfiop98765", token);
         let now = new Date();
-        let expirationDate = new Date(now.getTime() + 600 * 1000);
+        let expirationDate = new Date(now.getTime() + 1 * 1000);
         cookies().set("ramnath_pansari_user_token", token, {
           expires: expirationDate,
           // httpOnly: true,
@@ -85,10 +90,15 @@ export async function POST(req, res) {
       } else {
         const result = await db.collection("users").insertOne({ mobileNumber });
         const user = await db.collection("users").findOne({ mobileNumber });
+
         //create new entry in db
         console.log(result);
         console.log(result.ops);
         const token = generateToken(user);
+        await db.collection("carts").insertOne({
+          userId: new ObjectId(user._id),
+          items: [],
+        });
 
         return NextResponse.json(
           {

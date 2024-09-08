@@ -1,4 +1,6 @@
+import { isTokenVerified } from "@/json";
 import { NextResponse } from "next/server";
+import { connectDB } from "../lib/dbconnection";
 
 export async function POST(req, res) {
   if (req.method !== "POST") {
@@ -10,7 +12,11 @@ export async function POST(req, res) {
 
   try {
     // Check if user already exists in the database
-
+    const response = await isTokenVerified(req);
+    if (response) {
+      return response;
+    }
+    const db = await connectDB(req);
     return NextResponse.json(
       {
         message: "private data",

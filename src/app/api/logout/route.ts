@@ -1,3 +1,4 @@
+import { isTokenVerified } from "@/json";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -9,7 +10,10 @@ export async function POST(req, res) {
         { status: 405 }
       );
     }
-
+    const response = await isTokenVerified(req);
+    if (response) {
+      return response;
+    }
     cookies().delete("ramnath_pansari_user_token");
     cookies().delete("ramnath_pansari_user_data");
 

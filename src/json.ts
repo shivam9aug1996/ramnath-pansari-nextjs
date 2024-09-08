@@ -9,6 +9,7 @@ var requestCounts = {};
 export async function verifyToken(token, req) {
   try {
     const decoded = await jwt.verify(token, secretKey);
+    console.log("decoded458ytghjkl;", decoded);
     let userAgentHeader = req?.headers?.get("user-agent");
     let userFingerprint = req.headers.get("user-fingerprint");
     if (
@@ -28,17 +29,26 @@ export async function verifyToken(token, req) {
 }
 
 export const isTokenVerified = async (req) => {
-  let token = cookies().get("bahi_khata_user_token")?.value;
+  let token = req.headers.get("authorization")?.split(" ")[1];
+  console.log("87654ewsdfghjkl", req?.url, token);
   if (token) {
     let isTokenVerified = await verifyToken(token, req);
     if (!isTokenVerified) {
       deleteCookies();
-      return false;
+      return NextResponse.json(
+        { success: false, message: "Authentication failed" },
+        { status: 401 }
+      );
     } else {
-      return true;
+      return "";
     }
   } else {
-    return true;
+    return req?.url?.includes("api/auth")
+      ? ""
+      : NextResponse.json(
+          { success: false, message: "Authentication failed" },
+          { status: 401 }
+        );
   }
 };
 
