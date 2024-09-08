@@ -22,7 +22,7 @@ export async function GET(req, res) {
       return tokenVerificationResponse;
     }
 
-    const apiKey = "AIzaSyChU_p89k5voDYzgaFQcIu3gjH-4K6LBo4";
+    const apiKey = process.env.GEOCODING_API;
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
 
     const response = await fetch(url);

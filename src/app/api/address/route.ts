@@ -7,7 +7,7 @@ import url from "url";
 import { deleteImage, uploadImage, uploadImage1 } from "../lib/global";
 
 const getGoogleImage = (address) => {
-  const apiKey = "AIzaSyC7xZGaD-wIjGWpfrBuqf3XshCrLri4B0Q";
+  const apiKey = process.env.STATIC_MAP_API;
   const mapImage = `https://maps.googleapis.com/maps/api/staticmap?center=${address?.colonyArea}+${address?.city}+${address?.state}&zoom=13&size=300x150&key=${apiKey}`;
   return mapImage;
 };
