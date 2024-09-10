@@ -8,9 +8,9 @@ export async function POST(req, res) {
       let { data } = await req.json();
       console.log("kjhfghjkl;", data);
       const tokenVerificationResponse = await isTokenVerified(req);
-      if (tokenVerificationResponse) {
-        return tokenVerificationResponse;
-      }
+      // if (tokenVerificationResponse) {
+      //   return tokenVerificationResponse;
+      // }
       await pusher.trigger("c1", "e1", {
         message: "driver location",
         data: data,
