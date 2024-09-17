@@ -1,7 +1,35 @@
 import { NextResponse } from "next/server";
 
 import { isTokenVerified } from "@/json";
+import { encode } from "js-base64";
+import { connectDB } from "@/app/api/lib/dbconnection";
+const orderid = require("order-id")("key");
 
+function storeImages(cart) {
+  const images = [];
+
+  // Iterate over each item in the cart
+  cart?.items?.forEach((item) => {
+    const { productDetails, quantity } = item;
+    const { image } = productDetails;
+
+    if (image) {
+      if (images.length <= 3) {
+        images.push(image);
+      }
+    }
+  });
+
+  return images;
+}
+
+export const OrderStatus = {
+  CREATED: "created",
+  CONFIRMED: "confirmed",
+  OUT_FOR_DELIVERY: "out_for_delivery",
+  CANCELED: "canceled",
+  DELIVERED: "delivered",
+};
 export async function POST(req, res) {
   try {
     if (req.method !== "POST") {
@@ -22,6 +50,9 @@ export async function POST(req, res) {
       razorpay_signature,
       isLive = false,
       order_id,
+      cartData,
+      addressData,
+      userId,
     } = await req.json();
 
     const secretKey = isLive
@@ -39,6 +70,63 @@ export async function POST(req, res) {
     );
 
     if (isPaymentVerified) {
+      let credentials;
+      if (isLive) {
+        credentials = encode(
+          `${process.env.RAZORPAY_KEY_LIVE}:${process.env.RAZORPAY_SECRET_LIVE}`
+        );
+      } else {
+        credentials = encode(
+          `${process.env.RAZORPAY_KEY}:${process.env.RAZORPAY_SECRET}`
+        );
+      }
+
+      let res: any = await fetch(
+        `https://api.razorpay.com/v1/payments/${razorpay_payment_id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Basic ${credentials}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      res = await res.json();
+      console.log("LKUYTR4567890-=", res);
+      let transactionData = {};
+      if (res?.id && res?.method) {
+        transactionData.method = res?.method;
+        transactionData.id = res?.id;
+        transactionData.bank = res?.bank;
+        transactionData.wallet = res?.wallet;
+        transactionData.vpa = res?.vpa;
+        transactionData.acquirerData = res?.acquirer_data;
+        transactionData.orderId = res?.order_id;
+        transactionData.createdAt = res?.created_at;
+        transactionData.amount = res?.amount / 100;
+        transactionData.currency = res?.currency;
+        transactionData.isLive = isLive;
+      }
+      const db = await connectDB(req);
+      const id = orderid.generate();
+
+      let imgArr = storeImages(cartData.cart);
+
+      await db.collection("orders").insertOne({
+        transactionData,
+        cartData,
+        addressData,
+        orderStatus: OrderStatus.CREATED,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        orderId: id,
+        userId,
+        imgArr,
+        productCount: cartData?.cart?.items?.length,
+      });
+
+      //create order
       return NextResponse.json(
         { message: "Payment successful", verified: true },
         { status: 200 }

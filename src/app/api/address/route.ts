@@ -8,7 +8,11 @@ import { deleteImage, uploadImage, uploadImage1 } from "../lib/global";
 
 const getGoogleImage = (address) => {
   const apiKey = process.env.STATIC_MAP_API;
-  const mapImage = `https://maps.googleapis.com/maps/api/staticmap?center=${address?.colonyArea}+${address?.city}+${address?.state}&zoom=13&size=300x150&key=${apiKey}`;
+  let str = "";
+  if (address?.latitude) {
+    str = `&markers=color:red%7Clabel:A%7C${address?.latitude},${address?.longitude}`;
+  }
+  const mapImage = `https://maps.googleapis.com/maps/api/staticmap?center=${address?.colonyArea}+${address?.city}+${address?.state}${str}&zoom=13&size=300x150&key=${apiKey}`;
   return mapImage;
 };
 
