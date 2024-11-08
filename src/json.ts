@@ -9,7 +9,7 @@ var requestCounts = {};
 export async function verifyToken(token, req) {
   try {
     const decoded = await jwt.verify(token, secretKey);
-    console.log("decoded458ytghjkl;", decoded);
+    // console.log("decoded458ytghjkl;", decoded);
     let userAgentHeader = req?.headers?.get("user-agent");
     let userFingerprint = req.headers.get("user-fingerprint");
     if (

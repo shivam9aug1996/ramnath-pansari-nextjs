@@ -2,6 +2,7 @@ import { isTokenVerified } from "@/json";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 import {
+  abortTransaction,
   commitTransaction,
   connectDB,
   getClient,
@@ -9,6 +10,7 @@ import {
 } from "../lib/dbconnection";
 
 export async function PUT(req, res) {
+  let session;
   try {
     const { productId, productDetails, quantity } = await req.json();
     const { searchParams } = new URL(req.url);
@@ -28,30 +30,36 @@ export async function PUT(req, res) {
     if (tokenVerificationResponse) {
       return tokenVerificationResponse;
     }
-    let session;
+
     const db = await connectDB(req);
     const client = await getClient();
     session = await startTransaction(client);
     const userObjectId = new ObjectId(userId);
     const productObjectId = new ObjectId(productId);
 
-    const cart = await db.collection("carts").findOne({ userId: userObjectId });
+    const cart = await db
+      .collection("carts")
+      .findOne({ userId: userObjectId }, { session });
 
     if (!cart && quantity > 0) {
       // Cart doesn't exist, create a new one
       const product = await db
         .collection("products")
-        .findOne({ _id: productObjectId });
-      await db.collection("carts").insertOne({
-        userId: userObjectId,
-        items: [
-          {
-            productId: productObjectId,
-            productDetails: product,
-            quantity,
-          },
-        ],
-      });
+        .findOne({ _id: productObjectId }, { session });
+      await db.collection("carts").insertOne(
+        {
+          userId: userObjectId,
+          items: [
+            {
+              productId: productObjectId,
+              productDetails: product,
+              quantity,
+            },
+          ],
+        },
+        { session }
+      );
+
       await commitTransaction(session);
       return NextResponse.json(
         { message: "Product added to cart" },
@@ -61,7 +69,7 @@ export async function PUT(req, res) {
 
     const product = await db
       .collection("products")
-      .findOne({ _id: productObjectId });
+      .findOne({ _id: productObjectId }, { session });
 
     if (cart) {
       const itemIndex = cart.items.findIndex((item) =>
@@ -101,9 +109,10 @@ export async function PUT(req, res) {
 
       await db
         .collection("carts")
-        .updateOne({ userId: userObjectId }, updateAction);
+        .updateOne({ userId: userObjectId }, updateAction, { session });
 
       console.log("Cart updated successfully", updateAction);
+      // throw new Error("hiiii4567890-");
       await commitTransaction(session);
       return NextResponse.json(
         { message: "Cart updated successfully" },
@@ -116,14 +125,19 @@ export async function PUT(req, res) {
       { status: 400 }
     );
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error88:", error?.code, error?.status);
+
+    await abortTransaction(session);
+    if (error?.code == 112) {
+      return NextResponse.json({ error: "Retrying" }, { status: 467 });
+    }
     return NextResponse.json(
       { error: "Something went wrong" },
       { status: 500 }
     );
   }
 }
-let i = 0;
+
 export async function GET(req, res) {
   try {
     const { searchParams } = new URL(req.url);
@@ -143,8 +157,7 @@ export async function GET(req, res) {
     const cart = await db
       .collection("carts")
       .findOne({ userId: new ObjectId(userId) });
-    i = i + 1;
-    console.log("kiuy654567890-", i);
+    console.log("oi87654ewsdfghjkl", cart, userId);
     // if (i >= 1) {
     // await new Promise((res) => {
     //   setTimeout(() => {

@@ -38,6 +38,9 @@ export async function GET(req, res) {
         updatedAt: 1,
         imgArr: 1,
         productCount: 1,
+        totalProductCount: 1,
+        orderHistory: 1,
+        amountPaid: 1,
       })
       .toArray();
 

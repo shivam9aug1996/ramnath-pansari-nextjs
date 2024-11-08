@@ -44,7 +44,7 @@ export const connectDB = async (req) => {
 
   try {
     const mongoClient = await client.connect();
-    // console.log("jhgfdfghjk", mongoClient);
+    console.log("jhgfdfghjk", mongoClient);
     const db = await mongoClient.db("basic-crud");
     return db;
   } catch (error) {

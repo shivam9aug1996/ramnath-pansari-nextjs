@@ -23,8 +23,24 @@ function storeImages(cart) {
   return images;
 }
 
+function getTotalProductCount(cart) {
+  console.log("ytrdfghjk", cart);
+  // Iterate over each item in the cart
+  let total = 0;
+  cart?.items?.forEach((item) => {
+    const { quantity = 0 } = item;
+    console.log("ytredfghjkl", quantity, total, typeof quantity, typeof total);
+    // Store the image 'quantity' number of times or null if there's no image
+    total = total + quantity;
+    // for (let i = 0; i < quantity; i++) {
+    //   total = total + quantity;
+    // }
+  });
+  console.log("uytrdfghjk", total);
+  return total;
+}
+
 export const OrderStatus = {
-  CREATED: "created",
   CONFIRMED: "confirmed",
   OUT_FOR_DELIVERY: "out_for_delivery",
   CANCELED: "canceled",
@@ -117,13 +133,18 @@ export async function POST(req, res) {
         transactionData,
         cartData,
         addressData,
-        orderStatus: OrderStatus.CREATED,
+        orderStatus: OrderStatus.CONFIRMED,
         createdAt: new Date(),
         updatedAt: new Date(),
         orderId: id,
         userId,
         imgArr,
         productCount: cartData?.cart?.items?.length,
+        totalProductCount: getTotalProductCount(cartData?.cart),
+        orderHistory: [
+          { status: OrderStatus.CONFIRMED, timestamp: new Date() },
+        ],
+        amountPaid: transactionData?.amount || 0,
       });
 
       //create order
