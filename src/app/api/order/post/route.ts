@@ -29,6 +29,7 @@ export async function GET(req, res) {
     const orders = await db
       .collection("orders")
       .find({ userId: userId })
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .project({

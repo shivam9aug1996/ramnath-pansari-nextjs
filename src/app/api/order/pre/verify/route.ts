@@ -129,7 +129,7 @@ export async function POST(req, res) {
 
       let imgArr = storeImages(cartData.cart);
 
-      await db.collection("orders").insertOne({
+      let result = await db.collection("orders").insertOne({
         transactionData,
         cartData,
         addressData,
@@ -149,7 +149,11 @@ export async function POST(req, res) {
 
       //create order
       return NextResponse.json(
-        { message: "Payment successful", verified: true },
+        {
+          message: "Payment successful",
+          verified: true,
+          orderId: result?.insertedId,
+        },
         { status: 200 }
       );
     } else {
