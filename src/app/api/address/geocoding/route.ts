@@ -70,6 +70,7 @@ export async function GET(req, res) {
     const buildingName =
       getComponent(["premise"]) || getComponent(["subpremise"]); // e.g., apartment/building name
     const houseNumber = getComponent(["street_number"]); // house number
+    const landmark = getComponent(["landmark"]);
     const mohalla =
       getComponent(["sublocality_level_1", "political"]) ||
       getComponent(["sublocality"]); // mohalla or smaller sublocality
@@ -79,6 +80,7 @@ export async function GET(req, res) {
       `${buildingName ? `${buildingName}, ` : ""}` +
       `${houseNumber ? `${houseNumber}, ` : ""}` +
       `${mohalla ? `${mohalla}, ` : ""}` +
+      `${landmark ? `${landmark}, ` : ""}` +
       `${
         getComponent(["sublocality", "political"]) ||
         getComponent(["neighborhood", "political"]) ||
