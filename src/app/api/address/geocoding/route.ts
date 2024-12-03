@@ -80,7 +80,7 @@ export async function GET(req, res) {
       `${buildingName ? `${buildingName}, ` : ""}` +
       `${houseNumber ? `${houseNumber}, ` : ""}` +
       `${mohalla ? `${mohalla}, ` : ""}` +
-      `${landmark ? `${landmark}, ` : ""}` +
+      `${landmark ? `near ${landmark}, ` : ""}` +
       `${
         getComponent(["sublocality", "political"]) ||
         getComponent(["neighborhood", "political"]) ||
