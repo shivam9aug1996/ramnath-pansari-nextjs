@@ -2,6 +2,7 @@ import { isTokenVerified } from "@/json";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 import { connectDB } from "../lib/dbconnection";
+import redisClient from "../lib/redisClient";
 
 export async function POST(req, res) {
   if (req.method !== "POST") {
@@ -88,6 +89,19 @@ export async function GET(req, res) {
       return tokenVerificationResponse;
     }
 
+    const cacheKey = `products:${categoryId}:page:${page}:limit:${limit}`;
+    const cachedData = await redisClient.get(cacheKey);
+    if (cachedData) {
+      console.log("cached76544567890");
+      let data = JSON.parse(cachedData);
+      // await new Promise((res) => {
+      //   setTimeout(() => {
+      //     res("hi");
+      //   }, 500);
+      // });
+      return NextResponse.json({ ...data }, { status: 200 });
+    }
+
     const db = await connectDB(req);
     // await new Promise((res) => {
     //   setTimeout(() => {
@@ -117,10 +131,19 @@ export async function GET(req, res) {
 
     const totalPages = Math.ceil(totalProducts / limit);
 
-    return NextResponse.json(
-      { products, totalProducts, totalPages, currentPage: page },
-      { status: 200 }
-    );
+    const responseData = {
+      products,
+      totalProducts,
+      totalPages,
+      currentPage: page,
+      categoryId,
+    };
+
+    await redisClient.set(cacheKey, JSON.stringify(responseData), {
+      EX: 60, // 3600 seconds = 1 hour
+    });
+
+    return NextResponse.json(responseData, { status: 200 });
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(

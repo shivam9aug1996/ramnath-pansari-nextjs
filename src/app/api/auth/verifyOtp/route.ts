@@ -41,7 +41,7 @@ export async function POST(req, res) {
     //     .services(serviceSid)
     //     .verificationChecks.create({
     //       code: otp,
-    //       to: "+917983079320",
+    //       to: "+919634396572",
     //     });
     //   if (verificationCheck.status == "approved") {
     //     status = "approved";

@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { isTokenVerified } from "@/json";
 import { ObjectId } from "mongodb";
 import { connectDB } from "@/app/api/lib/dbconnection";
+import { Expo } from "expo-server-sdk";
+let expo = new Expo({});
 
 export async function PUT(req) {
   try {
@@ -51,14 +53,14 @@ export async function PUT(req) {
       canceled: [],
     };
 
-    if (!validTransitions[currentStatus].includes(newStatus)) {
-      return NextResponse.json(
-        {
-          message: `Invalid status transition: cannot change status from '${currentStatus}' to '${newStatus}'`,
-        },
-        { status: 400 }
-      );
-    }
+    // if (!validTransitions[currentStatus].includes(newStatus)) {
+    //   return NextResponse.json(
+    //     {
+    //       message: `Invalid status transition: cannot change status from '${currentStatus}' to '${newStatus}'`,
+    //     },
+    //     { status: 400 }
+    //   );
+    // }
 
     // Update the `orderStatus` and append the new entry to `orderHistory`
     const timestamp = new Date().toISOString();
@@ -87,6 +89,38 @@ export async function PUT(req) {
       );
     }
 
+    let pushArr = [
+      {
+        to: "ExponentPushToken[qQeZrcJM8ioVP9wFJE1KaX]",
+        sound: "default",
+        data: { updateOrderStatus: true, orderId: orderId, userId },
+        priority: "high",
+        title: "Order status updated successfully",
+      },
+      {
+        to: "ExponentPushToken[qQeZrcJM8ioVP9wFJE1KaX]",
+        sound: "default",
+        data: { updateOrderStatus: true, orderId: orderId, userId },
+        priority: "high",
+      },
+    ];
+    let tickets = await expo.sendPushNotificationsAsync(pushArr);
+    let okStatusArray: string[] = [];
+    tickets.forEach((item) => {
+      if (item?.status === "ok") {
+        okStatusArray.push(item?.id);
+      }
+    });
+    let receipts = await expo.getPushNotificationReceiptsAsync(okStatusArray);
+    for (let receiptId in receipts) {
+      let { status } = receipts[receiptId];
+      if (status === "ok") {
+        console.log("notification received");
+        continue;
+      } else if (status === "error") {
+        console.error(`There was an error sending a notification`);
+      }
+    }
     return NextResponse.json(
       {
         message: "Order status updated successfully",

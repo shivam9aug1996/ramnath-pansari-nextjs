@@ -24,7 +24,7 @@ export async function POST(req, res) {
     // Send OTP using Twilio
     // const verification = await client.verify.v2
     //   .services(serviceSid)
-    //   .verifications.create({ to: "+917983079320", channel: "sms" });
+    //   .verifications.create({ to: `+91${mobileNumber}`, channel: "sms" });
 
     // console.log(`Verification SID: ${JSON.stringify(verification)}`);
 
