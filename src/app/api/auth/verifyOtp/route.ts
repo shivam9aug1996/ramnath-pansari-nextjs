@@ -33,24 +33,27 @@ export async function POST(req, res) {
         { status: 400 }
       );
     }
+    console.log(mobileNumber, otp);
 
     // Send OTP using Twilio
     let status = "approved";
-    // try {
-    //   const verificationCheck = await client.verify.v2
-    //     .services(serviceSid)
-    //     .verificationChecks.create({
-    //       code: otp,
-    //       to: "+919634396572",
-    //     });
-    //   if (verificationCheck.status == "approved") {
-    //     status = "approved";
-    //   } else if (verificationCheck.status == "pending") {
-    //     status = "pending";
-    //   }
-    // } catch (error) {
-    //   status = "error";
-    // }
+    try {
+      const verificationCheck = await client.verify.v2
+        .services(serviceSid)
+        .verificationChecks.create({
+          code: otp,
+          to: `+91${mobileNumber}`,
+        });
+      console.log(verificationCheck);
+      if (verificationCheck.status == "approved") {
+        status = "approved";
+      } else if (verificationCheck.status == "pending") {
+        status = "pending";
+      }
+    } catch (error) {
+      console.log(error);
+      status = "error";
+    }
 
     // Check if user already exists in the database
 
