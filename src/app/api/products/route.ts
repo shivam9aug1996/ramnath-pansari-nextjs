@@ -90,16 +90,22 @@ export async function GET(req, res) {
     }
 
     const cacheKey = `products:${categoryId}:page:${page}:limit:${limit}`;
-    const cachedData = await redisClient.get(cacheKey);
-    if (cachedData) {
-      console.log("cached76544567890");
-      let data = JSON.parse(cachedData);
-      // await new Promise((res) => {
-      //   setTimeout(() => {
-      //     res("hi");
-      //   }, 500);
-      // });
-      return NextResponse.json({ ...data }, { status: 200 });
+    if (redisClient.isOpen) {
+      const cachedData = await redisClient.get(cacheKey);
+
+      if (cachedData) {
+        console.log("cached76544567890");
+        let data = JSON.parse(cachedData);
+        // await new Promise((res) => {
+        //   setTimeout(() => {
+        //     res("hi");
+        //   }, 500);
+        // });
+
+        return NextResponse.json({ ...data }, { status: 200 });
+      }
+    } else {
+      await redisClient.connect();
     }
 
     const db = await connectDB(req);

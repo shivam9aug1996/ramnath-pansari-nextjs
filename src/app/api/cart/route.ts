@@ -177,6 +177,11 @@ export async function GET(req, res) {
         { status: 404 }
       );
     }
+    // await new Promise((res) => {
+    //   setTimeout(() => {
+    //     res("hio");
+    //   }, 20000);
+    // });
 
     return NextResponse.json({ cart }, { status: 200 });
   } catch (error) {
