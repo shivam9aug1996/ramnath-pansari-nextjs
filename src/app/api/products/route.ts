@@ -13,13 +13,16 @@ export async function POST(req, res) {
   }
 
   try {
-    const { name, categoryPath, image } = await req.json();
+    const { name, categoryPath, image, discountedPrice, price } =
+      await req.json();
 
     if (
       !name ||
       !categoryPath ||
       !Array.isArray(categoryPath) ||
-      categoryPath.length === 0
+      categoryPath.length === 0 ||
+      !discountedPrice ||
+      !price
     ) {
       return NextResponse.json(
         { message: "Missing required fields" },
@@ -41,6 +44,8 @@ export async function POST(req, res) {
       name,
       categoryPath: categoryPath.map((id) => new ObjectId(id)),
       image: image || null, // Add image key, default to null if not provided
+      discountedPrice,
+      price,
     };
 
     // Insert new product into the products collection
@@ -90,6 +95,7 @@ export async function GET(req, res) {
     }
 
     const cacheKey = `products:${categoryId}:page:${page}:limit:${limit}`;
+    console.log("iuytrdfghjkl", cacheKey);
     if (redisClient.isOpen) {
       const cachedData = await redisClient.get(cacheKey);
 

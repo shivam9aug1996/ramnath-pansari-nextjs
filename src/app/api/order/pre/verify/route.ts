@@ -14,7 +14,7 @@ function storeImages(cart) {
     const { image } = productDetails;
 
     if (image) {
-      if (images.length <= 3) {
+      if (images.length < 3) {
         images.push(image);
       }
     }
