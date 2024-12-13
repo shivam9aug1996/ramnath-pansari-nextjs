@@ -152,7 +152,7 @@ export async function GET(req, res) {
     };
 
     await redisClient.set(cacheKey, JSON.stringify(responseData), {
-      EX: 60, // 3600 seconds = 1 hour
+      EX: 3600, // 3600 seconds = 1 hour
     });
 
     return NextResponse.json(responseData, { status: 200 });
