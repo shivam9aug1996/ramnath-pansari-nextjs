@@ -16,6 +16,7 @@ export async function PUT(req: Request, res) {
     const formData = await req?.formData();
     const _id = formData?.get("_id");
     const name = formData?.get("name");
+    const khataUrl = formData?.get("khataUrl");
     const type = formData.get(`images[type]`);
     const imageUrl = formData.get(`images[image]`);
 
@@ -38,6 +39,9 @@ export async function PUT(req: Request, res) {
 
     if (name) {
       updateData.name = name;
+    }
+    if (khataUrl) {
+      updateData.khataUrl = khataUrl;
     }
 
     // Handle image updates only if a new image is provided

@@ -1,6 +1,9 @@
 const dbPassword = process.env.DB_PASSWORD;
+const dbPasswordKhata = process.env.DB_PASSWORD_KHATA;
+
 export const secretKey = process.env.SECRET_KEY;
 export const dbUrl = `mongodb+srv://shivam9aug1996:${dbPassword}@ramnath-pansari-cluster.0ouh72q.mongodb.net/?retryWrites=true&w=majority&appName=ramnath-pansari-cluster-0`;
+export const dbUrlKhata = `mongodb+srv://shivam9aug1996:${dbPasswordKhata}@bahikhatacluster.mcviyfo.mongodb.net/`;
 
 export const cloudinary_api_key = process.env.CLOUDINARY_API_KEY;
 export const cloudinary_secret_key = process.env.CLOUDINARY_SECRET_KEY;

@@ -59,6 +59,8 @@ export async function POST(req, res) {
 
     if (status == "approved") {
       const db = await connectDB(req);
+      console.log("jhgfghjhgfghjk", db);
+
       const user = await db.collection("users").findOne({ mobileNumber });
 
       if (user) {
