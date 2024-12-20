@@ -137,11 +137,11 @@ export async function GET(req, res) {
         { status: 404 }
       );
     }
-    await new Promise((res) => {
-      setTimeout(() => {
-        res("hi");
-      }, 3000);
-    });
+    // await new Promise((res) => {
+    //   setTimeout(() => {
+    //     res("hi");
+    //   }, 3000);
+    // });
     //throw new Error("hi");
 
     return NextResponse.json({ children: category.children }, { status: 200 });

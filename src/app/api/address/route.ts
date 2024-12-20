@@ -109,11 +109,11 @@ export async function GET(req, res) {
     if (!userAddresses || !userAddresses.addresses) {
       return NextResponse.json([], { status: 200 });
     }
-    await new Promise((res) => {
-      setTimeout(() => {
-        res("hi");
-      }, 3000);
-    });
+    // await new Promise((res) => {
+    //   setTimeout(() => {
+    //     res("hi");
+    //   }, 3000);
+    // });
     //throw Error("hi");
 
     return NextResponse.json(userAddresses.addresses, { status: 200 });
