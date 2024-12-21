@@ -1,24 +1,9 @@
-// // lib/redisClient.js
-// import { createClient } from "redis";
-
-// const client = createClient({
-//   username: "default",
-//   password: "KnYi2Gx6q4DEVS9z5oiWyndB0arypx3U",
-//   socket: {
-//     host: "redis-14603.c261.us-east-1-4.ec2.redns.redis-cloud.com",
-//     port: 14603,
-//   },
-// });
-
-// client.on("error", (err) => console.log("Redis Client Error", err));
-
-// export default client;
-
 import { createClient, RedisClientType } from "redis";
+import { redisPassword } from "./keys";
 
 const redisConfig = {
   username: "default",
-  password: "KnYi2Gx6q4DEVS9z5oiWyndB0arypx3U",
+  password: redisPassword,
   socket: {
     host: "redis-14603.c261.us-east-1-4.ec2.redns.redis-cloud.com",
     port: 14603,
