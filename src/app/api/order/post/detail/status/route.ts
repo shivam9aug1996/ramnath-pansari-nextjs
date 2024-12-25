@@ -91,27 +91,29 @@ export async function PUT(req) {
 
     let pushArr = [
       {
-        to: "ExponentPushToken[qQeZrcJM8ioVP9wFJE1KaX]",
+        to: "ExponentPushToken[twvlwDMaxJ72H7nshuPICx]",
         sound: "default",
         data: { updateOrderStatus: true, orderId: orderId, userId },
         priority: "high",
         title: "Order status updated successfully",
       },
       {
-        to: "ExponentPushToken[qQeZrcJM8ioVP9wFJE1KaX]",
+        to: "ExponentPushToken[twvlwDMaxJ72H7nshuPICx]",
         sound: "default",
         data: { updateOrderStatus: true, orderId: orderId, userId },
         priority: "high",
       },
     ];
     let tickets = await expo.sendPushNotificationsAsync(pushArr);
+    console.log("iuytfvbn", tickets);
     let okStatusArray: string[] = [];
-    tickets.forEach((item) => {
+    tickets?.forEach((item) => {
       if (item?.status === "ok") {
         okStatusArray.push(item?.id);
       }
     });
     let receipts = await expo.getPushNotificationReceiptsAsync(okStatusArray);
+    console.log("iu76trdvbnm,", receipts);
     for (let receiptId in receipts) {
       let { status } = receipts[receiptId];
       if (status === "ok") {

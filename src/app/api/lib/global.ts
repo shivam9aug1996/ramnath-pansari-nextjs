@@ -56,11 +56,9 @@ export const uploadImage = async (imageFile) => {
       }
     } catch (error) {
       console.log(
-        "error while uploading image"
-        // error,
-        // imageFile,
-        // tmpFileName,
-        // `uploaded-images/image_${Date.now()}`
+        "error while uploading image",
+        error,
+        file?.substring(0, 100)
       );
     }
   } catch (error) {

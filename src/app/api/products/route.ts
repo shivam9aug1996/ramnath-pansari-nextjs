@@ -99,17 +99,17 @@ export async function GET(req, res) {
 
     const cachedData = await redisClient.get(cacheKey);
 
-    if (cachedData) {
-      console.log("cached76544567890");
-      let data = JSON.parse(cachedData);
-      // await new Promise((res) => {
-      //   setTimeout(() => {
-      //     res("hi");
-      //   }, 500);
-      // });
+    // if (cachedData) {
+    //   console.log("cached76544567890");
+    //   let data = JSON.parse(cachedData);
+    //   // await new Promise((res) => {
+    //   //   setTimeout(() => {
+    //   //     res("hi");
+    //   //   }, 500);
+    //   // });
 
-      return NextResponse.json({ ...data }, { status: 200 });
-    }
+    //   return NextResponse.json({ ...data }, { status: 200 });
+    // }
 
     const db = await connectDB(req);
     // await new Promise((res) => {
@@ -148,9 +148,9 @@ export async function GET(req, res) {
       categoryId,
     };
 
-    await redisClient.set(cacheKey, JSON.stringify(responseData), {
-      EX: 3600, // 3600 seconds = 1 hour
-    });
+    // await redisClient.set(cacheKey, JSON.stringify(responseData), {
+    //   EX: 3600, // 3600 seconds = 1 hour
+    // });
 
     return NextResponse.json(responseData, { status: 200 });
   } catch (error) {

@@ -37,6 +37,27 @@ export async function PUT(req, res) {
     const userObjectId = new ObjectId(userId);
     const productObjectId = new ObjectId(productId);
 
+    const product1 = await db
+      .collection("products")
+      .findOne({ _id: productObjectId }, { session });
+
+    if (!product1) {
+      await abortTransaction(session);
+      return NextResponse.json(
+        { message: "Product not found" },
+        { status: 404 }
+      );
+    }
+
+    // Check if the product is out of stock
+    if (product1?.isOutOfStock) {
+      await abortTransaction(session);
+      return NextResponse.json(
+        { message: "Product is out of stock" },
+        { status: 468 }
+      );
+    }
+
     const cart = await db
       .collection("carts")
       .findOne({ userId: userObjectId }, { session });
@@ -158,18 +179,6 @@ export async function GET(req, res) {
       .collection("carts")
       .findOne({ userId: new ObjectId(userId) });
     console.log("oi87654ewsdfghjkl", cart, userId);
-    // if (i >= 1) {
-    // await new Promise((res) => {
-    //   setTimeout(() => {
-    //     res("hi");
-    //   }, 5500);
-    // });
-    // }
-    // await new Promise((res) => {
-    //   setTimeout(() => {
-    //     res("hi");
-    //   }, 2000);
-    // });
 
     if (!cart) {
       return NextResponse.json(
@@ -177,11 +186,6 @@ export async function GET(req, res) {
         { status: 404 }
       );
     }
-    // await new Promise((res) => {
-    //   setTimeout(() => {
-    //     res("hio");
-    //   }, 20000);
-    // });
 
     return NextResponse.json({ cart }, { status: 200 });
   } catch (error) {
