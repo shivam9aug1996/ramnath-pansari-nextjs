@@ -128,20 +128,24 @@ export async function GET(req, res) {
       .skip(skip)
       .limit(limit)
       .toArray();
+    const filteredProducts = products.filter(
+      (product) => product?.discountedPrice !== 0
+    );
     // await new Promise((res) => {
     //   setTimeout(() => {
     //     res("hi");
     //   }, 3000);
     // });
     // Get the total count of documents for the category (for calculating total pages)
-    const totalProducts = await db
-      .collection("products")
-      .countDocuments({ categoryPath: new ObjectId(categoryId) });
+    const totalProducts = await db.collection("products").countDocuments({
+      categoryPath: new ObjectId(categoryId),
+      discountedPrice: { $ne: 0 },
+    });
 
     const totalPages = Math.ceil(totalProducts / limit);
 
     const responseData = {
-      products,
+      products: filteredProducts,
       totalProducts,
       totalPages,
       currentPage: page,

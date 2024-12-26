@@ -34,6 +34,9 @@ export async function GET(req, res) {
           },
         },
         {
+          $match: { discountedPrice: { $gt: 0 } },
+        },
+        {
           $count: "totalResults",
         },
       ];
@@ -55,6 +58,9 @@ export async function GET(req, res) {
             autocomplete: { query: query, path: "name" },
           },
         },
+        {
+          $match: { discountedPrice: { $gt: 0 } },
+        },
         { $skip: skip },
         { $limit: limit },
       ];
@@ -64,7 +70,6 @@ export async function GET(req, res) {
         { results, totalResults, totalPages, currentPage: page },
         { status: 200 }
       );
-      console.log("8765edfghj", results);
     } else if (searchType === "search") {
       // Full-Text Search: Perform a full-text search on the products
       const skip = (page - 1) * limit;
