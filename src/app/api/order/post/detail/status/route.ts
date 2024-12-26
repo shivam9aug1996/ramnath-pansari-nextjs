@@ -91,14 +91,14 @@ export async function PUT(req) {
 
     let pushArr = [
       {
-        to: "ExponentPushToken[twvlwDMaxJ72H7nshuPICx]",
+        to: "ExponentPushToken[1rnrtrHQ8rfDecQlrnlxdH]",
         sound: "default",
         data: { updateOrderStatus: true, orderId: orderId, userId },
         priority: "high",
         title: "Order status updated successfully",
       },
       {
-        to: "ExponentPushToken[twvlwDMaxJ72H7nshuPICx]",
+        to: "ExponentPushToken[1rnrtrHQ8rfDecQlrnlxdH]",
         sound: "default",
         data: { updateOrderStatus: true, orderId: orderId, userId },
         priority: "high",
