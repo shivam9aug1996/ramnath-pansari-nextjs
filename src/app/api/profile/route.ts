@@ -1,7 +1,13 @@
 import { isTokenVerified } from "@/json";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
-import { connectDB } from "../lib/dbconnection";
+import {
+  abortTransaction,
+  commitTransaction,
+  connectDB,
+  getClient,
+  startTransaction,
+} from "../lib/dbconnection";
 import { deleteImage, uploadImage } from "../lib/global";
 
 export async function PUT(req: Request, res) {
@@ -126,6 +132,78 @@ export async function GET(req) {
     console.error("Error:", error);
     return NextResponse.json(
       { error: "Something went wrong" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req) {
+  let session;
+
+  try {
+    const { searchParams } = new URL(req.url);
+    const userId = searchParams.get("userId");
+
+    if (!userId || !ObjectId.isValid(userId)) {
+      return NextResponse.json({ message: "Invalid input" }, { status: 400 });
+    }
+
+    // Verify token
+    const tokenVerificationResponse = await isTokenVerified(req);
+    if (tokenVerificationResponse) {
+      return tokenVerificationResponse;
+    }
+
+    const client = await getClient();
+    session = await startTransaction(client);
+    const db = await connectDB(req);
+    const userObjectId = new ObjectId(userId);
+    const user = await db.collection("users").findOne({ _id: userObjectId });
+
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    // Delete cart
+    await db
+      .collection("carts")
+      .deleteOne({ userId: userObjectId }, { session });
+
+    // Delete search history
+    await db
+      .collection("searchHistory")
+      .deleteOne({ userId: userId }, { session });
+
+    // Delete user addresses
+    await db
+      .collection("userAddresses")
+      .deleteMany({ userId: userId }, { session });
+
+    // Delete orders
+    await db.collection("orders").deleteMany({ userId: userId }, { session });
+
+    // Fetch user's profile image path from the database
+    const userProfile = await db
+      .collection("users")
+      .findOne({ _id: userObjectId }, { session });
+    const profileImage = userProfile?.profileImage;
+    if (profileImage) {
+      await deleteImage(profileImage);
+    }
+
+    // Delete user profile
+    await db.collection("users").deleteOne({ _id: userObjectId }, { session });
+
+    await commitTransaction(session);
+    return NextResponse.json(
+      { message: "Account deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error deleting account:", error);
+    await abortTransaction(session);
+    return NextResponse.json(
+      { error: "Failed to delete account. Please try again later." },
       { status: 500 }
     );
   }

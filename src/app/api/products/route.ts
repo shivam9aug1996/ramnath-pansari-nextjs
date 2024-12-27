@@ -13,7 +13,7 @@ export async function POST(req, res) {
   }
 
   try {
-    const { name, categoryPath, image, discountedPrice, price } =
+    const { name, categoryPath, image, discountedPrice, price, size } =
       await req.json();
 
     if (
@@ -22,7 +22,8 @@ export async function POST(req, res) {
       !Array.isArray(categoryPath) ||
       categoryPath.length === 0 ||
       !discountedPrice ||
-      !price
+      !price ||
+      !size
     ) {
       return NextResponse.json(
         { message: "Missing required fields" },
@@ -46,6 +47,7 @@ export async function POST(req, res) {
       image: image || null, // Add image key, default to null if not provided
       discountedPrice,
       price,
+      size,
     };
 
     // Insert new product into the products collection
