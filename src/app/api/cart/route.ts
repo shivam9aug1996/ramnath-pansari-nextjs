@@ -198,18 +198,16 @@ export async function PUT(req, res) {
 
       if (!product1) {
         await abortTransaction(session);
-        return NextResponse.json(
-          { message: "Product not found" },
-          { status: 404 }
-        );
+        const error = new Error("Product is out of stock");
+        error.code = 404;
+        throw error;
       }
-
+      console.log("juhgbnmkjhgvbnm,", product1);
       if (product1?.isOutOfStock) {
         await abortTransaction(session);
-        return NextResponse.json(
-          { message: "Product is out of stock" },
-          { status: 468 }
-        );
+        const error = new Error("Product is out of stock");
+        error.code = 468;
+        throw error;
       }
 
       const cart = await db
@@ -394,6 +392,12 @@ export async function PUT(req, res) {
     if (error?.code == 112) {
       return NextResponse.json({ error: "Retrying" }, { status: 467 });
     }
+    if (error?.code == 468) {
+      return NextResponse.json({ error: "Product is out of stock" }, { status: 468 });
+    }
+    if (error?.code == 404) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
 
     return NextResponse.json(
       { error: "Something went wrong" },
@@ -406,7 +410,11 @@ export async function GET(req, res) {
   try {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("userId");
-
+    // await new Promise((res) => {
+    //   setTimeout(() => {
+    //     res("hi");
+    //   }, 30000);
+    // });
     if (!userId || !ObjectId.isValid(userId)) {
       return NextResponse.json({ message: "Invalid user ID" }, { status: 400 });
     }
