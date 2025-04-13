@@ -5,8 +5,8 @@ const redisConfig = {
   username: "default",
   password: redisPassword,
   socket: {
-    host: "redis-14603.c261.us-east-1-4.ec2.redns.redis-cloud.com",
-    port: 14603,
+    host: "redis-19628.crce179.ap-south-1-1.ec2.redns.redis-cloud.com",
+    port: 19628,
   },
 };
 

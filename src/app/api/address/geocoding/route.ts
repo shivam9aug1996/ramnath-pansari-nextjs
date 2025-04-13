@@ -23,7 +23,7 @@ export async function GET(req, res) {
     }
 
     const apiKey = process.env.GEOCODING_API;
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}&result_type=street_address|premise|subpremise|point_of_interest|establishment&language=en`;
 
     const response = await fetch(url);
     const data = await response.json();
@@ -62,39 +62,37 @@ export async function GET(req, res) {
     };
     console.log("itredcvbnm,.", getComponent(["premise"]));
     const city =
-      getComponent(["locality"]) ||
-      getComponent(["administrative_area_level_2"]) ||
-      getComponent(["administrative_area_level_3"]);
-    const state = getComponent(["administrative_area_level_1"]);
-    const pincode = getComponent(["postal_code"]);
-    const buildingName =
-      getComponent(["premise"]) || getComponent(["subpremise"]); // e.g., apartment/building name
-    const houseNumber = getComponent(["street_number"]); // house number
-    const landmark = getComponent(["landmark"]);
-    const mohalla =
-      getComponent(["sublocality_level_1", "political"]) ||
-      getComponent(["sublocality"]); // mohalla or smaller sublocality
+    getComponent(["locality"]) ||
+    getComponent(["administrative_area_level_2"]) ||
+    getComponent(["administrative_area_level_3"]);
+  const state = getComponent(["administrative_area_level_1"]);
+  const pincode = getComponent(["postal_code"]);
+  const buildingName =
+    getComponent(["premise"]) || getComponent(["subpremise"]); // e.g., apartment/building name
+  const houseNumber = getComponent(["street_number"]); // house number
+  const landmark = getComponent(["landmark"]);
+  const mohalla =
+    getComponent(["sublocality_level_1", "political"]) ||
+    getComponent(["sublocality"]); // mohalla or smaller sublocality
+  const streetName = getComponent(["route"]); // street/road name
+  const sublocalityLevel2 = getComponent(["sublocality_level_2", "political"]); // additional area info
+  const neighborhood = getComponent(["neighborhood", "political"]);
+  const locality = getComponent(["locality"]); // main locality
 
-    // Construct a detailed area using the available components
-    const area =
-      `${buildingName ? `${buildingName}, ` : ""}` +
-      `${houseNumber ? `${houseNumber}, ` : ""}` +
-      `${mohalla ? `${mohalla}, ` : ""}` +
-      `${landmark ? `near ${landmark}, ` : ""}` +
-      `${
-        getComponent(["sublocality", "political"]) ||
-        getComponent(["neighborhood", "political"]) ||
-        getComponent(["locality"]) ||
-        ""
-      }`;
-    console.log("itred567890cvbnm,.", area);
-    // Remove the trailing comma if present
-    const formattedArea = area.trim().replace(/,\s*$/, "");
+  // Construct a detailed area using all available components
+  const area =
+    `${buildingName ? `${buildingName}, ` : ""}` +
+    `${houseNumber ? `${houseNumber}, ` : ""}` +
+    `${streetName ? `${streetName}, ` : ""}` +
+    `${mohalla ? `${mohalla}, ` : ""}` +
+    `${sublocalityLevel2 && sublocalityLevel2 !== mohalla ? `${sublocalityLevel2}, ` : ""}` +
+    `${neighborhood && neighborhood !== mohalla && neighborhood !== sublocalityLevel2 ? `${neighborhood}, ` : ""}` +
+    `${locality && locality !== mohalla ? `${locality}, ` : ""}` +
+    `${landmark ? `near ${landmark}, ` : ""}` +
+    `${city && city !== locality ? `${city}` : ""}`;
 
-    // const area =
-    //   getComponent(["sublocality", "political"]) ||
-    //   getComponent(["neighborhood", "political"]) ||
-    //   getComponent(["locality"]);
+  // Remove the trailing comma if present and clean up extra spaces
+  const formattedArea = area.trim().replace(/,\s*$/, "").replace(/\s+/g, " ");
 
     return NextResponse.json(
       {
