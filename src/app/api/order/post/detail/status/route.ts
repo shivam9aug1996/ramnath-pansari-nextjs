@@ -3,7 +3,8 @@ import { isTokenVerified } from "@/json";
 import { ObjectId } from "mongodb";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { Expo } from "expo-server-sdk";
-let expo = new Expo({});
+const expo = new Expo({
+});
 
 export async function PUT(req) {
   try {
@@ -91,14 +92,14 @@ export async function PUT(req) {
 
     let pushArr = [
       {
-        to: "ExponentPushToken[1rnrtrHQ8rfDecQlrnlxdH]",
+        to: "ExponentPushToken[LR57vCAo5DyzpQB0_75SQz]",
         sound: "default",
         data: { updateOrderStatus: true, orderId: orderId, userId },
         priority: "high",
         title: "Order status updated successfully",
       },
       {
-        to: "ExponentPushToken[1rnrtrHQ8rfDecQlrnlxdH]",
+        to: "ExponentPushToken[LR57vCAo5DyzpQB0_75SQz]",
         sound: "default",
         data: { updateOrderStatus: true, orderId: orderId, userId },
         priority: "high",

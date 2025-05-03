@@ -447,7 +447,7 @@ export async function PATCH(req, res) {
 
         const jioMartData = await jioMartResponse.json();
         console.log("jioMartData",jioMartData)
-        return NextResponse.json(jioMartData, { status: 200 });
+       // return NextResponse.json(jioMartData, { status: 200 });
        // return NextResponse.json(jioMartData, { status: 200 });
         const products = jioMartData.results[0].hits;
         console.log("products",products)
