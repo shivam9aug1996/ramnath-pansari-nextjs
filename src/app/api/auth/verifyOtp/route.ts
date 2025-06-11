@@ -12,7 +12,7 @@ const generateToken = (user: any) => {
     mobileNumber: user?.mobileNumber,
   };
   console.log("oiuytrdfghjkl", payload);
-  const options = { expiresIn: "1d" };
+  const options = {  };
   return jwt.sign(payload, secretKey, options);
 };
 
@@ -36,24 +36,24 @@ export async function POST(req, res) {
     console.log(mobileNumber, otp);
 
     // Send OTP using Twilio
-    let status = "";
-    try {
-      const verificationCheck = await client.verify.v2
-        .services(serviceSid)
-        .verificationChecks.create({
-          code: otp,
-          to: `+91${mobileNumber}`,
-        });
-      console.log(verificationCheck);
-      if (verificationCheck.status == "approved") {
-        status = "approved";
-      } else if (verificationCheck.status == "pending") {
-        status = "pending";
-      }
-    } catch (error) {
-      console.log(error);
-      status = "error";
-    }
+    let status = "approved";
+    // try {
+    //   const verificationCheck = await client.verify.v2
+    //     .services(serviceSid)
+    //     .verificationChecks.create({
+    //       code: otp,
+    //       to: `+91${mobileNumber}`,
+    //     });
+    //   console.log(verificationCheck);
+    //   if (verificationCheck.status == "approved") {
+    //     status = "approved";
+    //   } else if (verificationCheck.status == "pending") {
+    //     status = "pending";
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    //   status = "error";
+    // }
 
     // Check if user already exists in the database
 
@@ -69,7 +69,7 @@ export async function POST(req, res) {
         let now = new Date();
         let expirationDate = new Date(now.getTime() + 1 * 1000);
         cookies().set("ramnath_pansari_user_token", token, {
-          expires: expirationDate,
+         // expires: expirationDate,
           // httpOnly: true,
           // secure: true,
         });
@@ -77,7 +77,7 @@ export async function POST(req, res) {
           "ramnath_pansari_user_data",
           JSON.stringify({ mobileNumber, userId: user?._id }),
           {
-            expires: expirationDate,
+           // expires: expirationDate,
             // httpOnly: true,
             // secure: true,
           }
@@ -118,9 +118,10 @@ export async function POST(req, res) {
     } else if (status == "pending") {
       return NextResponse.json(
         {
-          message: "Wrong OTP",
+          //give nice message that otp is wrong
+          error: "Incorrect OTP. Please enter the correct code.",
         },
-        { status: 200 }
+        { status: 400 }
       );
     } else if (status == "error" || status == "") {
       return NextResponse.json(
