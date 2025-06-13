@@ -28,6 +28,9 @@ export async function middleware(request: NextRequest) {
     //     new URL(`/login?message=${encodeURIComponent(message)}`, request.url)
     //   );
     // }
+    if (currentPath.startsWith("/api/driver")) {
+      return NextResponse.next();
+    }
     if (!currentPath.startsWith("/api/auth")) {
       return new NextResponse(
         JSON.stringify({ success: false, message: "Authentication failed" }),
