@@ -1,3 +1,4 @@
+import { isTokenVerified } from "@/json";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -6,6 +7,10 @@ export async function POST(req: Request) {
 
     if (!prompt) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
+    }
+    const tokenVerificationResponse = await isTokenVerified(req);
+    if (tokenVerificationResponse) {
+      return tokenVerificationResponse;
     }
 
     const response = await fetch("https://router.huggingface.co/novita/v3/openai/chat/completions", {

@@ -37,6 +37,12 @@ export async function middleware(request: NextRequest) {
         { status: 401 }
       );
     }
+    if(currentPath.includes("/addressMap")) {
+      return new NextResponse(
+        JSON.stringify({ success: false, message: "Authentication failed" }),
+        { status: 401 }
+      );
+    }
     // else if (currentPath.includes("api/auth/signup")) {
     //   if (!fp) {
     //     return new NextResponse(
@@ -58,6 +64,10 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
   }
+  else if(currentPath.includes("/addressMap")) {
+    console.log("addressMap authenticated");
+    return NextResponse.next();
+  }
   // else if (
   //   currentPath === "/login" ||
   //   currentPath === "/signup" ||
@@ -73,5 +83,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/:path*"],
+  matcher: ["/api/:path*", "/addressMap/:path*"],
 };
