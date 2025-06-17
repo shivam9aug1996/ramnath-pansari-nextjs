@@ -36,24 +36,24 @@ export async function POST(req, res) {
     console.log(mobileNumber, otp);
 
     // Send OTP using Twilio
-    let status = "approved";
-    // try {
-    //   const verificationCheck = await client.verify.v2
-    //     .services(serviceSid)
-    //     .verificationChecks.create({
-    //       code: otp,
-    //       to: `+91${mobileNumber}`,
-    //     });
-    //   console.log(verificationCheck);
-    //   if (verificationCheck.status == "approved") {
-    //     status = "approved";
-    //   } else if (verificationCheck.status == "pending") {
-    //     status = "pending";
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    //   status = "error";
-    // }
+    let status = "";
+    try {
+      const verificationCheck = await client.verify.v2
+        .services(serviceSid)
+        .verificationChecks.create({
+          code: otp,
+          to: `+91${mobileNumber}`,
+        });
+      console.log(verificationCheck);
+      if (verificationCheck.status == "approved") {
+        status = "approved";
+      } else if (verificationCheck.status == "pending") {
+        status = "pending";
+      }
+    } catch (error) {
+      console.log(error);
+      status = "error";
+    }
 
     // Check if user already exists in the database
 
@@ -85,7 +85,7 @@ export async function POST(req, res) {
 
         return NextResponse.json(
           {
-            message: "OTP successfully verified1",
+            message: "OTP successfully verified",
             userAlreadyRegistered: true,
             userData: { ...user, userAlreadyRegistered: true },
             token: token,
