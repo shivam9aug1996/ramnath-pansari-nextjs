@@ -199,19 +199,7 @@ console.log("map34567876543", location);
   };
 
   if (!isLoaded) {
-    return  <div
-    style={{
-      height: "100vh",
-      width: "100%",
-      backgroundColor: "#f0f0f0",
-      borderRadius: "12px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: "18px",
-      color: "#666",
-    }}
-  />
+    return  <></>
   }
 
   return (
@@ -283,6 +271,7 @@ console.log("map34567876543", location);
       </div>
 
       <GoogleMap
+       
         mapContainerStyle={containerStyle}
         center={mapCenter}
         zoom={18}

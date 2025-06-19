@@ -434,7 +434,7 @@ export async function GET(req, res) {
     if (!cart) {
       return NextResponse.json(
         { message: "Cart not found", cart: [] },
-        { status: 404 }
+        { status: 401 }
       );
     }
 

@@ -22,15 +22,20 @@ export async function POST(req, res) {
     // throw Error("hi");
 
     // Send OTP using Twilio
-    try {
-      const verification = await client.verify.v2
-      .services(serviceSid)
-      .verifications.create({ to: `+91${mobileNumber}`, channel: "sms" });
-      console.log("verification",JSON.stringify(verification));
-    } catch (error) {
-      console.log(error);
-    }
 
+    if (
+      mobileNumber !== "9999999999" ||
+      process.env.NODE_ENV !== "development"
+    ) {
+      try {
+        const verification = await client.verify.v2
+          .services(serviceSid)
+          .verifications.create({ to: `+91${mobileNumber}`, channel: "sms" });
+        console.log("verification", JSON.stringify(verification));
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
     // console.log(`Verification SID: ${JSON.stringify(verification)}`);
 

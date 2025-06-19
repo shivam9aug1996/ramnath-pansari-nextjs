@@ -3,19 +3,7 @@ import dynamic from "next/dynamic";
 const AddressMap = dynamic(() => import("../components/AddressMap"), {
   ssr: false,
   loading: () => (
-    <div
-      style={{
-        height: "100vh",
-        width: "100%",
-        backgroundColor: "#f0f0f0",
-        borderRadius: "12px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "18px",
-        color: "#666",
-      }}
-    />
+   <></>
   )
 });
 
