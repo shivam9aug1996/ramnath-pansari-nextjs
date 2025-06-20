@@ -38,26 +38,28 @@ export async function POST(req, res) {
     // Send OTP using Twilio
     let status = "approved";
     if (
-      mobileNumber !== "9999999999" ||
       process.env.NODE_ENV !== "development"
     ) {
-      try {
-        const verificationCheck = await client.verify.v2
-          .services(serviceSid)
-          .verificationChecks.create({
-            code: otp,
-            to: `+91${mobileNumber}`,
-          });
-        console.log(verificationCheck);
-        if (verificationCheck.status == "approved") {
-          status = "approved";
-        } else if (verificationCheck.status == "pending") {
-          status = "pending";
-        }
-      } catch (error) {
-        console.log(error);
-        status = "error";
+      if(mobileNumber!=="9999999999") {
+        try {
+          const verificationCheck = await client.verify.v2
+            .services(serviceSid)
+            .verificationChecks.create({
+              code: otp,
+              to: `+91${mobileNumber}`,
+            });
+          console.log(verificationCheck);
+          if (verificationCheck.status == "approved") {
+            status = "approved";
+          } else if (verificationCheck.status == "pending") {
+            status = "pending";
+          }
+        } catch (error) {
+          console.log(error);
+          status = "error";
+        }   
       }
+     
     }
 
     // Check if user already exists in the database

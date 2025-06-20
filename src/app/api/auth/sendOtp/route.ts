@@ -24,16 +24,17 @@ export async function POST(req, res) {
     // Send OTP using Twilio
 
     if (
-      mobileNumber !== "9999999999" ||
       process.env.NODE_ENV !== "development"
     ) {
-      try {
-        const verification = await client.verify.v2
-          .services(serviceSid)
-          .verifications.create({ to: `+91${mobileNumber}`, channel: "sms" });
-        console.log("verification", JSON.stringify(verification));
-      } catch (error) {
-        console.log(error);
+      if(mobileNumber!=="9999999999") {
+        try {
+          const verification = await client.verify.v2
+            .services(serviceSid)
+            .verifications.create({ to: `+91${mobileNumber}`, channel: "sms" });
+          console.log("verification", JSON.stringify(verification));
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
 
