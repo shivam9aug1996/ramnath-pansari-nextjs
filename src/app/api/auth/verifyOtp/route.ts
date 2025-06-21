@@ -61,7 +61,7 @@ export async function POST(req, res) {
         }
       }
     }
-    if(mobileNumber==="9999999991" && otp==="123456"){
+    if(mobileNumber==="9999999999" && otp==="123456"){
       status = "approved";
     }else if(mobileNumber==="9999999991" && otp!=="123456"){
       status = "error";
