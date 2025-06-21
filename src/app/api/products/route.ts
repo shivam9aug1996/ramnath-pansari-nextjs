@@ -2,8 +2,11 @@ import { isTokenVerified } from "@/json";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 import { connectDB } from "../lib/dbconnection";
-import redisClient from "../lib/redisClient";
+// redisClient from "../lib/redisClient";
 import categoryConfig from "./categoryConfig";
+import redis from "../lib/redisClient";
+// import kv from '@vercel/kv';
+// import { createClient } from 'redis';
 
 export async function POST(req, res) {
   if (req.method !== "POST") {
@@ -99,8 +102,18 @@ export async function GET(req, res) {
 
     const cacheKey = `products:${categoryId}:page:${page}:limit:${limit}`;
     console.log("iuytrdfghjkl", cacheKey);
+    // const redis =  await createClient({ url: process.env.REDIS_URL }).connect();
 
-    const cachedData = await redisClient.get(cacheKey);
+    const cachedData = await redis.get(cacheKey);
+    const clientList = await redis.sendCommand(["CLIENT", "LIST"]);
+    const clientCount = clientList.split("\n").filter(Boolean).length;
+    console.log("Active Redis Clients:", clientCount);
+    console.log("clientList", clientList);
+    
+
+    
+
+    // const cachedData = await redisClient.get(cacheKey);
 
     if (cachedData) {
       console.log("cached76544567890");
@@ -155,7 +168,10 @@ export async function GET(req, res) {
       categoryId,
     };
 
-    await redisClient.set(cacheKey, JSON.stringify(responseData), {
+    // await redisClient.set(cacheKey, JSON.stringify(responseData), {
+    //   EX: 3600, // 3600 seconds = 1 hour
+    // });
+    await redis.set(cacheKey, JSON.stringify(responseData), {
       EX: 3600, // 3600 seconds = 1 hour
     });
 
