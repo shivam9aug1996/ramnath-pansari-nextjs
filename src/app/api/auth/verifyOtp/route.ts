@@ -6,13 +6,16 @@ import { client, serviceSid } from "../../lib/twilioClient";
 import { cookies } from "next/headers";
 import { ObjectId } from "mongodb";
 
-const generateToken = (user: any) => {
+const generateToken = (user: any, isGuestUser: boolean = false) => {
   const payload = {
     id: user?._id?.toString(),
     mobileNumber: user?.mobileNumber,
+    isGuestUser: isGuestUser,
   };
   console.log("oiuytrdfghjkl", payload);
-  const options = {};
+  let now = new Date();
+  let expirationDate = new Date(now.getTime() + 1 * 10000);
+  const options = {}
   return jwt.sign(payload, secretKey, options);
 };
 
@@ -37,10 +40,8 @@ export async function POST(req, res) {
 
     // Send OTP using Twilio
     let status = "approved";
-    if (
-      process.env.NODE_ENV !== "development"
-    ) {
-      if(mobileNumber!=="9999999999") {
+    if (process.env.NODE_ENV !== "development") {
+      if (mobileNumber !== "9999999999" && mobileNumber !== "9999999991") {
         try {
           const verificationCheck = await client.verify.v2
             .services(serviceSid)
@@ -57,9 +58,8 @@ export async function POST(req, res) {
         } catch (error) {
           console.log(error);
           status = "error";
-        }   
+        }
       }
-     
     }
 
     // Check if user already exists in the database
@@ -69,9 +69,11 @@ export async function POST(req, res) {
       console.log("jhgfghjhgfghjk", db);
 
       const user = await db.collection("users").findOne({ mobileNumber });
+      console.log("us67890-r", user);
+      const isGuestUser = mobileNumber === "9999999991";
 
       if (user) {
-        let token = generateToken(user);
+        let token = generateToken(user, isGuestUser);
         console.log("jhgfdsdfiop98765", token);
         let now = new Date();
         let expirationDate = new Date(now.getTime() + 1 * 1000);
@@ -89,14 +91,15 @@ export async function POST(req, res) {
             // secure: true,
           }
         );
+        const response = {
+          message: "OTP successfully verified",
+          userAlreadyRegistered: true,
+          userData: { ...user, userAlreadyRegistered: true },
+          token: token,
+        };
 
         return NextResponse.json(
-          {
-            message: "OTP successfully verified",
-            userAlreadyRegistered: true,
-            userData: { ...user, userAlreadyRegistered: true },
-            token: token,
-          },
+          isGuestUser ? { ...response, isGuestUser: true,userData:{...user,name:"Guest User",isGuestUser:true} } : response,
           { status: 200 }
         );
       } else {
@@ -106,19 +109,20 @@ export async function POST(req, res) {
         //create new entry in db
         console.log(result);
         console.log(result.ops);
-        const token = generateToken(user);
+        const token = generateToken(user,isGuestUser);
         await db.collection("carts").insertOne({
           userId: new ObjectId(user._id),
           items: [],
         });
+        const response =  {
+          message: "OTP successfully verified",
+          userAlreadyRegistered: false,
+          userData: { ...user, userAlreadyRegistered: false },
+          token: token,
+        }
 
         return NextResponse.json(
-          {
-            message: "OTP successfully verified",
-            userAlreadyRegistered: false,
-            userData: { ...user, userAlreadyRegistered: false },
-            token: token,
-          },
+          isGuestUser ? { ...response, isGuestUser: true,userData:{...user,name:"Guest User",isGuestUser:true} } : response,
           { status: 200 }
         );
       }
