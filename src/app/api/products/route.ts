@@ -104,11 +104,13 @@ export async function GET(req, res) {
     console.log("iuytrdfghjkl", cacheKey);
     // const redis =  await createClient({ url: process.env.REDIS_URL }).connect();
 
-    const cachedData = await redis.get(cacheKey);
-    const clientList = await redis.sendCommand(["CLIENT", "LIST"]);
-    const clientCount = clientList.split("\n").filter(Boolean).length;
-    console.log("Active Redis Clients:", clientCount);
-    console.log("clientList", clientList);
+    let cachedData = null;
+    try{
+      cachedData = await redis.get(cacheKey);
+    }catch(error){
+      console.log("error", error);
+    }
+   
     
 
     
@@ -171,9 +173,14 @@ export async function GET(req, res) {
     // await redisClient.set(cacheKey, JSON.stringify(responseData), {
     //   EX: 3600, // 3600 seconds = 1 hour
     // });
-    await redis.set(cacheKey, JSON.stringify(responseData), {
-      EX: 3600, // 3600 seconds = 1 hour
-    });
+
+    try{
+      await redis.set(cacheKey, JSON.stringify(responseData), {
+        EX: 3600, // 3600 seconds = 1 hour
+      });
+    }catch(error){
+      console.log("error", error);
+    }
 
     return NextResponse.json(responseData, { status: 200 });
   } catch (error) {
