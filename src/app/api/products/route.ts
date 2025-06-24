@@ -4,7 +4,8 @@ import { NextResponse } from "next/server";
 import { connectDB } from "../lib/dbconnection";
 // redisClient from "../lib/redisClient";
 import categoryConfig from "./categoryConfig";
-import redis from "../lib/redisClient";
+import RedisClient from "../lib/redisClient";
+// import redis from "../lib/redisClient";
 // import kv from '@vercel/kv';
 // import { createClient } from 'redis';
 
@@ -105,20 +106,17 @@ export async function GET(req, res) {
     // const redis =  await createClient({ url: process.env.REDIS_URL }).connect();
 
     let cachedData = null;
-    try{
+    let redis = null;
+    try {
+      redis = await RedisClient.getInstance();
       cachedData = await redis.get(cacheKey);
-    }catch(error){
+    } catch (error) {
       console.log("error", error);
     }
-   
-    
-
-    
 
     // const cachedData = await redisClient.get(cacheKey);
 
     if (cachedData) {
-      console.log("cached76544567890");
       let data = JSON.parse(cachedData);
       // await new Promise((res) => {
       //   setTimeout(() => {
@@ -174,12 +172,14 @@ export async function GET(req, res) {
     //   EX: 3600, // 3600 seconds = 1 hour
     // });
 
-    try{
-      await redis.set(cacheKey, JSON.stringify(responseData), {
-        EX: 3600, // 3600 seconds = 1 hour
-      });
-    }catch(error){
-      console.log("error", error);
+    if (redis) {
+      try {
+        await redis.set(cacheKey, JSON.stringify(responseData), {
+          EX: 3600, // 3600 seconds = 1 hour
+        });
+      } catch (error) {
+        console.log("error", error);
+      }
     }
 
     return NextResponse.json(responseData, { status: 200 });
@@ -281,12 +281,9 @@ export async function PUT(req, res) {
 //     }
 
 //     const db = await connectDB(req);
-   
+
 //     const categories = await db.collection("categories").find({}).toArray();
 //     let name = await findCategoryNameById(categories,categoryId)
-
-  
-
 
 //     const jioMartResponse = await fetch(
 //       "https://3yp0hp3wsh-dsn.algolia.net/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20JavaScript%20(4.5.1)%3B%20Browser%3B%20instantsearch.js%20(4.59.0)%3B%20JS%20Helper%20(3.15.0)",
@@ -332,10 +329,10 @@ export async function PUT(req, res) {
 //       .map(product => {
 //         const sellerData = product.seller_wise_mrp?.[6205];
 //         if (!sellerData) return null;
-        
+
 //         const firstKey = Object.keys(sellerData)[0];
 //         const priceDetails = sellerData[firstKey];
-        
+
 //         if (!priceDetails) return null;
 //         const imageUrl = product.image_url.replace(
 //           /images\/product\/\d+x\d+\//,
@@ -361,7 +358,7 @@ export async function PUT(req, res) {
 //     }
 
 //     await db.collection("products").deleteMany({
-//       categoryPath: { 
+//       categoryPath: {
 //         $all: categoryPath.map(id => new ObjectId(id))
 //       }
 //     });
@@ -404,11 +401,6 @@ export async function PUT(req, res) {
 //   }
 // }
 
-
-
-
-
-
 export async function PATCH(req, res) {
   if (req.method !== "PATCH") {
     return NextResponse.json(
@@ -431,27 +423,29 @@ export async function PATCH(req, res) {
 
         // Convert params object to URL-encoded string
         const paramsString = new URLSearchParams({
-          attributesToHighlight: '[]',
-          attributesToRetrieve: '["*","-algolia_facet","-alt_class_keywords","-available_stores","-avg_discount","-avg_discount_pct","-avg_discount_rate","-avg_mrp","-avg_selling_price","-search_keywords"]',
-          clickAnalytics: 'true',
-          distinct: 'false',
-          enableRules: 'true',
+          attributesToHighlight: "[]",
+          attributesToRetrieve:
+            '["*","-algolia_facet","-alt_class_keywords","-available_stores","-avg_discount","-avg_discount_pct","-avg_discount_rate","-avg_mrp","-avg_selling_price","-search_keywords"]',
+          clickAnalytics: "true",
+          distinct: "false",
+          enableRules: "true",
           facetFilters: `[["${config.facetFilters}"]]`,
-          facets: '["algolia_facet.*","avg_discount_pct","avg_selling_price","brand","category_level.level4"]',
+          facets:
+            '["algolia_facet.*","avg_discount_pct","avg_selling_price","brand","category_level.level4"]',
           filters: `category_ids:${config.categoryIds} AND (mart_availability:JIO OR mart_availability:JIO_WA) AND (available_stores:${config.availableStores}) AND ((inventory_stores:${config.inventoryStores} OR inventory_stores_3p:ALL OR inventory_stores_3p:groceries_zone_non-essential_services OR inventory_stores_3p:general_zone OR inventory_stores_3p:groceries_zone_essential_services))`,
-          highlightPostTag: '__/ais-highlight__',
-          highlightPreTag: '__ais-highlight__',
-          hitsPerPage: '12',
-          maxValuesPerFacet: '50',
-          page: '0',
-          query: '',
+          highlightPostTag: "__/ais-highlight__",
+          highlightPreTag: "__ais-highlight__",
+          hitsPerPage: "12",
+          maxValuesPerFacet: "50",
+          page: "0",
+          query: "",
           ruleContexts: '["PLP"]',
-          tagFilters: ''
+          tagFilters: "",
         }).toString();
 
         const request = {
           indexName: "prod_mart_master_vertical_products_popularity",
-          params: paramsString
+          params: paramsString,
         };
 
         const jioMartResponse = await fetch(
@@ -460,77 +454,78 @@ export async function PATCH(req, res) {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "Accept": "application/json",
+              Accept: "application/json",
               "x-algolia-api-key": "aace3f18430a49e185d2c1111602e4b1",
-              "x-algolia-application-id": "3YP0HP3WSH"
+              "x-algolia-application-id": "3YP0HP3WSH",
             },
-            body: JSON.stringify({ requests: [request] })
+            body: JSON.stringify({ requests: [request] }),
           }
         );
 
         const jioMartData = await jioMartResponse.json();
-        console.log("jioMartData",jioMartData)
-       // return NextResponse.json(jioMartData, { status: 200 });
-       // return NextResponse.json(jioMartData, { status: 200 });
+        console.log("jioMartData", jioMartData);
+        // return NextResponse.json(jioMartData, { status: 200 });
+        // return NextResponse.json(jioMartData, { status: 200 });
         const products = jioMartData.results[0].hits;
-        console.log("products",products)
-      //  return NextResponse.json(products, { status: 200 });
+        console.log("products", products);
+        //  return NextResponse.json(products, { status: 200 });
         const categoryPath = await getCategoryPath(db, categoryName);
-        console.log("iuytredfghjk",categoryPath)
-       // return NextResponse.json(categoryPath, { status: 200 });
+        console.log("iuytredfghjk", categoryPath);
+        // return NextResponse.json(categoryPath, { status: 200 });
         // Transform products
         const transformedProducts = products
-          .filter(product => product.is_sodexo_eligible)
-          .map(product => {
+          .filter((product) => product.is_sodexo_eligible)
+          .map((product) => {
             const sellerData = product.seller_wise_mrp?.[6205];
             if (!sellerData) return null;
-            
+
             const firstKey = Object.keys(sellerData)[0];
             const priceDetails = sellerData[firstKey];
-            
+
             if (!priceDetails) return null;
-            
-            const imageUrl = product.image_url.replace(
-              /images\/product\/\d+x\d+\//,
-              'images/product/original/'
-            ) + '?im=Resize=(360,360)';
+
+            const imageUrl =
+              product.image_url.replace(
+                /images\/product\/\d+x\d+\//,
+                "images/product/original/"
+              ) + "?im=Resize=(360,360)";
 
             return {
               name: product.display_name,
-              categoryPath: categoryPath.map(id => new ObjectId(id)),
+              categoryPath: categoryPath.map((id) => new ObjectId(id)),
               image: `https://www.jiomart.com/${imageUrl}`,
               discountedPrice: Math.round(priceDetails.price),
               price: Math.round(priceDetails.mrp),
               size: product.size,
-              category: categoryName
+              category: categoryName,
             };
           })
           .filter(Boolean);
-          console.log("transformedProducts",transformedProducts)
-          //return NextResponse.json(transformedProducts, { status: 200 });
+        console.log("transformedProducts", transformedProducts);
+        //return NextResponse.json(transformedProducts, { status: 200 });
 
         // Instead of deleting, we'll update existing products and add new ones
         for (const product of transformedProducts) {
           const existingProduct = await db.collection("products").findOne({
             name: product.name,
-            categoryPath: { 
-              $all: categoryPath.map(id => new ObjectId(id))
-            }
+            categoryPath: {
+              $all: categoryPath.map((id) => new ObjectId(id)),
+            },
           });
 
           if (existingProduct) {
             // Update existing product
             await db.collection("products").updateOne(
               { _id: existingProduct._id },
-              { 
+              {
                 $set: {
                   image: product.image,
                   discountedPrice: product.discountedPrice,
                   price: product.price,
                   size: product.size,
                   category: product.category,
-                  lastUpdated: new Date()
-                }
+                  lastUpdated: new Date(),
+                },
               }
             );
           } else {
@@ -539,51 +534,58 @@ export async function PATCH(req, res) {
               ...product,
               _id: new ObjectId(),
               createdAt: new Date(),
-              lastUpdated: new Date()
+              lastUpdated: new Date(),
             });
           }
         }
 
         // Handle special case for Sugar category
-        if (categoryName === 'Sugar') {
+        if (categoryName === "Sugar") {
           const sugarProduct = {
             name: "UTTAM SUGAR Sulphurfree Sugar (Refined Safed Cheeni)",
-            categoryPath: categoryPath.map(id => new ObjectId(id)),
-            image: "https://rukminim2.flixcart.com/image/832/832/xif0q/sugar/i/a/q/-original-imagtxubkgmbwpa6.jpeg?q=70",
+            categoryPath: categoryPath.map((id) => new ObjectId(id)),
+            image:
+              "https://rukminim2.flixcart.com/image/832/832/xif0q/sugar/i/a/q/-original-imagtxubkgmbwpa6.jpeg?q=70",
             discountedPrice: 0,
             price: 65,
             size: "1 kg",
             _id: new ObjectId("676da9f75763ded56d43032d"),
-            category: 'Sugar',
-            lastUpdated: new Date()
+            category: "Sugar",
+            lastUpdated: new Date(),
           };
 
-          await db.collection("products").updateOne(
-            { _id: sugarProduct._id },
-            { $set: sugarProduct },
-            { upsert: true }
-          );
+          await db
+            .collection("products")
+            .updateOne(
+              { _id: sugarProduct._id },
+              { $set: sugarProduct },
+              { upsert: true }
+            );
         }
 
         // Get counts for reporting
-        const categoryProducts = await db.collection("products").find({
-          categoryPath: { 
-            $all: categoryPath.map(id => new ObjectId(id))
-          }
-        }).toArray();
+        const categoryProducts = await db
+          .collection("products")
+          .find({
+            categoryPath: {
+              $all: categoryPath.map((id) => new ObjectId(id)),
+            },
+          })
+          .toArray();
 
         results.push({
           category: categoryName,
-          totalProducts: categoryProducts.length
+          totalProducts: categoryProducts.length,
         });
 
-        console.log(`Updated ${categoryName}: ${categoryProducts.length} products`);
-
+        console.log(
+          `Updated ${categoryName}: ${categoryProducts.length} products`
+        );
       } catch (error) {
         console.error(`Error processing ${categoryName}:`, error);
         results.push({
           category: categoryName,
-          error: error.message
+          error: error.message,
         });
       }
     }
@@ -591,11 +593,10 @@ export async function PATCH(req, res) {
     return NextResponse.json(
       {
         message: "Categories sync completed",
-        results: results
+        results: results,
       },
       { status: 200 }
     );
-
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(
@@ -605,7 +606,6 @@ export async function PATCH(req, res) {
   }
 }
 
-
 async function getCategoryPath(db, categoryName) {
   const findPath = async (categories, targetName, currentPath = []) => {
     for (const category of categories) {
@@ -613,14 +613,13 @@ async function getCategoryPath(db, categoryName) {
       if (category.name === targetName) {
         return [...currentPath, category._id?.toString()];
       }
-      
+
       // If this category has children, recursively search them
       if (category.children && category.children.length > 0) {
-        const path = await findPath(
-          category.children,
-          targetName,
-          [...currentPath, category._id?.toString()]
-        );
+        const path = await findPath(category.children, targetName, [
+          ...currentPath,
+          category._id?.toString(),
+        ]);
         if (path) return path;
       }
     }
@@ -629,10 +628,10 @@ async function getCategoryPath(db, categoryName) {
 
   // Get the mapping of category names to their paths
   const categories = await db.collection("categories").find({}).toArray();
-  
+
   // Find the path for the given category name
   const path = await findPath(categories, categoryName);
-  
+
   if (!path) {
     throw new Error(`Category path not found for: ${categoryName}`);
   }
@@ -647,7 +646,7 @@ async function getCategoryPath(db, categoryName) {
 //       if (category._id.toString() === targetId) {
 //         return [...currentPath, category._id];
 //       }
-      
+
 //       if (category.children && category.children.length > 0) {
 //         const path = await findPath(
 //           category.children,
@@ -664,20 +663,18 @@ async function getCategoryPath(db, categoryName) {
 //   return findPath(categories, targetCategoryId);
 // }
 
-
-
 const findCategoryNameById = async (categories, targetId) => {
   for (const category of categories) {
     if (category._id.toString() === targetId) {
       return category.name;
     }
-    
+
     if (category.children && category.children.length > 0) {
       for (const child of category.children) {
         if (child._id.toString() === targetId) {
           return child.name;
         }
-        
+
         if (child.children && child.children.length > 0) {
           for (const grandChild of child.children) {
             if (grandChild._id.toString() === targetId) {

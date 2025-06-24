@@ -1,19 +1,24 @@
+import { createClient, RedisClientType } from "redis";
 
+class RedisClient {
+  private static instance: RedisClientType | null = null;
 
+  private constructor() {}
 
-import { createClient } from "redis";
+  public static async getInstance(): Promise<RedisClientType> {
+    if (!RedisClient.instance) {
+      const client = createClient({
+        url: process.env.REDIS_URL,
+      });
 
-let redis;
+      client.on("error", (err) => console.error("Redis Client Error", err));
 
-if (!global.redisClient) {
-  global.redisClient = createClient({
-    url: process.env.REDIS_URL,
-  });
+      await client.connect();
+      RedisClient.instance = client;
+    }
 
-  global.redisClient.connect().catch(console.error);
+    return RedisClient.instance;
+  }
 }
 
-redis = global.redisClient;
-console.log("redis", redis);
-
-export default redis;
+export default RedisClient;
