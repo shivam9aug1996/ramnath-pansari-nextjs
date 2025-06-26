@@ -437,8 +437,10 @@ export async function GET(req, res) {
         { status: 401 }
       );
     }
+    const updatedCart = moveFreeItemToTop(cart);
 
-    return NextResponse.json({ cart }, { status: 200 });
+
+    return NextResponse.json({ cart: updatedCart }, { status: 200 });
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(
@@ -461,3 +463,21 @@ const calculateTotalAmount = (products: any = []): number => {
     return parseFloat(total?.toFixed(2)) + productTotal;
   }, 0);
 };
+
+
+const FREE_ITEM_ID = "676da9f75763ded56d43032d";
+
+function moveFreeItemToTop(cart) {
+  if (!cart?.items?.length) return cart;
+
+  const index = cart.items.findIndex(
+    (item) => item.productId === FREE_ITEM_ID || item.productDetails?._id === FREE_ITEM_ID
+  );
+
+  if (index > 0) {
+    const [freeItem] = cart?.items?.splice(index, 1); // remove it
+    cart?.items?.unshift(freeItem); // move to top
+  }
+
+  return cart;
+}
