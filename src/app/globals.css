@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.current-location-button {
+    padding: 10px 14px;
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #000000;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    font-weight: 600;
+    transition: all 0.2s ease; 
+}
+
+.current-location-button-text {
+    font-size: 10px;
+    font-weight: 600;
+}

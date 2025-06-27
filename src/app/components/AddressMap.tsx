@@ -25,13 +25,17 @@ interface AddressMapProps {
     address: string;
     name?: string;
   }) => void;
+  currentLat?: number;
+  currentLng?: number;
 }
 
 const AddressMap: React.FC<AddressMapProps> = ({
   initialLat,
   initialLng,
   initialAddress,
-  onLocationSelect
+  onLocationSelect,
+  currentLat,
+  currentLng
 }) => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [marker, setMarker] = useState<{ lat: number; lng: number } | null>(null);
@@ -334,6 +338,38 @@ console.log("map34567876543", location);
           </InfoWindow>
         )}
       </GoogleMap>
+      <div
+        style={{
+          position: "absolute",
+          bottom: "80px",
+          right: "10px",
+          zIndex: 10,
+        }}
+      >
+        <button
+          onClick={() => {
+            if (!currentLat || !currentLng) return;
+            const location = { lat: currentLat, lng: currentLng };
+            setMarker(location);
+            setMapCenter(location);
+
+            const geocoder = new google.maps.Geocoder();
+            geocoder
+              .geocode({ location })
+              .then((response) => {
+                if (response.results[0]) {
+                  const address = response.results[0].formatted_address;
+                  setClickedLocation({ ...location, address });
+                  updateSearchInput(address);
+                }
+              })
+              .catch(console.error);
+          }}
+          className="current-location-button"
+        >
+          <p className="current-location-button-text">📍 Current Location</p>
+        </button>
+      </div>
     </div>
   );
 };
