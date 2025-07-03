@@ -16,6 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="fast2sms" content="IXnaFm3TaNDs3a9WTvoZylwTuPvobVsl" />
+      </head>
+
       <body className={inter.className}>
         {children}
       </body>
