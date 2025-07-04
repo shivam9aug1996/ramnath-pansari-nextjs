@@ -5,7 +5,7 @@ import { secretKey } from "../../lib/keys";
 import { client, serviceSid } from "../../lib/twilioClient";
 import { cookies } from "next/headers";
 import { ObjectId } from "mongodb";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const generateToken = (user: any, isGuestUser: boolean = false) => {
   const payload = {
