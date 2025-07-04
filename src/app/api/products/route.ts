@@ -590,6 +590,8 @@ export async function PATCH(req, res) {
       }
     }
 
+    await RedisClient.flushAll();
+
     return NextResponse.json(
       {
         message: "Categories sync completed",

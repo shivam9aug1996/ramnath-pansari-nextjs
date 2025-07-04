@@ -23,20 +23,24 @@ export async function POST(req, res) {
 
     // Send OTP using Twilio
 
-    if (
-      process.env.NODE_ENV !== "development"
-    ) {
-      if(mobileNumber!=="9999999999") {
-        try {
-          const verification = await client.verify.v2
-            .services(serviceSid)
-            .verifications.create({ to: `+91${mobileNumber}`, channel: "sms" });
-          console.log("verification", JSON.stringify(verification));
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
+    // if (
+    //   process.env.NODE_ENV !== "development"
+    // ) {
+    //   if(mobileNumber!=="9999999999") {
+    //     try {
+    //       const verification = await client.verify.v2
+    //         .services(serviceSid)
+    //         .verifications.create({ to: `+91${mobileNumber}`, channel: "sms" });
+    //       console.log("verification", JSON.stringify(verification));
+    //     } catch (error) {
+    //       console.log(error);
+    //       return NextResponse.json(
+    //         { error: "Error from twilio" },
+    //         { status: 400 }
+    //       );
+    //     }
+    //   }
+    // }
 
     // console.log(`Verification SID: ${JSON.stringify(verification)}`);
 
