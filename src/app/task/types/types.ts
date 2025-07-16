@@ -2,7 +2,7 @@
 export type FieldConfig = {
     name: string;
     label: string;
-    type: string;
+    type: string; // 'text' | 'number' | 'select' | 'multiselect' | 'checkboxes'
     required?: boolean;
     min?: number;
     max?: number;
@@ -23,7 +23,7 @@ export type FieldConfig = {
 
   export type TabFieldProps = {
     field: any;
-    value: any;
+    value: any; // string | string[] for multiselect
     error: string;
     inputRef: React.RefObject<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement

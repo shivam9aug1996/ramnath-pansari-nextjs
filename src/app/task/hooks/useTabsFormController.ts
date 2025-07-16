@@ -39,7 +39,11 @@ export function useTabsFormController(config: TabsFormProps['config']) {
       if (!initialValuesRef.current[tab.key]) {
         const initial: Record<string, any> = {};
         tab.fields.forEach(field => {
-          initial[field.name] = '';
+          if (field.type === 'multiselect' || field.type === 'checkboxes') {
+            initial[field.name] = [];
+          } else {
+            initial[field.name] = '';
+          }
         });
         initialValuesRef.current[tab.key] = initial;
       }
@@ -68,6 +72,15 @@ export function useTabsFormController(config: TabsFormProps['config']) {
   const checkFieldDirty = (tabKey: string, fieldName: string) => {
     const initial = initialValuesRef.current[tabKey];
     const current = currentValuesRef.current[tabKey];
+    const field = config.find(tab => tab.key === tabKey)?.fields.find(f => f.name === fieldName);
+  
+    if (field?.type === 'multiselect' || field?.type === 'checkboxes') {
+      const a = Array.isArray(initial[fieldName]) ? initial[fieldName] : [];
+      const b = Array.isArray(current[fieldName]) ? current[fieldName] : [];
+      if (a.length !== b.length) return true;
+      // Compare contents (order-insensitive)
+      return a.sort().join(',') !== b.sort().join(',');
+    }
     return current[fieldName] !== initial[fieldName];
   };
 

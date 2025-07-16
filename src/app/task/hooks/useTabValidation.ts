@@ -5,8 +5,13 @@ export function useTabValidation(config: TabConfig[]) {
     const tab = config.find(t => t.key === tabKey);
     const field = tab?.fields.find(f => f.name === fieldName);
     if (!field) return '';
-    if (field.required && !value) {
-      return `${field.label} is required`;
+    if (field.required) {
+      if (field.type === 'multiselect' && (!value || value.length === 0)) {
+        return `${field.label} is required`;
+      }
+      if (field.type !== 'multiselect' && !value) {
+        return `${field.label} is required`;
+      }
     }
     if (field.type === 'number' && value !== '') {
       const numValue = Number(value);
