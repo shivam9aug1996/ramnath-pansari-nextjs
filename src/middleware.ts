@@ -31,6 +31,9 @@ export async function middleware(request: NextRequest) {
     if (currentPath.startsWith("/api/driver")) {
       return NextResponse.next();
     }
+    if (currentPath.startsWith("/api/task")) {
+      return NextResponse.next();
+    }
     if (!currentPath.startsWith("/api/auth")) {
       return new NextResponse(
         JSON.stringify({ success: false, message: "Authentication failed" }),
