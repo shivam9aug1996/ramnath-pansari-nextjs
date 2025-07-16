@@ -84,6 +84,21 @@ export function useTabsFormController(config: TabsFormProps['config']) {
     return current[fieldName] !== initial[fieldName];
   };
 
+  const checkFieldDirtyName = (tabKey: string, fieldName: string) => {
+    const initial = initialValuesRef.current[tabKey];
+    const current = currentValuesRef.current[tabKey];
+    const field = config.find(tab => tab.key === tabKey)?.fields.find(f => f.name === fieldName);
+  
+    if (field?.type === 'multiselect' || field?.type === 'checkboxes') {
+      const a = Array.isArray(initial[fieldName]) ? initial[fieldName] : [];
+      const b = Array.isArray(current[fieldName]) ? current[fieldName] : [];
+      if (a.length !== b.length) return fieldName
+      // Compare contents (order-insensitive)
+      return a.sort().join(',') !== b.sort().join(',') ? fieldName : '';
+    }
+    return current[fieldName] !== initial[fieldName] ? fieldName : '';
+  };
+
   const handleInputBlur = useCallback((tabKey: string, fieldName: string) => {
     const value = currentValuesRef.current[tabKey]?.[fieldName] ?? '';
     const error = validateField(tabKey, fieldName, value);
@@ -94,13 +109,18 @@ export function useTabsFormController(config: TabsFormProps['config']) {
         [fieldName]: error
       }
     }));
+    const dynamicKey = `${tabKey}_keys`;
     setDirtyTabs(prev => ({
       ...prev,
-      [tabKey]: checkFieldDirty(tabKey, fieldName) || Object.keys(currentValuesRef.current[tabKey]).some(key => key !== fieldName && checkFieldDirty(tabKey, key))
+      [tabKey]: checkFieldDirty(tabKey, fieldName) || Object.keys(currentValuesRef.current[tabKey]).some(key => key !== fieldName && checkFieldDirty(tabKey, key)),
+      [dynamicKey]: {
+        ...prev[dynamicKey],
+        [fieldName]: checkFieldDirtyName(tabKey, fieldName)
+      }
     }));
   }, [checkFieldDirty, currentValuesRef, setDirtyTabs, validateField]);
 
-  
+  console.log('dirtyTabs', dirtyTabs);
 //console.log('currentValuesRef', currentValuesRef.current);
   const handleInputChange = (tabKey: string, fieldName: string, value: any,isForceUpdate:boolean = false) => {
     currentValuesRef.current[tabKey] = {

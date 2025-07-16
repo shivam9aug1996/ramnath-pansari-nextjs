@@ -20,12 +20,13 @@ const TabsForm: React.FC<TabsFormProps> = ({ config }) => {
   } = useTabsFormController(config);
 
   const handleFieldChange = useCallback(
-    (tabKey: string, fieldName: string) => (value: any, isForceUpdate?: boolean) => {
-      handleInputChange(tabKey, fieldName, value, isForceUpdate);
-    },
+    (tabKey: string, fieldName: string) =>
+      (value: any, isForceUpdate?: boolean) => {
+        handleInputChange(tabKey, fieldName, value, isForceUpdate);
+      },
     [handleInputChange]
   );
-  
+
   const handleFieldBlur = useCallback(
     (tabKey: string, fieldName: string) => () => {
       handleInputBlur(tabKey, fieldName);
@@ -33,10 +34,9 @@ const TabsForm: React.FC<TabsFormProps> = ({ config }) => {
     [handleInputBlur]
   );
 
-
   return (
     <div>
-       {loading && (
+      {loading && (
         <div
           style={{
             textAlign: "center",
@@ -58,7 +58,7 @@ const TabsForm: React.FC<TabsFormProps> = ({ config }) => {
         dirtyTabs={dirtyTabs}
         onTabClick={handleTabClick}
       />
-     
+
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -70,10 +70,16 @@ const TabsForm: React.FC<TabsFormProps> = ({ config }) => {
           const ref = fieldRefs?.current?.[config[activeTab].key]?.[field.name];
           const tabKey = config[activeTab].key;
           const currentValue =
-            currentValuesRef?.current?.[tabKey]?.[field.name] ?? "";
+            currentValuesRef?.current?.[tabKey]?.[field.name] ??
+            (field.type === "multiselect" || field.type === "checkboxes"
+              ? []
+              : "");
           const fieldError = validationErrors[tabKey]?.[field.name] ?? "";
+          const dirty = dirtyTabs[`${tabKey}_keys`]?.[field.name] === field.name ? true : false
+          console.log("dirty",dirty)
           return (
             <TabField
+              dirty={dirty} 
               key={field.name}
               field={field}
               value={currentValue}

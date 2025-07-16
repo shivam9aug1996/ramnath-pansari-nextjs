@@ -8,13 +8,15 @@ const TabField: React.FC<TabFieldProps> = ({
   inputRef,
   onChange,
   onBlur,
+  dirty
 }) => {
-    console.log("Rendered TabField",field.name,value)
+    console.log("Rendered TabField",field.name,value,dirty)
   return (
-    <div style={{ marginBottom: 12 }}>
+    <div style={{ marginBottom: 12}}>
       <label>
         {field.label}
         {field.required && " *"}
+        {dirty && <span style={{ color: "red" ,fontSize:10}}>changed</span>}
         <br />
         {field.type === "select" ? (
           <select
@@ -101,6 +103,7 @@ const TabField: React.FC<TabFieldProps> = ({
           />
         )}
       </label>
+      
       {error && (
         <p style={{ color: "red", margin: "4px 0 0 0", fontSize: "12px" }}>
           {error}
@@ -115,6 +118,8 @@ function areEqual(prevProps: TabFieldProps, nextProps: TabFieldProps) {
     prevProps.value === nextProps.value &&
     prevProps.error === nextProps.error &&
     prevProps.field.name === nextProps.field.name
+     &&
+    prevProps.dirty === nextProps.dirty
   );
 }
 
