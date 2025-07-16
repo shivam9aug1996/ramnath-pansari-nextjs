@@ -75,8 +75,7 @@ const TabsForm: React.FC<TabsFormProps> = ({ config }) => {
               ? []
               : "");
           const fieldError = validationErrors[tabKey]?.[field.name] ?? "";
-          const dirty = dirtyTabs[`${tabKey}_keys`]?.[field.name] === field.name ? true : false
-          console.log("dirty",dirty)
+          const dirty = dirtyTabs?.[`${tabKey}_keys`]?.[field.name] === field.name ? true : false
           return (
             <TabField
               dirty={dirty} 

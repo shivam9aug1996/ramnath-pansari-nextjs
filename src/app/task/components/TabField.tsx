@@ -10,7 +10,7 @@ const TabField: React.FC<TabFieldProps> = ({
   onBlur,
   dirty
 }) => {
-    console.log("Rendered TabField",field.name,value,dirty)
+    console.log("Rendered TabField",field.name)
   return (
     <div style={{ marginBottom: 12}}>
       <label>

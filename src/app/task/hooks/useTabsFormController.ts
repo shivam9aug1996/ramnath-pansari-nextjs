@@ -120,8 +120,6 @@ export function useTabsFormController(config: TabsFormProps['config']) {
     }));
   }, [checkFieldDirty, currentValuesRef, setDirtyTabs, validateField]);
 
-  console.log('dirtyTabs', dirtyTabs);
-//console.log('currentValuesRef', currentValuesRef.current);
   const handleInputChange = (tabKey: string, fieldName: string, value: any,isForceUpdate:boolean = false) => {
     currentValuesRef.current[tabKey] = {
       ...currentValuesRef.current[tabKey],
