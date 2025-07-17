@@ -24,13 +24,13 @@ const tabConfig: TabConfig[] = [
         required: true,
         options: ["USA", "Canada", "UK", "Australia", "India"],
       },
-      {
-        name: "languages",
-        label: "Languages Known",
-        type: "multiselect",
-        required: true,
-        options: ["English", "Hindi", "Spanish", "French", "German"],
-      },
+      // {
+      //   name: "languages",
+      //   label: "Languages Known",
+      //   type: "multiselect",
+      //   required: true,
+      //   options: ["English", "Hindi", "Spanish", "French", "German"],
+      // },
       {
         name: "languagesCheckbox",
         label: "Languages (Checkboxes)",

@@ -92,11 +92,11 @@ export function useTabsFormController(config: TabsFormProps['config']) {
     if (field?.type === 'multiselect' || field?.type === 'checkboxes') {
       const a = Array.isArray(initial[fieldName]) ? initial[fieldName] : [];
       const b = Array.isArray(current[fieldName]) ? current[fieldName] : [];
-      if (a.length !== b.length) return fieldName
+      if (a.length !== b.length) return fieldName;
       // Compare contents (order-insensitive)
       return a.sort().join(',') !== b.sort().join(',') ? fieldName : '';
     }
-    return current[fieldName] !== initial[fieldName] ? fieldName : '';
+    return current[fieldName] != initial[fieldName] ? fieldName : '';
   };
 
   const handleInputBlur = useCallback((tabKey: string, fieldName: string) => {
@@ -109,15 +109,26 @@ export function useTabsFormController(config: TabsFormProps['config']) {
         [fieldName]: error
       }
     }));
+    
     const dynamicKey = `${tabKey}_keys`;
-    setDirtyTabs(prev => ({
-      ...prev,
-      [tabKey]: checkFieldDirty(tabKey, fieldName) || Object.keys(currentValuesRef.current[tabKey]).some(key => key !== fieldName && checkFieldDirty(tabKey, key)),
-      [dynamicKey]: {
-        ...prev[dynamicKey],
-        [fieldName]: checkFieldDirtyName(tabKey, fieldName)
+    const isFieldDirty = checkFieldDirtyName(tabKey, fieldName);
+    setDirtyTabs(prev => {
+      const newDirtyKeys = { ...prev[dynamicKey] };
+      
+      if (isFieldDirty) {
+        // Add field to dirty state
+        newDirtyKeys[fieldName] = fieldName;
+      } else {
+        // Remove field from dirty state
+        delete newDirtyKeys[fieldName];
       }
-    }));
+      
+      return {
+        ...prev,
+        [tabKey]: checkFieldDirty(tabKey, fieldName) || Object.keys(currentValuesRef.current[tabKey]).some(key => key !== fieldName && checkFieldDirty(tabKey, key)),
+        [dynamicKey]: newDirtyKeys
+      };
+    });
   }, [checkFieldDirty, currentValuesRef, setDirtyTabs, validateField]);
 
   const handleInputChange = (tabKey: string, fieldName: string, value: any,isForceUpdate:boolean = false) => {
