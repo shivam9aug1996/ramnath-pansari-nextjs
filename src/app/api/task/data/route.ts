@@ -10,6 +10,7 @@ const mockAllTabData = {
     city: "Mumbai",
     zip: 400001,
     country: "India",
+    languagesCheckbox: ["Spanish", "French"]
   },
 };
 
