@@ -171,7 +171,10 @@ export function useTabsFormController(config: TabsFormProps['config']) {
       // Update initial values and current values
       initialValuesRef.current[tab.key] = { ...data };
       currentValuesRef.current[tab.key] = { ...data };
-      setDirtyTabs(prev => ({ ...prev, [tab.key]: false }));
+      setDirtyTabs(prev => {
+        const { [`${tab.key}_keys`]: _, ...rest } = prev;
+        return { ...rest, [tab.key]: false };
+      });
       // Move to next tab if not last
       if (tabIdx < config.length - 1) {
         setActiveTab(tabIdx + 1);
