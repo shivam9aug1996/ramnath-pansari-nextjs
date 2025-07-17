@@ -81,7 +81,7 @@ export function useTabsFormController(config: TabsFormProps['config']) {
       // Compare contents (order-insensitive)
       return a.sort().join(',') !== b.sort().join(',');
     }
-    return current[fieldName] !== initial[fieldName];
+    return current[fieldName] != initial[fieldName];
   };
 
   const checkFieldDirtyName = (tabKey: string, fieldName: string) => {
