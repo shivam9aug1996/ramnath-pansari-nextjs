@@ -77,6 +77,7 @@ export async function POST(req, res) {
       const user = await db.collection("users").findOne({ mobileNumber });
       console.log("us67890-r", user);
       const isGuestUser = mobileNumber === "9999999991";
+      const isAdminUser = mobileNumber === "8888888888";
 
       if (user) {
         // if(user.password==undefined){
@@ -116,9 +117,10 @@ export async function POST(req, res) {
           userData: { ...user, userAlreadyRegistered: true },
           token: token,
         };
+        const newRes = isGuestUser ? { ...response, isGuestUser: true,userData:{...user,name:"Guest User",isGuestUser:true} } : isAdminUser ? { ...response, isAdminUser: true,userData:{...user,name:"Admin User",isAdminUser:true} } : response
 
         return NextResponse.json(
-          isGuestUser ? { ...response, isGuestUser: true,userData:{...user,name:"Guest User",isGuestUser:true} } : response,
+          newRes,
           { status: 200 }
         );
       } else {
@@ -142,9 +144,9 @@ export async function POST(req, res) {
           userData: { ...user, userAlreadyRegistered: false },
           token: token,
         }
-
+        const newRes = isGuestUser ? { ...response, isGuestUser: true,userData:{...user,name:"Guest User",isGuestUser:true} } : isAdminUser ? { ...response, isAdminUser: true,userData:{...user,name:"Admin User",isAdminUser:true} } : response
         return NextResponse.json(
-          isGuestUser ? { ...response, isGuestUser: true,userData:{...user,name:"Guest User",isGuestUser:true} } : response,
+          newRes,
           { status: 200 }
         );
       }

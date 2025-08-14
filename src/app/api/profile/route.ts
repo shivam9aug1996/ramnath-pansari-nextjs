@@ -25,6 +25,7 @@ export async function PUT(req: Request, res) {
     const khataUrl = formData?.get("khataUrl");
     const type = formData.get(`images[type]`);
     const imageUrl = formData.get(`images[image]`);
+   // const removeImage = formData.get("removeImage");
 
     const response = await isTokenVerified(req);
     if (response) {
@@ -66,6 +67,12 @@ export async function PUT(req: Request, res) {
       const data = await uploadImage(imageObject);
       updateData.profileImage = data;
     }
+    // if(removeImage==="true"){
+    //   if(user?.profileImage){
+    //     await deleteImage(user?.profileImage);
+    //   }
+    //   updateData.profileImage = null;
+    // }
     console.log("uytdfghjkl", updateData);
     // Only proceed with update if there is data to update
     if (Object.keys(updateData).length > 0) {
@@ -120,6 +127,7 @@ export async function GET(req) {
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
+    console.log("user",user)
 
     return NextResponse.json(
       {
@@ -193,6 +201,8 @@ export async function DELETE(req) {
 
     // Delete user profile
     await db.collection("users").deleteOne({ _id: userObjectId }, { session });
+
+    await db.collection("pushTokens").deleteOne({ userId: userId }, { session });
 
     await commitTransaction(session);
     return NextResponse.json(

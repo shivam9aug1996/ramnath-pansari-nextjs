@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { isTokenVerified } from "@/json";
 import { encode } from "js-base64";
 import { connectDB } from "@/app/api/lib/dbconnection";
+import { sendPushNotification } from "@/app/api/utils/sendPush";
 const orderid = require("order-id")("key");
 
 function storeImages(cart) {
@@ -146,6 +147,15 @@ export async function POST(req, res) {
         ],
         amountPaid: transactionData?.amount || 0,
       });
+
+      const admin = await db.collection("pushTokens").findOne({
+        isAdminUser: true,
+      });
+      if (admin) {
+        admin?.tokens?.forEach(async (token) => {
+          await sendPushNotification({deviceToken: token?.toString(),orderId: result?.insertedId?.toString(),userId: admin?.userId});
+        });
+      }
 
       //create order
       return NextResponse.json(

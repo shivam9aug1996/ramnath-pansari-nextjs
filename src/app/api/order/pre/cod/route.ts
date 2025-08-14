@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { isTokenVerified } from "@/json";
+import { sendPushNotification } from "@/app/api/utils/sendPush";
 const orderid = require("order-id")("key");
 
 function storeImages(cart) {
@@ -102,6 +103,17 @@ export async function POST(req, res) {
       orderHistory: [{ status: OrderStatus.CONFIRMED, timestamp: new Date() }],
       amountPaid: transactionData?.amount || 0,
     });
+    // send push notification to admin
+    const admin = await db.collection("pushTokens").findOne({
+      isAdminUser: true,
+    });
+    console.log("admin34567890", admin);
+    if (admin) {
+      admin?.tokens?.forEach(async (token) => {
+        await sendPushNotification({deviceToken: token?.toString(),orderId: result?.insertedId?.toString(),userId: admin?.userId});
+      });
+      
+    }
     return NextResponse.json(
       {
         message: "Order placed successfully",
