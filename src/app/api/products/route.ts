@@ -118,11 +118,6 @@ export async function GET(req, res) {
 
     if (cachedData) {
       let data = JSON.parse(cachedData);
-      // await new Promise((res) => {
-      //   setTimeout(() => {
-      //     res("hi");
-      //   }, 500);
-      // });
 
       return NextResponse.json({ ...data }, { status: 200 });
     }
@@ -136,17 +131,23 @@ export async function GET(req, res) {
 
     // Calculate the number of documents to skip
     const skip = (page - 1) * limit;
+ 
 
     // Find products where categoryPath contains the specified category ID
     const products = await db
       .collection("products")
-      .find({ categoryPath: new ObjectId(categoryId) })
+      .find({ 
+        categoryPath: new ObjectId(categoryId),
+        discountedPrice: { $ne: 0 }
+      })
       .skip(skip)
       .limit(limit)
       .toArray();
-    const filteredProducts = products.filter(
-      (product) => product?.discountedPrice !== 0
-    );
+      //const filteredProducts = products;
+
+    // const filteredProducts = products.filter(
+    //   (product) => product?.discountedPrice !== 0
+    // );
     // await new Promise((res) => {
     //   setTimeout(() => {
     //     res("hi");
@@ -161,7 +162,7 @@ export async function GET(req, res) {
     const totalPages = Math.ceil(totalProducts / limit);
 
     const responseData = {
-      products: filteredProducts,
+      products: products,
       totalProducts,
       totalPages,
       currentPage: page,
