@@ -4,6 +4,8 @@ import { connectDB } from "@/app/api/lib/dbconnection";
 import jwt from "jsonwebtoken";
 import { secretKey } from "@/app/api/lib/keys";
 import { ObjectId } from "mongodb";
+import { Expo } from "expo-server-sdk";
+import type { ExpoPushMessage } from "expo-server-sdk";
 
 type AnyObject = { [key: string]: any };
 
@@ -234,6 +236,53 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     console.debug(`${LOG_PREFIX} PUT res`, { hasWrapper: Boolean((res as any)?.value), isDoc: !Boolean((res as any)?.value) });
     console.debug(`${LOG_PREFIX} PUT updated`, { exists: Boolean(updated) });
     if (!updated) return buildError("NOT_FOUND", "Order not found", 404);
+
+    // Send push notification if orderStatus changed
+    try {
+      if ("orderStatus" in body) {
+        const prevStatus = (before as AnyObject)?.orderStatus;
+        const nextStatus = String(body.orderStatus);
+        if (prevStatus !== nextStatus) {
+          const userId = String((updated as AnyObject)?.userId || "");
+          const orderMongoId = String((updated as AnyObject)?._id || "");
+          if (userId) {
+            const tokensDoc = await db.collection("pushTokens").findOne({ userId });
+            const tokens: string[] = tokensDoc?.tokens || [];
+            if (tokens.length) {
+              const titleMap: AnyObject = {
+                delivered: "Your order has been delivered",
+                out_for_delivery: "Your order is out for delivery",
+                confirmed: "Your order is confirmed",
+                canceled: "Your order was canceled",
+              };
+              const title = titleMap[nextStatus] || `Order status updated to ${nextStatus}`;
+              const expo = new Expo({});
+              const messages: ExpoPushMessage[] = tokens.map((t): ExpoPushMessage => ({
+                to: t,
+                sound: "default",
+                data: { updateOrderStatus: true, orderId: orderMongoId, userId },
+                priority: "high",
+                title,
+              }));
+              const tickets = await expo.sendPushNotificationsAsync(messages);
+              const okIds: string[] = [];
+              tickets?.forEach((ticket: any) => {
+                if (ticket?.status === "ok") okIds.push(ticket?.id);
+              });
+              if (okIds.length) {
+                await expo.getPushNotificationReceiptsAsync(okIds);
+              }
+              console.debug(`${LOG_PREFIX} push sent`, { count: tokens.length, title });
+            } else {
+              console.debug(`${LOG_PREFIX} no tokens for user`, { userId });
+            }
+          }
+        }
+      }
+    } catch (pushErr: any) {
+      console.debug(`${LOG_PREFIX} push error`, { message: pushErr?.message });
+    }
+
     return NextResponse.json(normalize(updated), { status: 200 });
   } catch (err: any) {
     return buildError("INTERNAL", err?.message || "Internal server error", 500);

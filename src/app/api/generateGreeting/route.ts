@@ -32,7 +32,11 @@ export async function POST(req: Request) {
     });
 
     if (!response.ok) {
-      throw new Error(`HF API error: ${response.status}`);
+      console.log("HF API error: ", response.status);
+      return NextResponse.json(
+        { text: "Your one-stop shop for everything you love." },
+        { status: 200 }
+      );
     }
 
     const data = await response.json();
