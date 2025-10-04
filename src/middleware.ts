@@ -12,12 +12,17 @@ export async function middleware(request: NextRequest) {
   // if (currentPath === "/whatsapp-script.js") {
   //   return NextResponse.next();
   // }
-  // console.log("liuy654ertyui987654567890", currentPath);
   // console.log("6543edfghjyt543456", userToken, authorization);
   userToken = authorization?.split(" ")[1];
   // const decoded = await jwt.verify(userToken, "secretkey");
   // console.log("decoded8765434567890", decoded);
+  console.log("liuy654ertyui987654567890", currentPath,userToken);
+
   if (!userToken) {
+    // if(currentPath.startsWith("/admin")) {
+    //   console.log("admin authenticated");
+    //   return NextResponse.next();
+    // }
     //return NextResponse.next();
     // console.log("876543456789", userToken, authorization);
 
@@ -46,6 +51,7 @@ export async function middleware(request: NextRequest) {
         { status: 401 }
       );
     }
+   
     // else if (currentPath.includes("api/auth/signup")) {
     //   if (!fp) {
     //     return new NextResponse(
@@ -70,6 +76,9 @@ export async function middleware(request: NextRequest) {
   else if(currentPath.includes("/addressMap")) {
     console.log("addressMap authenticated");
     return NextResponse.next();
+  }else if(currentPath.includes("/admin")) {
+    console.log("admin authenticated");
+    return NextResponse.next();
   }
   // else if (
   //   currentPath === "/login" ||
@@ -86,5 +95,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/:path*", "/addressMap/:path*"],
+  matcher: ["/api/:path*", "/addressMap/:path*", "/admin/:path*"],
 };

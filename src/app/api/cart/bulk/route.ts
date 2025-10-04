@@ -67,13 +67,15 @@ export async function PUT(req) {
           const itemIndex = updatedItems.findIndex(i => i.productId.equals(productObjectId));
           const existingItem = updatedItems[itemIndex];
           const oldQuantity = existingItem?.quantity || 0;
-  
-          if (itemIndex === -1 && quantity > 0) {
-            updatedItems.push({ productId: productObjectId, quantity, productDetails: product });
-          } else if (itemIndex !== -1 && quantity > 0) {
-            updatedItems[itemIndex].quantity = quantity;
+          const adjustedQuantity = product.maxQuantity 
+          ? Math.min(quantity, product.maxQuantity) 
+          : quantity;
+          if (itemIndex === -1 && adjustedQuantity > 0) {
+            updatedItems.push({ productId: productObjectId, quantity: adjustedQuantity, productDetails: product });
+          } else if (itemIndex !== -1 && adjustedQuantity > 0) {
+            updatedItems[itemIndex].quantity = adjustedQuantity;
             updatedItems[itemIndex].productDetails = product;
-          } else if (itemIndex !== -1 && quantity === 0) {
+          } else if (itemIndex !== -1 && adjustedQuantity === 0) {
             updatedItems.splice(itemIndex, 1);
           }
         }
