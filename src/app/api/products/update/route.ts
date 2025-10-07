@@ -42,18 +42,18 @@ export async function PATCH(req, res) {
         // Search JioMart for this specific product
         const jioMartProduct = await searchJioMartProduct(existingProduct.name);
         
-        if (jioMartProduct) {
+        if (jioMartProduct?.discountedPrice && jioMartProduct.price && jioMartProduct.maxQuantity) {
             console.log("i765jioMartProduct66",jioMartProduct)
           // Update the product with fresh data
           await db.collection("products").updateOne(
             { _id: existingProduct._id },
             {
               $set: {
-                image: jioMartProduct.image,
+               // image: jioMartProduct.image,
                 discountedPrice: jioMartProduct.discountedPrice,
                 price: jioMartProduct.price,
-                size: jioMartProduct.size,
                 maxQuantity: jioMartProduct.maxQuantity,
+               // isOutOfStock: jioMartProduct.isOutOfStock,
                 lastUpdated: new Date(),
               },
             }
@@ -69,6 +69,8 @@ export async function PATCH(req, res) {
             newDiscountedPrice: jioMartProduct.discountedPrice,
             oldMaxQuantity: existingProduct.maxQuantity,
             newMaxQuantity: jioMartProduct.maxQuantity,
+            oldIsOutOfStock: existingProduct.isOutOfStock,
+            newIsOutOfStock: jioMartProduct.isOutOfStock,
           });
 
           console.log(`✅ Updated: ${existingProduct.name}`);
@@ -79,6 +81,14 @@ export async function PATCH(req, res) {
             name: existingProduct.name,
             error: "Product not found in JioMart"
           });
+          await db.collection("products").updateOne(
+            { _id: existingProduct._id },
+            {
+              $set: {
+                isOutOfStock: true
+              },
+            }
+          );
 
           console.log(`❌ Not found: ${existingProduct.name}`);
         }
@@ -120,6 +130,7 @@ export async function PATCH(req, res) {
   }
 }
 
+
 function getBuyboxMrp(data, productName, index = 0) {
     //console.log("876redfghjhfd",data)
     if (!data?.results?.[index]) return undefined;
@@ -144,6 +155,8 @@ function getBuyboxMrp(data, productName, index = 0) {
     // Recursive call to next index
     return getBuyboxMrp(data, productName, index + 1);
   }
+
+
 // Helper function to search JioMart for a specific product
 async function searchJioMartProduct(productName) {
   try {
@@ -194,20 +207,36 @@ async function searchJioMartProduct(productName) {
       
       
       // Parse the price data (format: "U1P7|1|Reliance Retail||213.0|167.0||46.0|21.0||2|")
-      const priceData = buyboxMrp.find(item => item.includes('U1P7'));
+      const priceData = buyboxMrp?.find(item => item.includes('U1P7'));
+
+      console.log("i765priceData",priceData)
+
+
+      // const isAvailable = isProductAvailableForStore(data, productName, 'U1P7')
+      // console.log("i765767654isAvailable",isAvailable,productName)
+      // Get inventory stores to check stock status
+      //const inventoryStores = getInventoryStores(data, productName);
+      //console.log("i765inventoryStores", JSON.stringify(inventoryStores),productName);
+      
+      // Check if U1P7 is present in inventory stores array
+     // const isOutOfStock = (inventoryStores?.length>0 && !inventoryStores.includes('U1P7') || !inventoryStores) ? true : false;
+      //console.log("i765isOutOfStock", isOutOfStock);
+      
       if (priceData) {
         const parts = priceData.split('|');
         const mrp = parseFloat(parts[4]); // MRP
         const sellingPrice = parseFloat(parts[5]); // Selling price
         const maxQuantity = parseInt(parts[parts.length - 2]) || 1
         console.log("i765maxQuantity",maxQuantity)
+        const product = data.results[0];
         
         return {
           name: product.product.title,
           image: product.product.images[0]?.uri || '',
           price: Math.round(mrp),
           discountedPrice: Math.round(sellingPrice),
-          maxQuantity: maxQuantity
+          maxQuantity: maxQuantity,
+          isOutOfStock: false
         };
       }
     }
