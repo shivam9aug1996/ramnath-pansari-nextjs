@@ -136,17 +136,21 @@ function getBuyboxMrp(data, productName, index = 0) {
     if (!data?.results?.[index]) return undefined;
   
     const product = data.results[index];
-  
+    //console.log("i765prod765uct767890",product,productName,index)
     // Case 1: Direct match with product title
-    if (product?.product?.title === productName) {
+    if (product?.product?.title === productName && product?.product?.attributes?.buybox_mrp?.text) {
       return product?.product?.attributes?.buybox_mrp?.text;
     }
   
     // Case 2: Try matching variant title (only if matchingVariantCount is present)
     if (product?.matchingVariantCount) {
       const variant = product?.product?.variants?.find(
-        (item) => item?.title === productName
+        (item) => {
+         //console.log("i765item76789076",item,productName)
+          return item?.title === productName
+        }
       );
+      //console.log("i765variant767890",variant)
       if (variant) {
         return variant?.attributes?.buybox_mrp?.text;
       }
@@ -160,18 +164,19 @@ function getBuyboxMrp(data, productName, index = 0) {
 // Helper function to search JioMart for a specific product
 async function searchJioMartProduct(productName) {
   try {
-    const response = await fetch('https://www.jiomart.com/lcat/rest/v1/vertex/search-products', {
+    const response = await fetch('https://www.jiomart.com/trex/search', {
       method: 'POST',
       headers: {
         'accept': '*/*',
+        'accept-language': 'en-IN,en-GB;q=0.9,en-US;q=0.8,en;q=0.7,hi;q=0.6',
         'content-type': 'application/json',
-        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
         'origin': 'https://www.jiomart.com',
         'referer': 'https://www.jiomart.com/',
+        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
       },
       body: JSON.stringify({
         "query": productName,
-        "pageSize": 10, // Only get first 10 results
+        "pageSize": 50,
         "facetSpecs": [
           {"facetKey": {"key": "brands"}, "limit": 500, "excludedFilterKeys": ["brands"]},
           {"facetKey": {"key": "categories"}, "limit": 500, "excludedFilterKeys": ["categories"]},
@@ -180,14 +185,26 @@ async function searchJioMartProduct(productName) {
           {"facetKey": {"key": "attributes.avg_selling_price", "return_min_max": true, "intervals": [{"minimum": 0.1, "maximum": 100000000}]}},
           {"facetKey": {"key": "attributes.avg_discount_pct", "return_min_max": true, "intervals": [{"minimum": 0, "maximum": 99}]}}
         ],
-        "filter": "attributes.status:ANY(\"active\") AND (attributes.available_regions:ANY(\"PANINDIABOOKS\", \"PANINDIACRAFT\", \"PANINDIADIGITAL\", \"PANINDIAFASHION\", \"PANINDIAFURNITURE\", \"U1P7\", \"PANINDIAGROCERIES\", \"PANINDIAHOMEANDKITCHEN\", \"PANINDIAHOMEIMPROVEMENT\", \"PANINDIAJEWEL\", \"PANINDIASTL\", \"PANINDIAWELLNESS\")) AND (attributes.inv_stores_1p:ANY(\"ALL\", \"U3HM\", \"SANR\", \"SANS\", \"SURR\", \"SANQ\", \"S4LI\", \"S535\", \"R975\", \"S402\", \"R300\", \"SLI1\", \"V017\", \"SB41\", \"TG1K\", \"SLE4\", \"SLTP\", \"T4QF\", \"S0XN\", \"SL7Q\", \"SZBL\", \"Y524\", \"SH09\", \"V027\", \"SJ14\", \"V012\", \"VLOR\", \"SF11\", \"SF40\", \"SX9A\", \"SC28\", \"SK1M\", \"R810\", \"SZ9U\", \"R696\", \"SJ93\", \"R396\", \"SE40\", \"S3TP\", \"SLOR\", \"SLKO\", \"R406\") OR attributes.inv_stores_3p:ANY(\"ALL\", \"groceries_zone_non-essential_services\", \"general_zone\", \"groceries_zone_essential_services\", \"fashion_zone\", \"electronics_zone\")) AND ( NOT attributes.vertical_code:ANY(\"ALCOHOL\"))",
-        "canonical_filter": "attributes.status:ANY(\"active\") AND (attributes.available_regions:ANY(\"PANINDIABOOKS\", \"PANINDIACRAFT\", \"PANINDIADIGITAL\", \"PANINDIAFASHION\", \"PANINDIAFURNITURE\", \"U1P7\", \"PANINDIAGROCERIES\", \"PANINDIAHOMEANDKITCHEN\", \"PANINDIAHOMEIMPROVEMENT\", \"PANINDIAJEWEL\", \"PANINDIASTL\", \"PANINDIAWELLNESS\")) AND (attributes.inv_stores_1p:ANY(\"ALL\", \"U3HM\", \"SANR\", \"SANS\", \"SURR\", \"SANQ\", \"S4LI\", \"S535\", \"R975\", \"S402\", \"R300\", \"SLI1\", \"V017\", \"SB41\", \"TG1K\", \"SLE4\", \"SLTP\", \"T4QF\", \"S0XN\", \"SL7Q\", \"SZBL\", \"Y524\", \"SH09\", \"V027\", \"SJ14\", \"V012\", \"VLOR\", \"SF11\", \"SF40\", \"SX9A\", \"SC28\", \"SK1M\", \"R810\", \"SZ9U\", \"R696\", \"SJ93\", \"R396\", \"SE40\", \"S3TP\", \"SLOR\", \"SLKO\", \"R406\") OR attributes.inv_stores_3p:ANY(\"ALL\", \"groceries_zone_non-essential_services\", \"general_zone\", \"groceries_zone_essential_services\", \"fashion_zone\", \"electronics_zone\")) AND ( NOT attributes.vertical_code:ANY(\"ALCOHOL\"))",
-        "visitor_id": "anonymous-0d21aadc-9e99-4ad9-96b5-07f4b11350a2"
+        "variantRollupKeys": ["variantId"],
+        "branch": "projects/sr-project-jiomart-jfront-prod/locations/global/catalogs/default_catalog/branches/0",
+        "queryExpansionSpec": {
+          "condition": "AUTO",
+          "pinUnexpandedResults": true
+        },
+        "userInfo": {
+          "userId": "8566634E5CCA3125DAF2A7C8C2A5CB8B3EC839304993A99AF0809E3E27F6A8FD"
+        },
+        "spellCorrectionSpec": {
+          "mode": "AUTO"
+        },
+        "filter": "attributes.status:ANY(\"active\") AND (attributes.mart_availability:ANY(\"JIO\", \"JIO_WA\")) AND (attributes.available_regions:ANY(\"PANINDIABOOKS\", \"PANINDIACRAFT\", \"PANINDIADIGITAL\", \"PANINDIAFASHION\", \"PANINDIAFURNITURE\", \"U1P7\", \"PANINDIAGROCERIES\", \"PANINDIAHOMEANDKITCHEN\", \"PANINDIAHOMEIMPROVEMENT\", \"PANINDIAJEWEL\", \"PANINDIASTL\", \"PANINDIAWELLNESS\")) AND (attributes.inv_stores_1p:ANY(\"ALL\", \"U3HM\", \"SANR\", \"SANS\", \"SURR\", \"SANQ\", \"S4LI\", \"VLOR\", \"SF11\", \"SF40\", \"SX9A\", \"SC28\", \"SK1M\", \"R810\", \"SZ9U\", \"R696\", \"SJ93\", \"R396\", \"SE40\", \"S3TP\", \"SLOR\", \"SLKO\", \"R406\") OR attributes.inv_stores_3p:ANY(\"ALL\", \"groceries_zone_non-essential_services\", \"general_zone\", \"groceries_zone_essential_services\", \"fashion_zone\", \"electronics_zone\")) AND ( NOT attributes.vertical_code:ANY(\"ALCOHOL\"))",
+        "canonicalFilter": "attributes.status:ANY(\"active\") AND (attributes.mart_availability:ANY(\"JIO\", \"JIO_WA\")) AND (attributes.available_regions:ANY(\"PANINDIABOOKS\", \"PANINDIACRAFT\", \"PANINDIADIGITAL\", \"PANINDIAFASHION\", \"PANINDIAFURNITURE\", \"U1P7\", \"PANINDIAGROCERIES\", \"PANINDIAHOMEANDKITCHEN\", \"PANINDIAHOMEIMPROVEMENT\", \"PANINDIAJEWEL\", \"PANINDIASTL\", \"PANINDIAWELLNESS\")) AND (attributes.inv_stores_1p:ANY(\"ALL\", \"U3HM\", \"SANR\", \"SANS\", \"SURR\", \"SANQ\", \"S4LI\", \"VLOR\", \"SF11\", \"SF40\", \"SX9A\", \"SC28\", \"SK1M\", \"R810\", \"SZ9U\", \"R696\", \"SJ93\", \"R396\", \"SE40\", \"S3TP\", \"SLOR\", \"SLKO\", \"R406\") OR attributes.inv_stores_3p:ANY(\"ALL\", \"groceries_zone_non-essential_services\", \"general_zone\", \"groceries_zone_essential_services\", \"fashion_zone\", \"electronics_zone\")) AND ( NOT attributes.vertical_code:ANY(\"ALCOHOL\"))",
+        "visitorId": "anonymous-0d21aadc-9e99-4ad9-96b5-07f4b11350a2"
       })
     });
 
     const data = await response.json();
-    console.log("i765res6789dfghj",data)
+   // console.log("i765res6789dfghj",data)
     
     if (data?.results && data.results.length > 0) {
     //   let product = data.results[0];
@@ -209,7 +226,7 @@ async function searchJioMartProduct(productName) {
       // Parse the price data (format: "U1P7|1|Reliance Retail||213.0|167.0||46.0|21.0||2|")
       const priceData = buyboxMrp?.find(item => item.includes('U1P7'));
 
-      console.log("i765priceData",priceData)
+      //console.log("i765priceData",priceData)
 
 
       // const isAvailable = isProductAvailableForStore(data, productName, 'U1P7')
@@ -231,8 +248,8 @@ async function searchJioMartProduct(productName) {
         const product = data.results[0];
         
         return {
-          name: product.product.title,
-          image: product.product.images[0]?.uri || '',
+          // name: product.product.title,
+          // image: product.product.images[0]?.uri || '',
           price: Math.round(mrp),
           discountedPrice: Math.round(sellingPrice),
           maxQuantity: maxQuantity,
