@@ -1,6 +1,5 @@
 import React, { memo } from "react";
 import { TabHeaderProps } from "../types/types";
-
 const TabHeader: React.FC<TabHeaderProps> = ({
   tabs,
   activeTab,
@@ -27,5 +26,4 @@ const TabHeader: React.FC<TabHeaderProps> = ({
     ))}
   </div>
 );
-
 export default memo(TabHeader);

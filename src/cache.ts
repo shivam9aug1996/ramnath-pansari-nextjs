@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { connectDB } from "./app/api/lib/dbconnection";
 
-async function setCache(cacheId, data) {
+async function setCache(cacheId: string, data: unknown) {
   const db = await connectDB();
   const createdAt = new Date();
 
@@ -16,53 +16,45 @@ async function setCache(cacheId, data) {
         message: "Cache updated successfully",
         data: updatedResult,
       };
-    } else {
-      const result = await db.collection("cache").insertOne({ cacheId, data });
-      return {
-        message: "Cache created successfully",
-        data: {
-          _id: new ObjectId(result?.insertedId),
-          cacheId,
-          data,
-          createdAt,
-        },
-      };
     }
-  } catch (error) {
+
+    const result = await db.collection("cache").insertOne({ cacheId, data });
+    return {
+      message: "Cache created successfully",
+      data: {
+        _id: new ObjectId(result?.insertedId),
+        cacheId,
+        data,
+        createdAt,
+      },
+    };
+  } catch {
     throw new Error("Something went wrong");
   }
 }
 
-async function getCache(cacheId) {
+async function getCache(cacheId: string) {
   const db = await connectDB();
 
   try {
     const cacheData = await db.collection("cache").findOne({ cacheId });
-
-    if (!cacheData) {
-      return null;
-    }
-
+    if (!cacheData) return null;
     return { data: cacheData };
-  } catch (error) {
+  } catch {
     throw new Error("Something went wrong");
   }
 }
 
-async function deleteCache(cacheId) {
+async function deleteCache(cacheId: string) {
   const db = await connectDB();
 
   try {
     const cacheData = await db.collection("cache").findOne({ cacheId });
-
     if (cacheData) {
-      const deleteCustomerResult = await db
-        .collection("cache")
-        .deleteOne({ cacheId });
+      await db.collection("cache").deleteOne({ cacheId });
     }
-
     return { message: "Deleted successfully" };
-  } catch (error) {
+  } catch {
     throw new Error("Something went wrong");
   }
 }

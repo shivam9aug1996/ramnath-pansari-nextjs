@@ -5,50 +5,26 @@ import {
   cloudinary_cloud_name,
   cloudinary_secret_key,
 } from "./keys";
-
 cloudinary.config({
   cloud_name: cloudinary_cloud_name,
   api_key: cloudinary_api_key,
   api_secret: cloudinary_secret_key,
 });
-
-export const uploadImage = async (imageFile) => {
+export const uploadImage = async (imageFile: {
+  type: string;
+  imageUrl?: string;
+}) => {
   try {
     let imageUrl = null;
-    // console.log(",kjhgfghjkl;", imageFile);
-    // const fileBuffer = await imageFile.arrayBuffer();
-    // console.log("765rdfgbnm", fileBuffer);
     var mime = imageFile.type;
     var encoding = "base64";
-    // var base64Data = Buffer.from(fileBuffer).toString("base64");
-    //var fileUri = "data:" + mime + ";" + encoding + "," + imageFile?.imageUrl;
-    //console.log(fileUri?.substring(0, 50));
-    // const bytes = await imageFile.arrayBuffer();
-    // const buffer = Buffer.from(bytes);
-    // const { name: tmpFileName, fd: tmpFileDescriptor } = tmp.fileSync();
-
-    // try {
-    //   // await writeFile(uploadDir, buffer);
-    //   console.log("jhgfdcvhjk", tmpFileName, buffer);
-    //   let result = await writeFile(tmpFileName, buffer);
-    //   console.log("i8765redfghjki87", result);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-
-    let file = await new Promise((res) => {
+    let file = await new Promise<string>((res) => {
       res("data:" + mime + ";" + encoding + "," + imageFile?.imageUrl);
     });
-    //console.log(",jhgfdwe67890", file?.substring(0, 50));
-
     try {
-      const uploadResult = await cloudinary.uploader.upload(file, {
-        //public_id: `uploaded-images/image_tmpFileName`, // Adjust the public_id as needed
-      });
-      // console.log("kjhgfdfghjk", uploadResult);
+      const uploadResult = await cloudinary.uploader.upload(file, {});
       imageUrl = uploadResult?.secure_url;
       try {
-        //  await fs.unlink(uploadDir);
         tmp.setGracefulCleanup();
         return imageUrl;
       } catch (error) {
@@ -58,33 +34,24 @@ export const uploadImage = async (imageFile) => {
       console.log(
         "error while uploading image",
         error,
-        file?.substring(0, 100)
+        file?.substring(0, 100),
       );
     }
   } catch (error) {
     console.log("error in buffer", error);
   }
 };
-
-export const uploadImage1 = async (imageUrl) => {
+export const uploadImage1 = async (imageUrl: string) => {
   try {
-    // Fetch the image from the URL
     const response = await fetch(imageUrl);
     if (!response.ok)
       throw new Error(`Failed to fetch image: ${response.statusText}`);
-
-    // Get the response as an ArrayBuffer and convert it to a Buffer
     const arrayBuffer = await response.arrayBuffer();
     const fileBuffer = Buffer.from(arrayBuffer);
-
-    // Convert the buffer to a base64 string
     const mimeType = response.headers.get("content-type");
     const base64Data = fileBuffer.toString("base64");
     const fileUri = `data:${mimeType};base64,${base64Data}`;
-
-    // Upload the image to Cloudinary
     const uploadResult = await cloudinary.uploader.upload(fileUri, {});
-
     console.log("Image uploaded successfully:", uploadResult.secure_url);
     return uploadResult.secure_url;
   } catch (error) {
@@ -92,16 +59,13 @@ export const uploadImage1 = async (imageUrl) => {
     return null;
   }
 };
-
-export const deleteImage = async (imageUrl) => {
+export const deleteImage = async (imageUrl: string) => {
+  console.log("deleteImage---------->", imageUrl);
   const url = new URL(imageUrl);
   const pathnameParts = url.pathname.split("/");
   const imageName = pathnameParts[pathnameParts.length - 1];
   const publicName = imageName?.substring(0, imageName?.lastIndexOf("."));
-
-  cloudinary.uploader.destroy(
-    publicName,
-    //{ invalidate: true, resource_type: "image" },
-    (err, callResult) => console.log("Response", err, callResult)
+  cloudinary.uploader.destroy(publicName, (err, callResult) =>
+    console.log("Response", err, callResult),
   );
 };

@@ -1,5 +1,4 @@
 import React from "react";
-
 const DeleteAccountInstructions = () => {
   return (
     <div style={{ padding: "20px", textAlign: "center" }}>
@@ -23,5 +22,4 @@ const DeleteAccountInstructions = () => {
     </div>
   );
 };
-
 export default DeleteAccountInstructions;

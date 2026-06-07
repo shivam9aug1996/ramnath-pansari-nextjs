@@ -1,10 +1,12 @@
-import { Expo } from "expo-server-sdk";
+import { Expo, ExpoPushMessage } from "expo-server-sdk";
 const expo = new Expo({});
-export async function sendPushNotification(
-  response: any,
-) {
+export async function sendPushNotification(response: {
+  deviceToken: string;
+  orderId: string;
+  userId: string;
+}) {
   const { deviceToken, orderId, userId } = response;
-  let pushArr = [
+  const pushArr: ExpoPushMessage[] = [
     {
       to: deviceToken,
       sound: "default",
@@ -20,7 +22,6 @@ export async function sendPushNotification(
     },
   ];
   let tickets = await expo.sendPushNotificationsAsync(pushArr);
-
   let okStatusArray: string[] = [];
   tickets?.forEach((item) => {
     if (item?.status === "ok") {

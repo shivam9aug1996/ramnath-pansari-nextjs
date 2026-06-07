@@ -1,5 +1,5 @@
 "use client";
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 import TabHeader from "./TabHeader";
 import TabField from "./TabField";
 import { TabsFormProps } from "../types/types";
@@ -24,15 +24,16 @@ const TabsForm: React.FC<TabsFormProps> = ({ config }) => {
       (value: any, isForceUpdate?: boolean) => {
         handleInputChange(tabKey, fieldName, value, isForceUpdate);
       },
-    [handleInputChange]
+    [handleInputChange],
   );
 
   const handleFieldBlur = useCallback(
     (tabKey: string, fieldName: string) => () => {
       handleInputBlur(tabKey, fieldName);
     },
-    [handleInputBlur]
+    [handleInputBlur],
   );
+  console.log("tab form", dirtyTabs);
 
   return (
     <div>
@@ -75,10 +76,14 @@ const TabsForm: React.FC<TabsFormProps> = ({ config }) => {
               ? []
               : "");
           const fieldError = validationErrors[tabKey]?.[field.name] ?? "";
-          const dirty = dirtyTabs?.[`${tabKey}_keys`]?.[field.name] === field.name ? true : false
+          const dirtyKeys = dirtyTabs?.[`${tabKey}_keys`];
+          const dirty =
+            typeof dirtyKeys === "object" &&
+            dirtyKeys !== null &&
+            dirtyKeys[field.name] === field.name;
           return (
             <TabField
-              dirty={dirty} 
+              dirty={dirty}
               key={field.name}
               field={field}
               value={currentValue}

@@ -1,15 +1,12 @@
 import { isTokenVerified } from "@/json";
-import { ObjectId } from "mongodb";
-import { NextResponse } from "next/server";
-import { connectDB } from "../../lib/dbconnection";
+import { NextRequest, NextResponse } from "next/server";
 import { encode } from "js-base64";
 
-// POST - Add a new address for the user
-export async function POST(req, res) {
+export async function POST(req: NextRequest) {
   if (req.method !== "POST") {
     return NextResponse.json(
       { message: "Method not allowed" },
-      { status: 405 }
+      { status: 405 },
     );
   }
 
@@ -19,7 +16,7 @@ export async function POST(req, res) {
     if (!amount || amount == 0) {
       return NextResponse.json(
         { message: "Pass correct value for the amount" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -31,11 +28,11 @@ export async function POST(req, res) {
     let credentials;
     if (isLive) {
       credentials = encode(
-        `${process.env.RAZORPAY_KEY_LIVE}:${process.env.RAZORPAY_SECRET_LIVE}`
+        `${process.env.RAZORPAY_KEY_LIVE}:${process.env.RAZORPAY_SECRET_LIVE}`,
       );
     } else {
       credentials = encode(
-        `${process.env.RAZORPAY_KEY}:${process.env.RAZORPAY_SECRET}`
+        `${process.env.RAZORPAY_KEY}:${process.env.RAZORPAY_SECRET}`,
       );
     }
 
@@ -60,13 +57,13 @@ export async function POST(req, res) {
       console.log("ytdfghj", res?.error);
       return NextResponse.json(
         { error: res?.error?.description },
-        { status: 500 }
+        { status: 500 },
       );
     }
   } catch (error) {
     return NextResponse.json(
       { error: "Something went wrong" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

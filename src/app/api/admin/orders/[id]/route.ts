@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/app/api/lib/dbconnection";
-// @ts-ignore - typings not installed for jsonwebtoken in this project
+
 import jwt from "jsonwebtoken";
 import { secretKey } from "@/app/api/lib/keys";
 import { ObjectId } from "mongodb";
@@ -10,15 +10,6 @@ import type { ExpoPushMessage } from "expo-server-sdk";
 type AnyObject = { [key: string]: any };
 
 const LOG_PREFIX = "[admin/orders/:id]";
-
-const ORDER_STATUS_ENUM = [
-  "created",
-  "confirmed",
-  "packed",
-  "out_for_delivery",
-  "delivered",
-  "canceled",
-];
 
 function buildError(code: string, message: string, status: number) {
   console.debug(`${LOG_PREFIX} error`, { code, message, status });
@@ -47,15 +38,22 @@ async function requireAdmin(req: Request) {
       console.debug(`${LOG_PREFIX} DB connection failed during auth`);
       return buildError("INTERNAL", "Database connection failed", 500);
     }
-    const user = await db.collection("users").findOne({ _id: new ObjectId(decoded.id) });
+    const user = await db
+      .collection("users")
+      .findOne({ _id: new ObjectId(decoded.id) });
     if (!user) {
-      console.debug(`${LOG_PREFIX} user not found for token`, { userId: decoded.id });
+      console.debug(`${LOG_PREFIX} user not found for token`, {
+        userId: decoded.id,
+      });
       return buildError("UNAUTHORIZED", "User not found", 401);
     }
 
     const isAdminFromDb = Boolean((user as AnyObject)?.isAdminUser);
     const isAdminFallback = (user as AnyObject)?.mobileNumber === "8888888888";
-    console.debug(`${LOG_PREFIX} admin flags`, { isAdminFromDb, isAdminFallback });
+    console.debug(`${LOG_PREFIX} admin flags`, {
+      isAdminFromDb,
+      isAdminFallback,
+    });
     if (!(isAdminFromDb || isAdminFallback)) {
       return buildError("FORBIDDEN", "Admin access required", 403);
     }
@@ -103,12 +101,15 @@ function buildIdFilter(id: string) {
   if (ObjectId.isValid(id)) {
     or.unshift({ _id: new ObjectId(id) });
   }
-  // Fallback: in case some docs were created with string _id
+
   or.push({ _id: id as any });
   return { $and: [base, { $or: or }] };
 }
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } },
+) {
   try {
     const authError = await requireAdmin(req);
     if (authError) return authError;
@@ -131,10 +132,13 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(
+  req: Request,
+  { params }: { params: { id: string } },
+) {
   try {
     const authError = await requireAdmin(req);
-    console.log("authError",authError);
+    console.log("authError", authError);
     if (authError) return authError;
 
     const rawId = params?.id || "";
@@ -148,15 +152,12 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     }
 
     const update: AnyObject = { $set: { updatedAt: new Date() } };
-    console.log("b567890dy",body);
-    // defer orderStatus handling until after we load existing doc
+    console.log("b567890dy", body);
 
-    // allow address corrections and other partial fields
     if (body?.addressData) {
       update.$set.addressData = body.addressData;
     }
     if (body?.cartData) {
-      // basic validation
       const items = body.cartData?.cart?.items || [];
       for (const item of items) {
         if (typeof item?.quantity !== "number" || item.quantity <= 0) {
@@ -171,25 +172,35 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       update.$set.productCount = items.length || 0;
       update.$set.totalProductCount = items.reduce(
         (acc: number, it: any) => acc + Number(it?.quantity || 0),
-        0
+        0,
       );
     }
 
-    // Set orderStatus exactly as provided (no history push)
     if ("orderStatus" in body) {
       update.$set.orderStatus = String(body.orderStatus);
-      console.debug(`${LOG_PREFIX} orderStatus set`, { orderStatus: update.$set.orderStatus });
+      console.debug(`${LOG_PREFIX} orderStatus set`, {
+        orderStatus: update.$set.orderStatus,
+      });
     }
 
-    // Update transactionData fields (amount, currency) and amountPaid
-    if (body?.transactionData && ("amount" in body.transactionData || "currency" in body.transactionData)) {
+    if (
+      body?.transactionData &&
+      ("amount" in body.transactionData || "currency" in body.transactionData)
+    ) {
       const txSet: AnyObject = {};
       if ("amount" in body.transactionData) {
         txSet["transactionData.amount"] = String(body.transactionData.amount);
       }
       if ("currency" in body.transactionData) {
-        if (body.transactionData.currency != null && typeof body.transactionData.currency !== "string") {
-          return buildError("BAD_REQUEST", "transactionData.currency must be string", 400);
+        if (
+          body.transactionData.currency != null &&
+          typeof body.transactionData.currency !== "string"
+        ) {
+          return buildError(
+            "BAD_REQUEST",
+            "transactionData.currency must be string",
+            400,
+          );
         }
         txSet["transactionData.currency"] = body.transactionData.currency;
       }
@@ -199,45 +210,40 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
     if ("amountPaid" in body) {
       update.$set.amountPaid = String(body.amountPaid);
-      console.debug(`${LOG_PREFIX} amountPaid update`, { amountPaid: update.$set.amountPaid });
+      console.debug(`${LOG_PREFIX} amountPaid update`, {
+        amountPaid: update.$set.amountPaid,
+      });
     }
 
-    // Replace orderHistory exactly as provided when present
     if ("orderHistory" in body) {
       update.$set.orderHistory = body.orderHistory;
-      console.debug(`${LOG_PREFIX} orderHistory replace`, { count: Array.isArray(body.orderHistory) ? body.orderHistory.length : undefined });
+      console.debug(`${LOG_PREFIX} orderHistory replace`, {
+        count: Array.isArray(body.orderHistory)
+          ? body.orderHistory.length
+          : undefined,
+      });
     }
 
     const filter = buildIdFilter(id);
     console.debug(`${LOG_PREFIX} PUT filter`, filter);
     const before = await db.collection("orders").findOne(filter);
-    console.debug(`${LOG_PREFIX} PUT exists before`, { exists: Boolean(before) });
-    // if (body?.orderStatus) {
-    //   const status: string = String(body.orderStatus);
-    //   // allow unknown strings but prefer enum (no hard validation)
-    //   const previousStatus = (before as AnyObject)?.orderStatus;
-    //   if (previousStatus !== status) {
-    //     if (!update.$push) update.$push = {};
-    //     update.$set.orderStatus = status;
-    //     update.$push.orderHistory = {
-    //       $each: [{ status, timestamp: new Date() }],
-    //       $position: 0,
-    //     } as any;
-    //     console.debug(`${LOG_PREFIX} status change`, { previousStatus, status });
-    //   } else {
-    //     console.debug(`${LOG_PREFIX} status unchanged, skip history push`, { status });
-    //   }
-    // }
-    const res = await db.collection("orders").findOneAndUpdate(filter, update, { returnDocument: "after", // modern drivers
-      // @ts-ignore fallback for older drivers
+    console.debug(`${LOG_PREFIX} PUT exists before`, {
+      exists: Boolean(before),
+    });
+
+    const res = await db.collection("orders").findOneAndUpdate(filter, update, {
+      returnDocument: "after",
+
       returnOriginal: false,
     } as any);
     const updated = (res as any)?.value ?? (res as any);
-    console.debug(`${LOG_PREFIX} PUT res`, { hasWrapper: Boolean((res as any)?.value), isDoc: !Boolean((res as any)?.value) });
+    console.debug(`${LOG_PREFIX} PUT res`, {
+      hasWrapper: Boolean((res as any)?.value),
+      isDoc: !Boolean((res as any)?.value),
+    });
     console.debug(`${LOG_PREFIX} PUT updated`, { exists: Boolean(updated) });
     if (!updated) return buildError("NOT_FOUND", "Order not found", 404);
 
-    // Send push notification if orderStatus changed
     try {
       if ("orderStatus" in body) {
         const prevStatus = (before as AnyObject)?.orderStatus;
@@ -246,7 +252,9 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
           const userId = String((updated as AnyObject)?.userId || "");
           const orderMongoId = String((updated as AnyObject)?._id || "");
           if (userId) {
-            const tokensDoc = await db.collection("pushTokens").findOne({ userId });
+            const tokensDoc = await db
+              .collection("pushTokens")
+              .findOne({ userId });
             const tokens: string[] = tokensDoc?.tokens || [];
             if (tokens.length) {
               const titleMap: AnyObject = {
@@ -255,15 +263,22 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
                 confirmed: "Your order is confirmed",
                 canceled: "Your order was canceled",
               };
-              const title = titleMap[nextStatus] || `Order status updated to ${nextStatus}`;
+              const title =
+                titleMap[nextStatus] || `Order status updated to ${nextStatus}`;
               const expo = new Expo({});
-              const messages: ExpoPushMessage[] = tokens.map((t): ExpoPushMessage => ({
-                to: t,
-                sound: "default",
-                data: { updateOrderStatus: true, orderId: orderMongoId, userId },
-                priority: "high",
-                title,
-              }));
+              const messages: ExpoPushMessage[] = tokens.map(
+                (t): ExpoPushMessage => ({
+                  to: t,
+                  sound: "default",
+                  data: {
+                    updateOrderStatus: true,
+                    orderId: orderMongoId,
+                    userId,
+                  },
+                  priority: "high",
+                  title,
+                }),
+              );
               const tickets = await expo.sendPushNotificationsAsync(messages);
               const okIds: string[] = [];
               tickets?.forEach((ticket: any) => {
@@ -272,7 +287,10 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
               if (okIds.length) {
                 await expo.getPushNotificationReceiptsAsync(okIds);
               }
-              console.debug(`${LOG_PREFIX} push sent`, { count: tokens.length, title });
+              console.debug(`${LOG_PREFIX} push sent`, {
+                count: tokens.length,
+                title,
+              });
             } else {
               console.debug(`${LOG_PREFIX} no tokens for user`, { userId });
             }
@@ -289,7 +307,10 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } },
+) {
   try {
     const authError = await requireAdmin(req);
     if (authError) return authError;
@@ -309,10 +330,11 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
       .findOneAndUpdate(
         filter,
         { $set: { isDeleted: true, updatedAt: new Date() } },
-        { returnDocument: "after", // modern drivers
-          // @ts-ignore fallback for older drivers
+        {
+          returnDocument: "after",
+
           returnOriginal: false,
-        } as any
+        } as any,
       );
     const deletedDoc = (res as any)?.value ?? (res as any);
     if (!deletedDoc) return buildError("NOT_FOUND", "Order not found", 404);
@@ -321,5 +343,3 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
     return buildError("INTERNAL", err?.message || "Internal server error", 500);
   }
 }
-
-

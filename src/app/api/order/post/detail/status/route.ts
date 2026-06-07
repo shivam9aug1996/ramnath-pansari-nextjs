@@ -1,14 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { isTokenVerified } from "@/json";
-import { ObjectId } from "mongodb";
 import { connectDB } from "@/app/api/lib/dbconnection";
-import { Expo } from "expo-server-sdk";
-const expo = new Expo({
-});
+import { Expo, ExpoPushMessage } from "expo-server-sdk";
+import { updateOrderStatus } from "@/app/api/utils/updateOrderStatus";
+const expo = new Expo({});
 
-export async function PUT(req) {
+export async function PUT(req: NextRequest) {
   try {
-    const { newStatus, userId, orderId } = await req.json();
+    const { newStatus, userId, orderId, _id } = await req.json();
 
     if (!userId) {
       return NextResponse.json({ message: "Missing user ID" }, { status: 400 });
@@ -16,17 +15,16 @@ export async function PUT(req) {
     if (!orderId) {
       return NextResponse.json(
         { message: "Missing order ID" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     if (!newStatus) {
       return NextResponse.json(
         { message: "Missing new order status" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    // Verify token (example function, replace with your authentication logic)
     const tokenVerificationResponse = await isTokenVerified(req);
     if (tokenVerificationResponse) {
       return tokenVerificationResponse;
@@ -34,74 +32,20 @@ export async function PUT(req) {
 
     const db = await connectDB(req);
 
-    // Fetch the current order to validate its existence and status
-    const order = await db.collection("orders").findOne({
-      userId: userId,
-      _id: new ObjectId(orderId),
-    });
+    await updateOrderStatus(db, orderId, newStatus, userId);
 
-    if (!order) {
-      return NextResponse.json({ message: "Order not found" }, { status: 404 });
-    }
-
-    const currentStatus = order.orderStatus;
-
-    // Validate status transitions
-    const validTransitions = {
-      confirmed: ["out_for_delivery", "canceled"],
-      out_for_delivery: ["delivered", "canceled"],
-      delivered: [],
-      canceled: [],
-    };
-
-    // if (!validTransitions[currentStatus].includes(newStatus)) {
-    //   return NextResponse.json(
-    //     {
-    //       message: `Invalid status transition: cannot change status from '${currentStatus}' to '${newStatus}'`,
-    //     },
-    //     { status: 400 }
-    //   );
-    // }
-
-    // Update the `orderStatus` and append the new entry to `orderHistory`
-    const timestamp = new Date().toISOString();
-    const updateResult = await db.collection("orders").updateOne(
-      { _id: new ObjectId(orderId) },
-      {
-        $set: { orderStatus: newStatus, updatedAt: timestamp },
-        $push: {
-          orderHistory: {
-            $each: [
-              {
-                status: newStatus,
-                timestamp: timestamp,
-              },
-            ],
-            $position: 0, // Prepend to the array
-          },
-        },
-      }
-    );
-
-    if (updateResult.modifiedCount === 0) {
-      return NextResponse.json(
-        { message: "Failed to update order status" },
-        { status: 500 }
-      );
-    }
-
-    let pushArr = [
+    const pushArr: ExpoPushMessage[] = [
       {
         to: "ExponentPushToken[LR57vCAo5DyzpQB0_75SQz]",
         sound: "default",
-        data: { updateOrderStatus: true, orderId: orderId, userId },
+        data: { updateOrderStatus: true, orderId: _id, userId },
         priority: "high",
         title: "Order status updated successfully",
       },
       {
         to: "ExponentPushToken[LR57vCAo5DyzpQB0_75SQz]",
         sound: "default",
-        data: { updateOrderStatus: true, orderId: orderId, userId },
+        data: { updateOrderStatus: true, orderId: _id, userId },
         priority: "high",
       },
     ];
@@ -128,15 +72,14 @@ export async function PUT(req) {
       {
         message: "Order status updated successfully",
         newStatus,
-        timestamp,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(
       { error: "Something went wrong" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

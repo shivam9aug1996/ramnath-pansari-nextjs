@@ -1,29 +1,25 @@
-// Types for config
 export type FieldConfig = {
   name: string;
   label: string;
-  type: string; // 'text' | 'number' | 'select' | 'multiselect' | 'checkboxes'
+  type: string;
   required?: boolean;
   min?: number;
   max?: number;
   validation?: (value: any) => string | null;
   options?: string[];
 };
-
 export type TabConfig = {
   key: string;
   label: string;
   api: string;
   fields: FieldConfig[];
 };
-
 export type TabsFormProps = {
   config: TabConfig[];
 };
-
 export type TabFieldProps = {
   field: any;
-  value: any; // string | string[] for multiselect
+  value: any;
   error: string;
   inputRef: React.RefObject<
     HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -32,16 +28,13 @@ export type TabFieldProps = {
   onBlur: () => void;
   dirty: boolean;
 };
-
 export type TabHeaderProps = {
-  tabs: { key: string; label: string }[];
+  tabs: {
+    key: string;
+    label: string;
+  }[];
   activeTab: number;
   dirtyTabs: DirtyTabs;
   onTabClick: (idx: number) => void;
 };
-
-export type DirtyTabs = {
-    [tabKey: string]: boolean;
-  } & {
-    [tabKey_keys: string]: { [fieldName: string]: string };
-  };
+export type DirtyTabs = Record<string, boolean | Record<string, string>>;

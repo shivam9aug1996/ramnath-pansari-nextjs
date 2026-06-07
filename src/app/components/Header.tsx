@@ -1,5 +1,4 @@
 import React from "react";
-
 const Header = () => {
   return (
     <header style={styles.header}>
@@ -12,7 +11,6 @@ const Header = () => {
     </header>
   );
 };
-
 const styles = {
   header: {
     display: "flex",
@@ -35,5 +33,4 @@ const styles = {
     fontWeight: "bold",
   },
 };
-
 export default Header;

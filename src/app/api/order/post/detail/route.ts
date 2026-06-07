@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server"; // Assuming Next.js environment
+import { NextRequest, NextResponse } from "next/server";
 import { isTokenVerified } from "@/json";
 import { connectDB } from "../../../lib/dbconnection";
 import { ObjectId } from "mongodb";
+import { logError } from "../../../lib/logger";
 
-export async function GET(req, res) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("userId");
@@ -15,11 +16,10 @@ export async function GET(req, res) {
     if (!orderId) {
       return NextResponse.json(
         { message: "Missing order ID" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    // Verify token (example function, replace with your authentication logic)
     const tokenVerificationResponse = await isTokenVerified(req);
     if (tokenVerificationResponse) {
       return tokenVerificationResponse;
@@ -31,7 +31,6 @@ export async function GET(req, res) {
       userId: userId,
       _id: new ObjectId(orderId),
     });
-    console.log("jhgfdsdfghjkl", userId, orderId);
 
     if (!orderData) {
       return NextResponse.json({ message: "Order not found" }, { status: 404 });
@@ -39,10 +38,10 @@ export async function GET(req, res) {
 
     return NextResponse.json({ orderData }, { status: 200 });
   } catch (error) {
-    console.error("Error:", error);
+    logError("Error:", error);
     return NextResponse.json(
       { error: "Something went wrong" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -1,21 +1,12 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/app/api/lib/dbconnection";
-// @ts-ignore - typings not installed for jsonwebtoken in this project
+
 import jwt from "jsonwebtoken";
 import { secretKey } from "@/app/api/lib/keys";
 
 type AnyObject = { [key: string]: any };
 
 const LOG_PREFIX = "[admin/orders]";
-
-const ORDER_STATUS_ENUM = [
-  "created",
-  "confirmed",
-  "packed",
-  "out_for_delivery",
-  "delivered",
-  "canceled", // accommodate existing spelling used elsewhere
-];
 
 function buildError(code: string, message: string, status: number) {
   console.debug(`${LOG_PREFIX} error`, { code, message, status });
@@ -44,15 +35,22 @@ async function requireAdmin(req: Request) {
       console.debug(`${LOG_PREFIX} DB connection failed during auth`);
       return buildError("INTERNAL", "Database connection failed", 500);
     }
-    const user = await db.collection("users").findOne({ _id: new (await import("mongodb")).ObjectId(decoded.id) });
+    const user = await db
+      .collection("users")
+      .findOne({ _id: new (await import("mongodb")).ObjectId(decoded.id) });
     if (!user) {
-      console.debug(`${LOG_PREFIX} user not found for token`, { userId: decoded.id });
+      console.debug(`${LOG_PREFIX} user not found for token`, {
+        userId: decoded.id,
+      });
       return buildError("UNAUTHORIZED", "User not found", 401);
     }
 
     const isAdminFromDb = Boolean((user as AnyObject)?.isAdminUser);
-    const isAdminFallback = (user as AnyObject)?.mobileNumber === "8888888888"; // existing convention in project
-    console.debug(`${LOG_PREFIX} admin flags`, { isAdminFromDb, isAdminFallback });
+    const isAdminFallback = (user as AnyObject)?.mobileNumber === "8888888888";
+    console.debug(`${LOG_PREFIX} admin flags`, {
+      isAdminFromDb,
+      isAdminFallback,
+    });
     if (!(isAdminFromDb || isAdminFallback)) {
       return buildError("FORBIDDEN", "Admin access required", 403);
     }
@@ -159,7 +157,9 @@ export async function GET(req: Request) {
     const filter: AnyObject = { isDeleted: { $ne: true } };
     if (status) filter.orderStatus = status;
     const searchFilter = buildSearchFilter(search);
-    const finalFilter = Object.keys(searchFilter).length ? { $and: [filter, searchFilter] } : filter;
+    const finalFilter = Object.keys(searchFilter).length
+      ? { $and: [filter, searchFilter] }
+      : filter;
     console.debug(`${LOG_PREFIX} GET filter`, finalFilter);
 
     const skip = (page - 1) * limit;
@@ -171,14 +171,21 @@ export async function GET(req: Request) {
       .skip(skip)
       .limit(limit);
     const ordersRaw = await cursor.toArray();
-    console.debug(`${LOG_PREFIX} GET fetched`, { count: ordersRaw?.length || 0 });
+    console.debug(`${LOG_PREFIX} GET fetched`, {
+      count: ordersRaw?.length || 0,
+    });
     const orders = ordersRaw.map(normalizeOrderForResponse);
 
-    const totalCount = await db.collection("orders").countDocuments(finalFilter);
+    const totalCount = await db
+      .collection("orders")
+      .countDocuments(finalFilter);
     const totalPages = Math.max(Math.ceil(totalCount / limit), 1);
     console.debug(`${LOG_PREFIX} GET totals`, { totalCount, totalPages });
 
-    return NextResponse.json({ orders, currentPage: page, totalPages }, { status: 200 });
+    return NextResponse.json(
+      { orders, currentPage: page, totalPages },
+      { status: 200 },
+    );
   } catch (err: any) {
     console.debug(`${LOG_PREFIX} GET error`, { message: err?.message });
     return buildError("INTERNAL", err?.message || "Internal server error", 500);
@@ -191,7 +198,12 @@ export async function POST(req: Request) {
     if (authError) return authError;
 
     const body = (await req.json()) as AnyObject;
-    const { cartData, transactionData = {}, addressData = {}, orderStatus } = body || {};
+    const {
+      cartData,
+      transactionData = {},
+      addressData = {},
+      orderStatus,
+    } = body || {};
     console.debug(`${LOG_PREFIX} POST body shape`, {
       hasCartData: Boolean(cartData),
       hasTx: Boolean(transactionData),
@@ -199,10 +211,11 @@ export async function POST(req: Request) {
       orderStatus,
     });
 
-    // Validation
     const cartValidation = validateCartData(cartData);
     if (!cartValidation.valid) {
-      console.debug(`${LOG_PREFIX} POST validation failed`, { message: cartValidation.message });
+      console.debug(`${LOG_PREFIX} POST validation failed`, {
+        message: cartValidation.message,
+      });
       return buildError("BAD_REQUEST", cartValidation.message!, 400);
     }
 
@@ -210,8 +223,15 @@ export async function POST(req: Request) {
     if (txAmount != null && typeof txAmount !== "string") {
       transactionData.amount = String(txAmount);
     }
-    if (transactionData?.currency && typeof transactionData.currency !== "string") {
-      return buildError("BAD_REQUEST", "transactionData.currency must be string", 400);
+    if (
+      transactionData?.currency &&
+      typeof transactionData.currency !== "string"
+    ) {
+      return buildError(
+        "BAD_REQUEST",
+        "transactionData.currency must be string",
+        400,
+      );
     }
 
     const db = await connectDB(req);
@@ -219,7 +239,7 @@ export async function POST(req: Request) {
       console.debug(`${LOG_PREFIX} DB connection failed`);
       return buildError("INTERNAL", "Database connection failed", 500);
     }
-    const orderId = (require("order-id")("key")).generate();
+    const orderId = require("order-id")("key").generate();
 
     const now = new Date();
     const imgArr = storeImages(cartData?.cart);
@@ -229,7 +249,9 @@ export async function POST(req: Request) {
     const doc: AnyObject = {
       transactionData: {
         ...transactionData,
-        createdAt: transactionData?.createdAt ? new Date(transactionData.createdAt) : now,
+        createdAt: transactionData?.createdAt
+          ? new Date(transactionData.createdAt)
+          : now,
       },
       cartData,
       addressData,
@@ -246,13 +268,17 @@ export async function POST(req: Request) {
     };
 
     const result = await db.collection("orders").insertOne(doc);
-    console.debug(`${LOG_PREFIX} POST inserted`, { insertedId: result?.insertedId?.toString?.() });
-    const created = await db.collection("orders").findOne({ _id: result.insertedId });
-    return NextResponse.json(normalizeOrderForResponse(created as AnyObject), { status: 201 });
+    console.debug(`${LOG_PREFIX} POST inserted`, {
+      insertedId: result?.insertedId?.toString?.(),
+    });
+    const created = await db
+      .collection("orders")
+      .findOne({ _id: result.insertedId });
+    return NextResponse.json(normalizeOrderForResponse(created as AnyObject), {
+      status: 201,
+    });
   } catch (err: any) {
     console.debug(`${LOG_PREFIX} POST error`, { message: err?.message });
     return buildError("INTERNAL", err?.message || "Internal server error", 500);
   }
 }
-
-

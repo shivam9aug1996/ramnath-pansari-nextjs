@@ -1,18 +1,18 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { isTokenVerified } from "@/json";
 import { encode } from "js-base64";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { sendPushNotification } from "@/app/api/utils/sendPush";
+import { CartItem } from "@/types/api";
 const orderid = require("order-id")("key");
 
-function storeImages(cart) {
-  const images = [];
+function storeImages(cart: { items?: CartItem[] }) {
+  const images: string[] = [];
 
-  // Iterate over each item in the cart
-  cart?.items?.forEach((item) => {
-    const { productDetails, quantity } = item;
-    const { image } = productDetails;
+  cart?.items?.forEach((item: CartItem) => {
+    const { productDetails } = item;
+    const { image } = (productDetails ?? {}) as { image?: string };
 
     if (image) {
       if (images.length < 3) {
@@ -24,18 +24,15 @@ function storeImages(cart) {
   return images;
 }
 
-function getTotalProductCount(cart) {
+function getTotalProductCount(cart: { items?: CartItem[] }) {
   console.log("ytrdfghjk", cart);
-  // Iterate over each item in the cart
+
   let total = 0;
-  cart?.items?.forEach((item) => {
+  cart?.items?.forEach((item: CartItem) => {
     const { quantity = 0 } = item;
     console.log("ytredfghjkl", quantity, total, typeof quantity, typeof total);
-    // Store the image 'quantity' number of times or null if there's no image
+
     total = total + quantity;
-    // for (let i = 0; i < quantity; i++) {
-    //   total = total + quantity;
-    // }
   });
   console.log("uytrdfghjk", total);
   return total;
@@ -47,12 +44,12 @@ export const OrderStatus = {
   CANCELED: "canceled",
   DELIVERED: "delivered",
 };
-export async function POST(req, res) {
+export async function POST(req: NextRequest) {
   try {
     if (req.method !== "POST") {
       return NextResponse.json(
         { message: "Method not allowed" },
-        { status: 405 }
+        { status: 405 },
       );
     }
 
@@ -63,7 +60,6 @@ export async function POST(req, res) {
 
     const {
       razorpay_payment_id,
-      razorpay_order_id,
       razorpay_signature,
       isLive = false,
       order_id,
@@ -83,18 +79,18 @@ export async function POST(req, res) {
     const isPaymentVerified = validatePaymentVerification(
       { order_id: order_id, payment_id: razorpay_payment_id },
       razorpay_signature,
-      secretKey
+      secretKey,
     );
 
     if (isPaymentVerified) {
       let credentials;
       if (isLive) {
         credentials = encode(
-          `${process.env.RAZORPAY_KEY_LIVE}:${process.env.RAZORPAY_SECRET_LIVE}`
+          `${process.env.RAZORPAY_KEY_LIVE}:${process.env.RAZORPAY_SECRET_LIVE}`,
         );
       } else {
         credentials = encode(
-          `${process.env.RAZORPAY_KEY}:${process.env.RAZORPAY_SECRET}`
+          `${process.env.RAZORPAY_KEY}:${process.env.RAZORPAY_SECRET}`,
         );
       }
 
@@ -106,12 +102,12 @@ export async function POST(req, res) {
             Authorization: `Basic ${credentials}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       res = await res.json();
       console.log("LKUYTR4567890-=", res);
-      let transactionData = {};
+      let transactionData: Record<string, unknown> = {};
       if (res?.id && res?.method) {
         transactionData.method = res?.method;
         transactionData.id = res?.id;
@@ -145,38 +141,41 @@ export async function POST(req, res) {
         orderHistory: [
           { status: OrderStatus.CONFIRMED, timestamp: new Date() },
         ],
-        amountPaid: transactionData?.amount || 0,
+        amountPaid: (transactionData?.amount as number) || 0,
       });
 
       const admin = await db.collection("pushTokens").findOne({
         isAdminUser: true,
       });
       if (admin) {
-        admin?.tokens?.forEach(async (token) => {
-          await sendPushNotification({deviceToken: token?.toString(),orderId: result?.insertedId?.toString(),userId: admin?.userId});
+        admin?.tokens?.forEach(async (token: { toString(): string }) => {
+          await sendPushNotification({
+            deviceToken: token?.toString(),
+            orderId: result?.insertedId?.toString(),
+            userId: admin?.userId,
+          });
         });
       }
 
-      //create order
       return NextResponse.json(
         {
           message: "Payment successful",
           verified: true,
           orderId: result?.insertedId,
         },
-        { status: 200 }
+        { status: 200 },
       );
     } else {
       return NextResponse.json(
         { message: "Try again", verified: false },
-        { status: 400 }
+        { status: 400 },
       );
     }
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { error: "Something went wrong" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

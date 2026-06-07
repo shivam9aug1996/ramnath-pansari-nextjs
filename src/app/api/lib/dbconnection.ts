@@ -1,77 +1,85 @@
-import { dbUrl } from "./keys";
-import AsyncLock from "async-lock";
+import type { Db, MongoClient, ClientSession } from "mongodb";
+import clientPromise from "./mongodb";
+import { log, logError } from "./logger";
 
-import client from "./mongodb";
+const DB_NAME = "basic-crud";
 
-const uri = dbUrl;
+let cachedDb: Db | null = null;
 
-const lock = new AsyncLock();
+export const connectDB = async (_req?: unknown): Promise<Db> => {
+  if (cachedDb) {
+    log("cachedDb", cachedDb);
+    return cachedDb;
+  }
 
-export const connectDB = async (req) => {
   try {
-    const mongoClient = await client.connect();
-    const db = await mongoClient.db("basic-crud");
-    return db;
+    const client = await clientPromise;
+    cachedDb = client.db(DB_NAME);
+    return cachedDb;
   } catch (error) {
-    console.log("error");
+    logError("connectDB failed", error);
+    throw error;
   }
 };
 
-export const getClient = async () => {
-  return client;
+export const getClient = async (): Promise<MongoClient> => {
+  return clientPromise;
 };
 
 export const startSession = async () => {
   try {
-    let cachedSession = client.startSession();
-    return cachedSession;
+    const client = await getClient();
+    return client.startSession();
   } catch (error) {
-    console.error("uytfdfghjkl", error);
+    logError("startSession failed", error);
+    throw error;
   }
 };
 
-export const startTransaction = async (client) => {
+export const startTransaction = async (client: MongoClient) => {
   try {
-    const session = await client.startSession();
-    console.log("123456789 session started");
+    const session = client.startSession();
+    log("session started");
     try {
-      await session?.startTransaction();
-      console.log("123456789 transaction started");
+      await session.startTransaction();
+      log("transaction started");
       return session;
     } catch (error) {
-      console.log("123456789 error startTransaction", error);
+      logError("startTransaction failed", error);
+      throw error;
     }
   } catch (error) {
-    console.log("123456789 error startSession", error);
+    logError("startSession failed", error);
+    throw error;
   }
 };
 
-export const abortTransaction = async (session) => {
+export const abortTransaction = async (session: ClientSession) => {
   try {
     await session.abortTransaction();
-    console.log("123456789 transaction aborted");
+    log("transaction aborted");
     try {
       await session?.endSession();
-      console.log("123456789 session closed");
+      log("session closed");
     } catch (error) {
-      console.log("123456789 error endSession", error);
+      logError("endSession failed", error);
     }
   } catch (error) {
-    console.log("123456789 error abortTransaction", error);
+    logError("abortTransaction failed", error);
   }
 };
 
-export const commitTransaction = async (session) => {
+export const commitTransaction = async (session: ClientSession) => {
   try {
     await session.commitTransaction();
-    console.log("123456789 transaction committed");
+    log("transaction committed");
     try {
       await session?.endSession();
-      console.log("123456789 session closed");
+      log("session closed");
     } catch (error) {
-      console.log("123456789 error endSession", error);
+      logError("endSession failed", error);
     }
   } catch (error) {
-    console.log("123456789 error commitTransaction", error);
+    logError("commitTransaction failed", error);
   }
 };

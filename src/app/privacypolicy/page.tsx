@@ -1,5 +1,4 @@
 import React from "react";
-
 const PrivacyPolicy = () => {
   const effectiveDate = "25 Dec 2024";
   const companyName = "Ramnath Pansari";
@@ -7,7 +6,6 @@ const PrivacyPolicy = () => {
   const contactPhoneNumber = "+91 9634396572";
   const contactAddress =
     "942, Ramnath Pansari, krishan ganj, pilkhuwa, hapur, Uttar Pradesh, India, 245304";
-
   return (
     <div className="p-6 bg-gray-50 text-gray-800 font-sans">
       <h1 className="text-3xl font-bold mb-4">Privacy Policy</h1>
@@ -165,5 +163,4 @@ const PrivacyPolicy = () => {
     </div>
   );
 };
-
 export default PrivacyPolicy;

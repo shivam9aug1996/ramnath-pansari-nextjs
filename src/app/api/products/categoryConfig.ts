@@ -1,11 +1,15 @@
 const categoryConfig = {
-  // Flours (28985)
   Atta: {
     categoryIds: "28985",
     category: "Atta",
     facetFilters: "category_level.level4:Atta",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "atta-flours-sooji",
+      l3Category: "atta",
+    },
   },
   Besan: {
     categoryIds: "28985",
@@ -13,6 +17,11 @@ const categoryConfig = {
     facetFilters: "category_level.level4:Besan",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "atta-flours-sooji",
+      l3Category: "besan",
+    },
   },
   Maida: {
     categoryIds: "28985",
@@ -20,15 +29,24 @@ const categoryConfig = {
     facetFilters: "category_level.level4:Maida",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "atta-flours-sooji",
+      l3Category: "maida",
+    },
   },
 
-  // Dals (28986)
   "Toor Dal": {
     categoryIds: "28986",
     category: "Toor Dal",
     facetFilters: "category_level.level4:Toor Dal",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "dals-pulses",
+      l3Category: "toor-dal-l3",
+    },
   },
   "Moong Dal": {
     categoryIds: "28986",
@@ -36,6 +54,11 @@ const categoryConfig = {
     facetFilters: "category_level.level4:Moong Dal",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "dals-pulses",
+      l3Category: "moong-dal-l3",
+    },
   },
   "Urad Dal": {
     categoryIds: "28986",
@@ -43,6 +66,11 @@ const categoryConfig = {
     facetFilters: "category_level.level4:Urad Dal",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "dals-pulses",
+      l3Category: "urad-dal-l3",
+    },
   },
   "Masoor Dal": {
     categoryIds: "28986",
@@ -50,6 +78,11 @@ const categoryConfig = {
     facetFilters: "category_level.level4:Masoor Dal",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "dals-pulses",
+      l3Category: "masoor-dal-l3",
+    },
   },
   "Chana Dal": {
     categoryIds: "28986",
@@ -57,6 +90,11 @@ const categoryConfig = {
     facetFilters: "category_level.level4:Chana Dal",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "dals-pulses",
+      l3Category: "chana-dal-l3",
+    },
   },
   "Kabuli Chana": {
     categoryIds: "28986",
@@ -64,15 +102,24 @@ const categoryConfig = {
     facetFilters: "category_level.level4:Kabuli Chana",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "dals-pulses",
+      l3Category: "kabuli-chana",
+    },
   },
 
-  // Oils (28989)
   "Mustard Oil": {
     categoryIds: "28989",
     category: "Mustard Oil",
     facetFilters: "category_level.level4:Mustard Oil",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "edible-oils",
+      l3Category: "mustard-oil-l3",
+    },
   },
   "Groundnut Oil": {
     categoryIds: "28989",
@@ -80,6 +127,11 @@ const categoryConfig = {
     facetFilters: "category_level.level4:Groundnut Oil",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "edible-oils",
+      l3Category: "groundnut-oil",
+    },
   },
   "Olive Oil": {
     categoryIds: "28989",
@@ -87,6 +139,11 @@ const categoryConfig = {
     facetFilters: "category_level.level4:Olive Oil",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "edible-oils",
+      l3Category: "olive-oil-l3",
+    },
   },
   "Sunflower Oil": {
     categoryIds: "28989",
@@ -94,41 +151,62 @@ const categoryConfig = {
     facetFilters: "category_level.level4:Sunflower Oil",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "edible-oils",
+      l3Category: "sunflower-oil-l3",
+    },
   },
 
-  // Sugar (28991)
   Sugar: {
     categoryIds: "28991",
     category: "Sugar",
     facetFilters: "category_level.level4:Sugar",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "salt-sugar-jaggery",
+      l3Category: "sugar-l3",
+    },
   },
 
-  // Ghee (28993)
   Ghee: {
     categoryIds: "28993",
     category: "Ghee",
     facetFilters: "category_level.level4:Ghee",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "cooking-essentials",
+      l2Category: "ghee",
+      l3Category: "ghee-l3",
+    },
   },
 
-  // Oats (28999)
   Oats: {
     categoryIds: "28999",
     category: "Oats",
     facetFilters: "category_level.level4:Oats",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "breakfast-cereals",
+      l3Category: "oats",
+    },
   },
-
   Muesli: {
     categoryIds: "28999",
     category: "Muesli",
     facetFilters: "category_level.level4:Muesli",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "breakfast-cereals",
+      l3Category: "muesli",
+    },
   },
   Flakes: {
     categoryIds: "28999",
@@ -136,31 +214,48 @@ const categoryConfig = {
     facetFilters: "category_level.level4:Flakes",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "breakfast-cereals",
+      l3Category: "flakes",
+    },
   },
 
-  // Sauces & Spreads (29008)
   "Tomato Ketchup & Sauces": {
     categoryIds: "29008",
     category: "Tomato Ketchup & Sauces",
     facetFilters: "category_level.level4:Tomato Ketchup & Sauces",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "spread-sauces-ketchup",
+      l3Category: "tomato-ketchup-sauces",
+    },
   },
-
   "Dips, Dressings, Chilli & Soya Sauce": {
     categoryIds: "29008",
     category: "Dips, Dressings, Chilli & Soya Sauce",
     facetFilters: "category_level.level4:Dips, Dressings, Chilli & Soya Sauce",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "spread-sauces-ketchup",
+      l3Category: "dips-dressings-chilli-and-soya-sauce-l3",
+    },
   },
-
   Mayonnaise: {
     categoryIds: "29008",
     category: "Mayonnaise",
     facetFilters: "category_level.level4:Mayonnaise",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "spread-sauces-ketchup",
+      l3Category: "mayonnaise",
+    },
   },
   Jam: {
     categoryIds: "29008",
@@ -168,14 +263,23 @@ const categoryConfig = {
     facetFilters: "category_level.level4:Jam",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "spread-sauces-ketchup",
+      l3Category: "jam",
+    },
   },
-
   Honey: {
     categoryIds: "29008",
     category: "Honey",
     facetFilters: "category_level.level4:Honey",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "spread-sauces-ketchup",
+      l3Category: "honey",
+    },
   },
   "Choco & Nut Spread": {
     categoryIds: "29008",
@@ -183,138 +287,217 @@ const categoryConfig = {
     facetFilters: "category_level.level4:Choco & Nut Spread",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "spread-sauces-ketchup",
+      l3Category: "choco-nut-spread",
+    },
   },
 
-   // Tea (29661)
-   'Exotic & Flavoured Tea': {
+  "Exotic & Flavoured Tea": {
     categoryIds: "29661",
     category: "Exotic & Flavoured Tea",
     facetFilters: "category_level.level4:Exotic & Flavoured Tea",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM"
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "tea-coffee",
+      l3Category: "exotic-flavoured-tea",
+    },
   },
-  'Gourmet Tea & Tea Bags': {
-      categoryIds: "29661",
-      category: "Gourmet Tea & Tea Bags",
-      facetFilters: "category_level.level4:Gourmet Tea & Tea Bags",
-      availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-      inventoryStores: "ALL OR inventory_stores:U3HM"
+  "Gourmet Tea & Tea Bags": {
+    categoryIds: "29661",
+    category: "Gourmet Tea & Tea Bags",
+    facetFilters: "category_level.level4:Gourmet Tea & Tea Bags",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "tea-coffee",
+      l3Category: "gourmet-tea-tea-bags-l3",
     },
-    'Leaf & Dust Tea': {
-      categoryIds: "29661",
-      category: "Leaf & Dust Tea",
-      facetFilters: "category_level.level4:Leaf & Dust Tea",
-      availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-      inventoryStores: "ALL OR inventory_stores:U3HM"
+  },
+  "Leaf & Dust Tea": {
+    categoryIds: "29661",
+    category: "Leaf & Dust Tea",
+    facetFilters: "category_level.level4:Leaf & Dust Tea",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "tea-coffee",
+      l3Category: "leaf-dust-tea",
     },
-    'Tea Additive': {
-        categoryIds: "29661",
-        category: "Tea Additive",
-        facetFilters: "category_level.level4:Tea Additive",
-        availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-        inventoryStores: "ALL OR inventory_stores:U3HM"
-      },
-      
-       // Coffee (29662)
-    'Ground Coffee': {
-        categoryIds: "29662",
-        category: "Ground Coffee",
-        facetFilters: "category_level.level4:Ground Coffee",
-        availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-        inventoryStores: "ALL OR inventory_stores:U3HM"
-      },
-      'Instant Coffee': {
-        categoryIds: "29662",
-        category: "Instant Coffee",
-        facetFilters: "category_level.level4:Instant Coffee",
-        availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-        inventoryStores: "ALL OR inventory_stores:U3HM"
-      },
-      'Speciality Coffee': {
-      categoryIds: "29662",
-      category: "Speciality Coffee",
-      facetFilters: "category_level.level4:Speciality Coffee",
-      availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-      inventoryStores: "ALL OR inventory_stores:U3HM"
+  },
+  "Tea Additive": {
+    categoryIds: "29661",
+    category: "Tea Additive",
+    facetFilters: "category_level.level4:Tea Additive",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "tea-coffee",
+      l3Category: "tea-additive",
     },
+  },
 
-     // Milk & Milk Products (29011)
-     'Milk': {
-        categoryIds: "29011",
-        category: "Milk",
-        facetFilters: "category_level.level4:Milk",
-        availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-        inventoryStores: "ALL OR inventory_stores:U3HM"
-      },
-      'Milk Powder & Cream': {
-        categoryIds: "29011",
-        category: "Milk Powder & Cream",
-        facetFilters: "category_level.level4:Milk Powder & Cream",
-        availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-        inventoryStores: "ALL OR inventory_stores:U3HM"
-      },
-      'Curd': {
-      categoryIds: "29011",
-      category: "Curd",
-      facetFilters: "category_level.level4:Curd",
-      availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-      inventoryStores: "ALL OR inventory_stores:U3HM"
+  "Ground Coffee": {
+    categoryIds: "29662",
+    category: "Ground Coffee",
+    facetFilters: "category_level.level4:Ground Coffee",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "tea-coffee",
+      l3Category: "ground-coffee",
     },
-    'Butter & Margarine': {
-      categoryIds: "29011",
-      category: "Butter & Margarine",
-      facetFilters: "category_level.level4:Butter & Margarine",
-      availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-      inventoryStores: "ALL OR inventory_stores:U3HM"
+  },
+  "Instant Coffee": {
+    categoryIds: "29662",
+    category: "Instant Coffee",
+    facetFilters: "category_level.level4:Instant Coffee",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "biscuits-drinks-packaged-foods",
+      l2Category: "tea-coffee",
+      l3Category: "instant-coffee",
     },
-    // Cheese (29010)
-    'Cheese': {
-        categoryIds: "29010",
-        category: "Cheese",
-        facetFilters: "category_level.level4:Cheese",
-        availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-        inventoryStores: "ALL OR inventory_stores:U3HM"
-      },
-      'Paneer': {
-        categoryIds: "29010",
-        category: "Paneer",
-        facetFilters: "category_level.level4:Paneer",
-        availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-        inventoryStores: "ALL OR inventory_stores:U3HM"
-      },
+  },
+  "Speciality Coffee": {
+    categoryIds: "29662",
+    category: "Speciality Coffee",
+    facetFilters: "category_level.level4:Speciality Coffee",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+  },
 
-       // Breads & Buns (267)
-    'Buns, Pavs & Pizza Base': {
-        categoryIds: "267",
-        category: "Buns, Pavs & Pizza Base",
-        facetFilters: "category_level.level4:Buns, Pavs & Pizza Base",
-        availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-        inventoryStores: "ALL OR inventory_stores:U3HM"
-      },
-      'Milk, Wheat & Multigrain Bread': {
-        categoryIds: "267",
-        category: "Milk, Wheat & Multigrain Bread",
-        facetFilters: "category_level.level4:Milk, Wheat & Multigrain Bread",
-        availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-        inventoryStores: "ALL OR inventory_stores:U3HM"
-      },
-      'Speciality Breads': {
-        categoryIds: "267",
-        category: "Speciality Breads",
-        facetFilters: "category_level.level4:Speciality Breads",
-        availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-        inventoryStores: "ALL OR inventory_stores:U3HM"
-      },
+  Milk: {
+    categoryIds: "29011",
+    category: "Milk",
+    facetFilters: "category_level.level4:Milk",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "fresh-l1",
+      l2Category: "milk-milk-products",
+      l3Category: "milk",
+    },
+  },
+  "Milk Powder & Cream": {
+    categoryIds: "29011",
+    category: "Milk Powder & Cream",
+    facetFilters: "category_level.level4:Milk Powder & Cream",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "fresh-l1",
+      l2Category: "milk-milk-products",
+      l3Category: "milk-powder-cream",
+    },
+  },
+  Curd: {
+    categoryIds: "29011",
+    category: "Curd",
+    facetFilters: "category_level.level4:Curd",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "fresh-l1",
+      l2Category: "milk-milk-products",
+      l3Category: "curd",
+    },
+  },
+  "Butter & Margarine": {
+    categoryIds: "29011",
+    category: "Butter & Margarine",
+    facetFilters: "category_level.level4:Butter & Margarine",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "fresh-l1",
+      l2Category: "milk-milk-products",
+      l3Category: "butter-margarine",
+    },
+  },
 
-      'Rusk': {
-        categoryIds: "102",
-        category: "Rusk",
-        facetFilters: "category_level.level4:Rusk",
-        availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-        inventoryStores: "ALL OR inventory_stores:U3HM"
-      }
+  Cheese: {
+    categoryIds: "29010",
+    category: "Cheese",
+    facetFilters: "category_level.level4:Cheese",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "fresh-l1",
+      l2Category: "cheese-paneer-tofu",
+      l3Category: "cheese-l3",
+    },
+  },
+  Paneer: {
+    categoryIds: "29010",
+    category: "Paneer",
+    facetFilters: "category_level.level4:Paneer",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "fresh-l1",
+      l2Category: "cheese-paneer-tofu",
+      l3Category: "paneer",
+    },
+  },
 
+  "Buns, Pavs & Pizza Base": {
+    categoryIds: "267",
+    category: "Buns, Pavs & Pizza Base",
+    facetFilters: "category_level.level4:Buns, Pavs & Pizza Base",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "fresh-l1",
+      l2Category: "breads-chapatis",
+      l3Category: "buns-pavs-pizza-base",
+    },
+  },
+  "Milk, Wheat & Multigrain Bread": {
+    categoryIds: "267",
+    category: "Milk, Wheat & Multigrain Bread",
+    facetFilters: "category_level.level4:Milk, Wheat & Multigrain Bread",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "fresh-l1",
+      l2Category: "breads-chapatis",
+      l3Category: "milk-wheat-multigrain-bread",
+    },
+  },
+  "Speciality Breads": {
+    categoryIds: "267",
+    category: "Speciality Breads",
+    facetFilters: "category_level.level4:Speciality Breads",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "fresh-l1",
+      l2Category: "breads-chapatis",
+      l3Category: "speciality-breads",
+    },
+  },
 
+  Rusk: {
+    categoryIds: "102",
+    category: "Rusk",
+    facetFilters: "category_level.level4:Rusk",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "fresh-l1",
+      l2Category: "cakes-rusk-more-l2",
+      l3Category: "rusk",
+    },
+  },
 };
 
 export default categoryConfig;

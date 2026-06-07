@@ -1,19 +1,18 @@
-import { TabConfig } from '../types/types';
-
+import { TabConfig } from "../types/types";
 export function useTabValidation(config: TabConfig[]) {
   const validateField = (tabKey: string, fieldName: string, value: any) => {
-    const tab = config.find(t => t.key === tabKey);
-    const field = tab?.fields.find(f => f.name === fieldName);
-    if (!field) return '';
+    const tab = config.find((t) => t.key === tabKey);
+    const field = tab?.fields.find((f) => f.name === fieldName);
+    if (!field) return "";
     if (field.required) {
-      if (field.type === 'multiselect' && (!value || value.length === 0)) {
+      if (field.type === "multiselect" && (!value || value.length === 0)) {
         return `${field.label} is required`;
       }
-      if (field.type !== 'multiselect' && !value) {
+      if (field.type !== "multiselect" && !value) {
         return `${field.label} is required`;
       }
     }
-    if (field.type === 'number' && value !== '') {
+    if (field.type === "number" && value !== "") {
       const numValue = Number(value);
       if (field.min !== undefined && numValue < field.min) {
         return `${field.label} must be at least ${field.min}`;
@@ -28,18 +27,22 @@ export function useTabValidation(config: TabConfig[]) {
         return customError;
       }
     }
-    return '';
+    return "";
   };
-
   const validateTab = (tabKey: string, values: Record<string, any>) => {
-    const tab = config.find(t => t.key === tabKey);
+    const tab = config.find((t) => t.key === tabKey);
     if (!tab) return {};
-    const errors: { [fieldName: string]: string } = {};
-    tab.fields.forEach(field => {
-      errors[field.name] = validateField(tabKey, field.name, values[field.name]);
+    const errors: {
+      [fieldName: string]: string;
+    } = {};
+    tab.fields.forEach((field) => {
+      errors[field.name] = validateField(
+        tabKey,
+        field.name,
+        values[field.name],
+      );
     });
     return errors;
   };
-
   return { validateField, validateTab };
-} 
+}

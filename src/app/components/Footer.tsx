@@ -1,5 +1,4 @@
-import React from "react";
-
+import React, { CSSProperties } from "react";
 const Footer = () => {
   return (
     <footer style={styles.footer}>
@@ -7,8 +6,10 @@ const Footer = () => {
     </footer>
   );
 };
-
-const styles = {
+const styles: {
+  footer: CSSProperties;
+  text: CSSProperties;
+} = {
   footer: {
     textAlign: "center",
     padding: "20px",
@@ -20,5 +21,4 @@ const styles = {
     margin: 0,
   },
 };
-
 export default Footer;

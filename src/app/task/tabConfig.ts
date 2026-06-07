@@ -1,5 +1,4 @@
 import { TabConfig } from "./types/types";
-
 const tabConfig: TabConfig[] = [
   {
     key: "personal",
@@ -24,13 +23,6 @@ const tabConfig: TabConfig[] = [
         required: true,
         options: ["USA", "Canada", "UK", "Australia", "India"],
       },
-      // {
-      //   name: "languages",
-      //   label: "Languages Known",
-      //   type: "multiselect",
-      //   required: true,
-      //   options: ["English", "Hindi", "Spanish", "French", "German"],
-      // },
       {
         name: "languagesCheckbox",
         label: "Languages (Checkboxes)",
@@ -41,5 +33,4 @@ const tabConfig: TabConfig[] = [
     ],
   },
 ];
-
 export default tabConfig;

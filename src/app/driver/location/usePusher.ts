@@ -1,25 +1,23 @@
 import Pusher from "pusher-js";
 import { useState, useEffect } from "react";
-
-const usePusher = (appKey, appCluster) => {
-  const [pusherInstance, setPusherInstance] = useState(null);
-  const [channel, setChannel] = useState(null);
+import type { Channel } from "pusher-js";
+const usePusher = (appKey: string, appCluster: string) => {
+  const [pusherInstance, setPusherInstance] = useState<Pusher | null>(null);
+  const [channel, setChannel] = useState<Channel | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [error, setError] = useState(null);
-  const [message, setMessage] = useState(null);
-
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<unknown>(null);
   useEffect(() => {
     if (appKey && appCluster) {
-      let pusherObj: any;
+      let pusherObj: Pusher | undefined;
       try {
         pusherObj = new Pusher(appKey, {
           cluster: appCluster,
         });
         setPusherInstance(pusherObj);
-      } catch (error) {
-        setError("Error occurred, pusherObj", error);
+      } catch (err) {
+        setError(`Error occurred, pusherObj: ${String(err)}`);
       }
-
       return () => {
         if (pusherObj) {
           pusherObj.disconnect();
@@ -29,44 +27,38 @@ const usePusher = (appKey, appCluster) => {
       };
     }
   }, [appKey, appCluster]);
-
   console.log("jhgfdcvkjfdfgh", channel);
-
-  const startSocket = (channelName, eventName) => {
+  const startSocket = (channelName: string, eventName: string) => {
     if (pusherInstance && channelName && eventName) {
       try {
         const newChannel = pusherInstance.subscribe(channelName);
         setChannel(newChannel);
-        newChannel.bind(eventName, (data) => {
-          // Handle the event data here
+        newChannel.bind(eventName, (data: unknown) => {
           console.log(`Received data from ${eventName}:`, data);
           setMessage(data);
         });
         setIsConnected(true);
-      } catch (error) {
-        setError("Error occurred, startSocket", error);
+      } catch (err) {
+        setError(`Error occurred, startSocket: ${String(err)}`);
       }
     } else {
       setError("Pusher instance, channel name, or event name not provided.");
     }
   };
-
   const closeSocket = () => {
     if (pusherInstance) {
       pusherInstance.disconnect();
       setPusherInstance(null);
       setIsConnected(false);
     }
-    if (channel) {
+    if (channel && pusherInstance) {
       console.log(channel);
-      channel.unbind();
+      channel.unbind_all();
       pusherInstance.unsubscribe(channel.name);
-      channel.disconnect();
       setChannel(null);
       setIsConnected(false);
     }
   };
-
   return {
     isConnected,
     error,
@@ -75,5 +67,4 @@ const usePusher = (appKey, appCluster) => {
     message,
   };
 };
-
 export default usePusher;

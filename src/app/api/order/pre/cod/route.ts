@@ -1,16 +1,17 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { isTokenVerified } from "@/json";
 import { sendPushNotification } from "@/app/api/utils/sendPush";
 const orderid = require("order-id")("key");
 
-function storeImages(cart) {
-  const images = [];
+import { CartItem } from "@/types/api";
 
-  // Iterate over each item in the cart
-  cart?.items?.forEach((item) => {
-    const { productDetails, quantity } = item;
-    const { image } = productDetails;
+function storeImages(cart: { items?: CartItem[] }) {
+  const images: string[] = [];
+
+  cart?.items?.forEach((item: CartItem) => {
+    const { productDetails } = item;
+    const { image } = (productDetails ?? {}) as { image?: string };
 
     if (image) {
       if (images.length < 3) {
@@ -22,18 +23,15 @@ function storeImages(cart) {
   return images;
 }
 
-function getTotalProductCount(cart) {
+function getTotalProductCount(cart: { items?: CartItem[] }) {
   console.log("ytrdfghjk", cart);
-  // Iterate over each item in the cart
+
   let total = 0;
-  cart?.items?.forEach((item) => {
+  cart?.items?.forEach((item: CartItem) => {
     const { quantity = 0 } = item;
     console.log("ytredfghjkl", quantity, total, typeof quantity, typeof total);
-    // Store the image 'quantity' number of times or null if there's no image
+
     total = total + quantity;
-    // for (let i = 0; i < quantity; i++) {
-    //   total = total + quantity;
-    // }
   });
   console.log("uytrdfghjk", total);
   return total;
@@ -46,12 +44,12 @@ export const OrderStatus = {
   DELIVERED: "delivered",
 };
 
-export async function POST(req, res) {
+export async function POST(req: NextRequest) {
   try {
     if (req.method !== "POST") {
       return NextResponse.json(
         { message: "Method not allowed" },
-        { status: 405 }
+        { status: 405 },
       );
     }
 
@@ -103,29 +101,32 @@ export async function POST(req, res) {
       orderHistory: [{ status: OrderStatus.CONFIRMED, timestamp: new Date() }],
       amountPaid: transactionData?.amount || 0,
     });
-    // send push notification to admin
+
     const admin = await db.collection("pushTokens").findOne({
       isAdminUser: true,
     });
     console.log("admin34567890", admin);
     if (admin) {
-      admin?.tokens?.forEach(async (token) => {
-        await sendPushNotification({deviceToken: token?.toString(),orderId: result?.insertedId?.toString(),userId: admin?.userId});
+      admin?.tokens?.forEach(async (token: { toString(): string }) => {
+        await sendPushNotification({
+          deviceToken: token?.toString(),
+          orderId: result?.insertedId?.toString(),
+          userId: admin?.userId,
+        });
       });
-      
     }
     return NextResponse.json(
       {
         message: "Order placed successfully",
         orderId: result?.insertedId,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { error: "Something went wrong" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

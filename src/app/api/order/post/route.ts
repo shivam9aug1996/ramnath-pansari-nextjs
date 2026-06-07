@@ -1,9 +1,8 @@
-import { NextResponse } from "next/server"; // Assuming Next.js environment
-import { ObjectId } from "mongodb"; // Ensure this is imported for ObjectId operations
+import { NextRequest, NextResponse } from "next/server";
 import { isTokenVerified } from "@/json";
 import { connectDB } from "../../lib/dbconnection";
 
-export async function GET(req, res) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("userId");
@@ -14,7 +13,6 @@ export async function GET(req, res) {
       return NextResponse.json({ message: "Missing user ID" }, { status: 400 });
     }
 
-    // Verify token (example function, replace with your authentication logic)
     const tokenVerificationResponse = await isTokenVerified(req);
     if (tokenVerificationResponse) {
       return tokenVerificationResponse;
@@ -22,10 +20,8 @@ export async function GET(req, res) {
 
     const db = await connectDB(req);
 
-    // Calculate the number of documents to skip for pagination
     const skip = (page - 1) * limit;
 
-    // Find orders by userId with pagination, only returning the needed fields
     const orders = await db
       .collection("orders")
       .find({ userId: userId })
@@ -33,7 +29,6 @@ export async function GET(req, res) {
       .skip(skip)
       .limit(limit)
       .project({
-        // Only return necessary fields
         orderStatus: 1,
         createdAt: 1,
         updatedAt: 1,
@@ -45,7 +40,6 @@ export async function GET(req, res) {
       })
       .toArray();
 
-    // Get the total count of orders for the user (for calculating total pages)
     const totalOrders = await db
       .collection("orders")
       .countDocuments({ userId: userId });
@@ -54,13 +48,13 @@ export async function GET(req, res) {
 
     return NextResponse.json(
       { orders, totalOrders, totalPages, currentPage: page },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(
       { error: "Something went wrong" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -1,6 +1,5 @@
 import React, { memo } from "react";
 import { TabFieldProps } from "../types/types";
-
 const TabField: React.FC<TabFieldProps> = ({
   field,
   value,
@@ -8,15 +7,15 @@ const TabField: React.FC<TabFieldProps> = ({
   inputRef,
   onChange,
   onBlur,
-  dirty
+  dirty,
 }) => {
-    console.log("Rendered TabField",field.name)
+  console.log("Rendered TabField", field.name);
   return (
-    <div style={{ marginBottom: 12}}>
+    <div style={{ marginBottom: 12 }}>
       <label>
         {field.label}
         {field.required && " *"}
-        {dirty && <span style={{ color: "red" ,fontSize:10}}>changed</span>}
+        {dirty && <span style={{ color: "red", fontSize: 10 }}>changed</span>}
         <br />
         {field.type === "select" ? (
           <select
@@ -45,7 +44,10 @@ const TabField: React.FC<TabFieldProps> = ({
             value={value || []}
             multiple
             onChange={(e) => {
-              const selected = Array.from(e.target.selectedOptions, (opt) => opt.value);
+              const selected = Array.from(
+                e.target.selectedOptions,
+                (opt) => opt.value,
+              );
               onChange(selected, true);
             }}
             onBlur={onBlur}
@@ -63,13 +65,18 @@ const TabField: React.FC<TabFieldProps> = ({
             ))}
           </select>
         ) : field.type === "checkboxes" ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             {field.options?.map((option: string) => (
-              <label key={option} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <label
+                key={option}
+                style={{ display: "flex", alignItems: "center", gap: 4 }}
+              >
                 <input
                   type="checkbox"
                   name={field.name}
-                  checked={Array.isArray(value) ? value.includes(option) : false}
+                  checked={
+                    Array.isArray(value) ? value.includes(option) : false
+                  }
                   onChange={(e) => {
                     let newValue = Array.isArray(value) ? [...value] : [];
                     if (e.target.checked) {
@@ -103,7 +110,7 @@ const TabField: React.FC<TabFieldProps> = ({
           />
         )}
       </label>
-      
+
       {error && (
         <p style={{ color: "red", margin: "4px 0 0 0", fontSize: "12px" }}>
           {error}
@@ -112,15 +119,12 @@ const TabField: React.FC<TabFieldProps> = ({
     </div>
   );
 };
-
 function areEqual(prevProps: TabFieldProps, nextProps: TabFieldProps) {
   return (
     prevProps.value === nextProps.value &&
     prevProps.error === nextProps.error &&
-    prevProps.field.name === nextProps.field.name
-     &&
+    prevProps.field.name === nextProps.field.name &&
     prevProps.dirty === nextProps.dirty
   );
 }
-
 export default memo(TabField, areEqual);
