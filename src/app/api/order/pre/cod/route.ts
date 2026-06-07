@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { isTokenVerified } from "@/json";
 import { sendPushNotification } from "@/app/api/utils/sendPush";
-const orderid = require("order-id")("key");
-
 import { CartItem } from "@/types/api";
+import { OrderStatus } from "../../orderStatus";
+const orderid = require("order-id")("key");
 
 function storeImages(cart: { items?: CartItem[] }) {
   const images: string[] = [];
@@ -36,13 +36,6 @@ function getTotalProductCount(cart: { items?: CartItem[] }) {
   console.log("uytrdfghjk", total);
   return total;
 }
-
-export const OrderStatus = {
-  CONFIRMED: "confirmed",
-  OUT_FOR_DELIVERY: "out_for_delivery",
-  CANCELED: "canceled",
-  DELIVERED: "delivered",
-};
 
 export async function POST(req: NextRequest) {
   try {

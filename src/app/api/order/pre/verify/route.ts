@@ -5,6 +5,7 @@ import { encode } from "js-base64";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { sendPushNotification } from "@/app/api/utils/sendPush";
 import { CartItem } from "@/types/api";
+import { OrderStatus } from "../../orderStatus";
 const orderid = require("order-id")("key");
 
 function storeImages(cart: { items?: CartItem[] }) {
@@ -38,12 +39,6 @@ function getTotalProductCount(cart: { items?: CartItem[] }) {
   return total;
 }
 
-export const OrderStatus = {
-  CONFIRMED: "confirmed",
-  OUT_FOR_DELIVERY: "out_for_delivery",
-  CANCELED: "canceled",
-  DELIVERED: "delivered",
-};
 export async function POST(req: NextRequest) {
   try {
     if (req.method !== "POST") {
