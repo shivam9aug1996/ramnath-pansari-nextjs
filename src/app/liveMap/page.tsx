@@ -5,15 +5,11 @@ export default function Page({
 }: {
   searchParams: {
     orderId?: string;
-    lat?: string;
-    lng?: string;
   };
 }) {
-  const orderId = searchParams?.orderId;
-  const lat = parseFloat(searchParams?.lat || "");
-  const lng = parseFloat(searchParams?.lng || "");
+  const orderId = searchParams?.orderId?.trim();
 
-  if (!orderId || Number.isNaN(lat) || Number.isNaN(lng)) {
+  if (!orderId) {
     return (
       <div
         style={{
@@ -22,7 +18,7 @@ export default function Page({
           color: "#666",
         }}
       >
-        Missing orderId or customer location
+        Missing order ID
       </div>
     );
   }
@@ -37,11 +33,7 @@ export default function Page({
         overflow: "hidden",
       }}
     >
-      <DriverTracking
-        orderId={orderId}
-        customerLocation={{ lat, lng }}
-        embedded
-      />
+      <DriverTracking orderId={orderId} embedded />
     </div>
   );
 }
