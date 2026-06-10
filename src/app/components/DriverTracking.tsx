@@ -332,7 +332,7 @@ export default function DriverTracking({
   const [isAutoFollow, setIsAutoFollow] = useState(true);
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyB_h4QX0PCsZ4Zq2ffJ9IT3iaqlFUDeHvA",
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
   });
 
   const driverPosition = useMemo(
