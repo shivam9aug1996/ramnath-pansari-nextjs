@@ -5,6 +5,11 @@ import { sendPushNotification } from "@/app/api/utils/sendPush";
 import { CartItem } from "@/types/api";
 import { OrderStatus } from "../../orderStatus";
 import { syncActiveOrderToFirebase } from "@/app/api/utils/syncActiveOrderToFirebase";
+import {
+  calculateCartSubtotal,
+  getDeliveryFee,
+  getPayableAmountFromCart,
+} from "@/app/api/utils/orderAmount";
 const orderid = require("order-id")("key");
 
 function storeImages(cart: { items?: CartItem[] }) {
@@ -62,8 +67,24 @@ export async function POST(req: NextRequest) {
 
     console.log(cartData, addressData, userId, isLive);
 
-    if (!cartData || !addressData || !userId || !amount) {
+    if (!cartData || !addressData || !userId || amount == null) {
       return NextResponse.json({ message: "Invalid input" }, { status: 400 });
+    }
+
+    const cartItems = cartData?.cart?.items ?? [];
+    const subtotal = calculateCartSubtotal(cartItems);
+    const deliveryFee = getDeliveryFee(subtotal);
+    const expectedAmount = getPayableAmountFromCart(cartItems);
+
+    if (Math.abs(Number(amount) - expectedAmount) > 0.01) {
+      return NextResponse.json(
+        {
+          message: "Invalid order amount",
+          expectedAmount,
+          receivedAmount: amount,
+        },
+        { status: 400 },
+      );
     }
 
     const db = await connectDB(req);
@@ -77,11 +98,11 @@ export async function POST(req: NextRequest) {
       createdAt: new Date(),
       currency: "INR",
       isLive: isLive,
-      amount: amount,
+      amount: expectedAmount,
     };
 
     const totalProductCount = getTotalProductCount(cartData?.cart);
-    const amountPaid = transactionData?.amount || 0;
+    const amountPaid = expectedAmount;
 
     const result = await db.collection("orders").insertOne({
       transactionData,
@@ -97,6 +118,8 @@ export async function POST(req: NextRequest) {
       totalProductCount,
       orderHistory: [{ status: OrderStatus.CONFIRMED, timestamp: new Date() }],
       amountPaid,
+      subtotal,
+      deliveryFee,
     });
 
     await syncActiveOrderToFirebase({

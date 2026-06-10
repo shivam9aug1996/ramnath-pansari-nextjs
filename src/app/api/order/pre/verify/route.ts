@@ -7,6 +7,10 @@ import { sendPushNotification } from "@/app/api/utils/sendPush";
 import { CartItem } from "@/types/api";
 import { OrderStatus } from "../../orderStatus";
 import { syncActiveOrderToFirebase } from "@/app/api/utils/syncActiveOrderToFirebase";
+import {
+  calculateCartSubtotal,
+  getDeliveryFee,
+} from "@/app/api/utils/orderAmount";
 const orderid = require("order-id")("key");
 
 function storeImages(cart: { items?: CartItem[] }) {
@@ -123,6 +127,9 @@ export async function POST(req: NextRequest) {
       let imgArr = storeImages(cartData.cart);
 
       const totalProductCount = getTotalProductCount(cartData?.cart);
+      const cartItems = cartData?.cart?.items ?? [];
+      const subtotal = calculateCartSubtotal(cartItems);
+      const deliveryFee = getDeliveryFee(subtotal);
       const amountPaid = (transactionData?.amount as number) || 0;
 
       let result = await db.collection("orders").insertOne({
@@ -141,6 +148,8 @@ export async function POST(req: NextRequest) {
           { status: OrderStatus.CONFIRMED, timestamp: new Date() },
         ],
         amountPaid,
+        subtotal,
+        deliveryFee,
       });
 
       await syncActiveOrderToFirebase({
