@@ -4,6 +4,7 @@ import { isTokenVerified } from "@/json";
 import { sendPushNotification } from "@/app/api/utils/sendPush";
 import { CartItem } from "@/types/api";
 import { OrderStatus } from "../../orderStatus";
+import { syncActiveOrderToFirebase } from "@/app/api/utils/syncActiveOrderToFirebase";
 const orderid = require("order-id")("key");
 
 function storeImages(cart: { items?: CartItem[] }) {
@@ -79,6 +80,9 @@ export async function POST(req: NextRequest) {
       amount: amount,
     };
 
+    const totalProductCount = getTotalProductCount(cartData?.cart);
+    const amountPaid = transactionData?.amount || 0;
+
     const result = await db.collection("orders").insertOne({
       transactionData,
       cartData,
@@ -90,9 +94,19 @@ export async function POST(req: NextRequest) {
       userId,
       imgArr,
       productCount: cartData?.cart?.items?.length || 0,
-      totalProductCount: getTotalProductCount(cartData?.cart),
+      totalProductCount,
       orderHistory: [{ status: OrderStatus.CONFIRMED, timestamp: new Date() }],
-      amountPaid: transactionData?.amount || 0,
+      amountPaid,
+    });
+
+    await syncActiveOrderToFirebase({
+      userId,
+      mongoOrderId: result.insertedId.toString(),
+      orderId: id,
+      status: OrderStatus.CONFIRMED,
+      imgArr,
+      amountPaid,
+      totalProductCount,
     });
 
     const admin = await db.collection("pushTokens").findOne({

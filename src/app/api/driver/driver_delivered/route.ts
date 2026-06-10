@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../../lib/dbconnection";
 import { asMongoUpdate } from "@/types/api";
+import { syncActiveOrderToFirebase } from "../../utils/syncActiveOrderToFirebase";
 export async function POST(req: NextRequest) {
   try {
     const { orderId, driverId } = await req.json();
@@ -49,6 +50,17 @@ export async function POST(req: NextRequest) {
         },
       }),
     );
+
+    await syncActiveOrderToFirebase({
+      userId: String(order.userId),
+      mongoOrderId: order._id.toString(),
+      orderId,
+      status: "delivered",
+      imgArr: order.imgArr,
+      amountPaid: order.amountPaid,
+      totalProductCount: order.totalProductCount,
+    });
+
     return NextResponse.json(
       { message: "Order marked as delivered" },
       { status: 200 },

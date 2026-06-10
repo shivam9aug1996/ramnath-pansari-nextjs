@@ -6,6 +6,7 @@ import { secretKey } from "@/app/api/lib/keys";
 import { ObjectId } from "mongodb";
 import { Expo } from "expo-server-sdk";
 import type { ExpoPushMessage } from "expo-server-sdk";
+import { syncActiveOrderToFirebase } from "@/app/api/utils/syncActiveOrderToFirebase";
 
 type AnyObject = { [key: string]: any };
 
@@ -251,6 +252,18 @@ export async function PUT(
         if (prevStatus !== nextStatus) {
           const userId = String((updated as AnyObject)?.userId || "");
           const orderMongoId = String((updated as AnyObject)?._id || "");
+          const humanOrderId = String((updated as AnyObject)?.orderId || "");
+          if (userId && orderMongoId) {
+            await syncActiveOrderToFirebase({
+              userId,
+              mongoOrderId: orderMongoId,
+              orderId: humanOrderId,
+              status: nextStatus,
+              imgArr: (updated as AnyObject)?.imgArr,
+              amountPaid: (updated as AnyObject)?.amountPaid,
+              totalProductCount: (updated as AnyObject)?.totalProductCount,
+            });
+          }
           if (userId) {
             const tokensDoc = await db
               .collection("pushTokens")

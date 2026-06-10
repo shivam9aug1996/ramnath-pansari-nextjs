@@ -6,6 +6,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("userId");
+    const status = searchParams.get("status");
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "10", 10);
 
@@ -22,13 +23,24 @@ export async function GET(req: NextRequest) {
 
     const skip = (page - 1) * limit;
 
+    const filter: Record<string, unknown> = { userId };
+    if (status) {
+      const statuses = status
+        .split(",")
+        .map((value) => value.trim())
+        .filter(Boolean);
+      filter.orderStatus =
+        statuses.length > 1 ? { $in: statuses } : statuses[0];
+    }
+
     const orders = await db
       .collection("orders")
-      .find({ userId: userId })
+      .find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .project({
+        orderId: 1,
         orderStatus: 1,
         createdAt: 1,
         updatedAt: 1,
@@ -40,9 +52,7 @@ export async function GET(req: NextRequest) {
       })
       .toArray();
 
-    const totalOrders = await db
-      .collection("orders")
-      .countDocuments({ userId: userId });
+    const totalOrders = await db.collection("orders").countDocuments(filter);
 
     const totalPages = Math.ceil(totalOrders / limit);
 

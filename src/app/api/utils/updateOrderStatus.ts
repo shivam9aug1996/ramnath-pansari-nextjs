@@ -1,5 +1,4 @@
-import { database } from "../../../lib/firebase";
-import { ref, set, remove } from "firebase/database";
+import { syncActiveOrderToFirebase } from "./syncActiveOrderToFirebase";
 
 export async function updateOrderStatus(
   db: any,
@@ -8,10 +7,6 @@ export async function updateOrderStatus(
   userId: string,
 ) {
   const order = await db.collection("orders").findOne({
-    userId: userId,
-    orderId: orderId,
-  });
-  console.log("jgfrew34567890-=", order, {
     userId: userId,
     orderId: orderId,
   });
@@ -41,27 +36,15 @@ export async function updateOrderStatus(
     throw new Error("Failed to update order status");
   }
 
-  try {
-    const locationRef = ref(database, `drivers/${orderId}/locations`);
-
-    const orderStatusRef = ref(database, `orders/${userId}/order/status`);
-    await set(orderStatusRef, {
-      trigger: true,
-      status: newStatus,
-      orderId: orderId,
-      userId: userId,
-      timestamp: timestamp,
-      _id: order?._id?.toString(),
-    });
-    if (newStatus !== "out_for_delivery") {
-      await remove(locationRef);
-    }
-    setTimeout(async () => {
-      await remove(orderStatusRef);
-    }, 2000);
-  } catch (error) {
-    console.error("Error updating Firebase:", error);
-  }
+  await syncActiveOrderToFirebase({
+    userId,
+    mongoOrderId: order._id.toString(),
+    orderId,
+    status: newStatus,
+    imgArr: order.imgArr,
+    amountPaid: order.amountPaid,
+    totalProductCount: order.totalProductCount,
+  });
 
   return { newStatus, timestamp };
 }
