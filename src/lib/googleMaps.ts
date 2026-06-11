@@ -8,6 +8,12 @@ export function getGoogleMapsApiKey(): string {
   );
 }
 
+export function getGoogleMapsApiKeyAddress(): string {
+  return (
+    process.env.GOOGLE_MAPS_API_KEY_ADDRESS ?? ""
+  );
+}
+
 export function getStaticMapApiKey(): string {
   return (
     process.env.STATIC_MAP_API ??

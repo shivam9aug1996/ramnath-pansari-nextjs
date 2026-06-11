@@ -1,8 +1,5 @@
-import dynamic from "next/dynamic";
-const AddressMap = dynamic(() => import("../components/AddressMap"), {
-  ssr: false,
-  loading: () => <></>,
-});
+import AddressMap from "../components/AddressMap";
+
 export default function Page({
   searchParams,
 }: {
@@ -17,7 +14,11 @@ export default function Page({
   const lng = parseFloat(searchParams?.lng || "77.651730");
   const cLat = parseFloat(searchParams?.cLat || "28.709560");
   const cLng = parseFloat(searchParams?.cLng || "77.651730");
-  if (!lat || !lng) return <div>No lat or lng</div>;
+
+  if (Number.isNaN(lat) || Number.isNaN(lng)) {
+    return <div>No lat or lng</div>;
+  }
+
   return (
     <AddressMap
       initialLat={lat}
