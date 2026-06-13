@@ -8,7 +8,6 @@ let cachedDb: Db | null = null;
 
 export const connectDB = async (_req?: unknown): Promise<Db> => {
   if (cachedDb) {
-    log("cachedDb", cachedDb);
     return cachedDb;
   }
 

@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../lib/dbconnection";
 
 import categoryConfig from "./categoryConfig";
-import { fetchVertexProducts, transformVertexProducts } from "./jiomartVertex";
+import { syncJiomartCategories } from "./jiomartSync";
 import RedisClient from "../lib/redisClient";
 import { log, logError } from "../lib/logger";
 
@@ -233,154 +233,26 @@ export async function PATCH(req: NextRequest) {
   }
 
   try {
-    const { categories, wipeAll = false } = await req.json();
+    const { categories, wipeAll = false, syncAll = false } = await req.json();
     const db = await connectDB(req);
-    const results = [];
 
-    if (wipeAll) {
-      await db.collection("products").deleteMany({});
-      await db.collection("carts").updateMany({}, { $set: { items: [] } });
+    const categoryList = syncAll
+      ? Object.keys(categoryConfig)
+      : categories;
 
-      try {
-        await RedisClient.flushAll();
-      } catch (error) {
-        log("Redis flush skipped:", error);
-      }
+    if (!Array.isArray(categoryList) || categoryList.length === 0) {
+      return NextResponse.json(
+        { message: "Provide categories array or syncAll: true" },
+        { status: 400 },
+      );
     }
 
-    for (const categoryName of categories) {
-      try {
-        const config =
-          categoryConfig[categoryName as keyof typeof categoryConfig];
-        if (!config) {
-          throw new Error(`Invalid category name: ${categoryName}`);
-        }
+    const result = await syncJiomartCategories(db, {
+      categories: categoryList,
+      wipeAll,
+    });
 
-        if (!("vertex" in config) || !config.vertex) {
-          throw new Error(
-            `No JioMart Vertex mapping for category: ${categoryName}`,
-          );
-        }
-
-        const vertexItems = await fetchVertexProducts(config.vertex);
-        if (!vertexItems.length) {
-          throw new Error("No products found in JioMart response");
-        }
-
-        const categoryPath = await getCategoryPath(db, categoryName);
-        const transformedProducts = (
-          await transformVertexProducts(
-            vertexItems,
-            categoryName,
-            config.vertex,
-          )
-        ).map((product) => ({
-          ...product,
-          categoryPath: categoryPath.map((id: string) => new ObjectId(id)),
-        }));
-
-        log(
-          `Fetched ${vertexItems.length} items, transformed ${transformedProducts.length} products for ${categoryName}`,
-        );
-
-        if (wipeAll) {
-          if (transformedProducts.length) {
-            await db.collection("products").insertMany(
-              transformedProducts.map((product) => ({
-                ...product,
-                _id: new ObjectId(),
-                createdAt: new Date(),
-                lastUpdated: new Date(),
-              })),
-            );
-          }
-        } else {
-          for (const product of transformedProducts) {
-            await db.collection("products").updateOne(
-              { jiomartUid: product.jiomartUid },
-              {
-                $set: {
-                  ...product,
-                  lastUpdated: new Date(),
-                },
-                $setOnInsert: {
-                  _id: new ObjectId(),
-                  createdAt: new Date(),
-                },
-              },
-              { upsert: true },
-            );
-          }
-        }
-
-        if (categoryName === "Sugar") {
-          const sugarProduct = {
-            name: "UTTAM SUGAR Sulphurfree Sugar (Refined Safed Cheeni)",
-            categoryPath: categoryPath.map((id: string) => new ObjectId(id)),
-            image:
-              "https://rukminim2.flixcart.com/image/832/832/xif0q/sugar/i/a/q/-original-imagtxubkgmbwpa6.jpeg?q=70",
-            discountedPrice: 0,
-            price: 65,
-            size: "1 kg",
-            _id: new ObjectId("676da9f75763ded56d43032d"),
-            category: "Sugar",
-            jiomartUid: "676da9f75763ded56d43032d",
-            jiomartSlug: "uttam-sugar-sulphurfree",
-            skuCode: "676da9f75763ded56d43032d",
-            maxQuantity: 10,
-            isOutOfStock: false,
-            isSmartBazaar: true,
-            lastUpdated: new Date(),
-          };
-
-          await db
-            .collection("products")
-            .updateOne(
-              { _id: sugarProduct._id },
-              { $set: sugarProduct },
-              { upsert: true },
-            );
-        }
-
-        const categoryProducts = await db
-          .collection("products")
-          .find({
-            categoryPath: {
-              $all: categoryPath.map((id: string) => new ObjectId(id)),
-            },
-          })
-          .toArray();
-
-        results.push({
-          category: categoryName,
-          syncedProducts: transformedProducts.length,
-          totalProducts: categoryProducts.length,
-        });
-
-        log(`Updated ${categoryName}: ${categoryProducts.length} products`);
-      } catch (error) {
-        logError(`Error processing ${categoryName}:`, error);
-        results.push({
-          category: categoryName,
-          error: error instanceof Error ? error.message : String(error),
-        });
-      }
-    }
-
-    try {
-      await RedisClient.flushAll();
-    } catch (error) {
-      log("Redis flush skipped:", error);
-    }
-
-    return NextResponse.json(
-      {
-        message: "Categories sync completed",
-        wipeAll,
-        results: results,
-      },
-      { status: 200 },
-    );
+    return NextResponse.json(result, { status: 200 });
   } catch (error) {
     logError("Error:", error);
     return NextResponse.json(
@@ -391,49 +263,4 @@ export async function PATCH(req: NextRequest) {
       { status: 500 },
     );
   }
-}
-
-async function getCategoryPath(db: import("mongodb").Db, categoryName: string) {
-  type CategoryDoc = {
-    _id?: { toString(): string };
-    name: string;
-    children?: CategoryDoc[];
-  };
-
-  const findPath = async (
-    categories: CategoryDoc[],
-    targetName: string,
-    currentPath: string[] = [],
-  ): Promise<string[] | null> => {
-    for (const category of categories) {
-      if (category.name === targetName) {
-        const idStr = category._id?.toString();
-        return idStr ? [...currentPath, idStr] : null;
-      }
-
-      if (category.children && category.children.length > 0) {
-        const idStr = category._id?.toString();
-        const path = await findPath(
-          category.children,
-          targetName,
-          idStr ? [...currentPath, idStr] : currentPath,
-        );
-        if (path) return path;
-      }
-    }
-    return null;
-  };
-
-  const categories = (await db
-    .collection("categories")
-    .find({})
-    .toArray()) as unknown as CategoryDoc[];
-
-  const path = await findPath(categories, categoryName);
-
-  if (!path) {
-    throw new Error(`Category path not found for: ${categoryName}`);
-  }
-
-  return path;
 }

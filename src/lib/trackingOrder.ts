@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { OrderStatus } from "@/app/api/order/orderStatus";
 
@@ -21,11 +22,29 @@ export type TrackingOrderFailure = {
 
 export type TrackingOrderResult = TrackingOrderSuccess | TrackingOrderFailure;
 
+async function findOrderByIdOrMongoId(db: Awaited<ReturnType<typeof connectDB>>, id: string) {
+  const trimmed = id.trim();
+  if (!trimmed) return null;
+
+  const byOrderId = await db.collection("orders").findOne({ orderId: trimmed });
+  if (byOrderId) return byOrderId;
+
+  if (ObjectId.isValid(trimmed)) {
+    try {
+      return await db.collection("orders").findOne({ _id: new ObjectId(trimmed) });
+    } catch {
+      return null;
+    }
+  }
+
+  return null;
+}
+
 export async function getTrackingOrder(
-  orderId: string,
+  orderIdOrMongoId: string,
 ): Promise<TrackingOrderResult> {
   const db = await connectDB();
-  const order = await db.collection("orders").findOne({ orderId });
+  const order = await findOrderByIdOrMongoId(db, orderIdOrMongoId);
 
   if (!order) {
     return {
@@ -35,6 +54,7 @@ export async function getTrackingOrder(
     };
   }
 
+  const canonicalOrderId = String(order.orderId ?? orderIdOrMongoId);
   const orderStatus = String(order.orderStatus ?? order.status ?? "");
   if (!TRACKABLE_STATUSES.has(orderStatus)) {
     return {
@@ -56,7 +76,7 @@ export async function getTrackingOrder(
 
   return {
     ok: true,
-    orderId,
+    orderId: canonicalOrderId,
     orderStatus,
     customerLocation: { lat, lng },
   };

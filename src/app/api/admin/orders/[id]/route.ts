@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/app/api/lib/dbconnection";
-
-import jwt from "jsonwebtoken";
-import { secretKey } from "@/app/api/lib/keys";
 import { ObjectId } from "mongodb";
 import { Expo } from "expo-server-sdk";
 import type { ExpoPushMessage } from "expo-server-sdk";
 import { syncActiveOrderToFirebase } from "@/app/api/utils/syncActiveOrderToFirebase";
+import { requireAdmin } from "@/app/api/admin/requireAdmin";
+import { computeOrderTotalsFromCart } from "@/app/api/admin/orderTotals";
+import {
+  calculateCartSubtotal,
+  getDeliveryFee,
+} from "@/app/api/utils/orderAmount";
 
 type AnyObject = { [key: string]: any };
 
@@ -15,55 +18,6 @@ const LOG_PREFIX = "[admin/orders/:id]";
 function buildError(code: string, message: string, status: number) {
   console.debug(`${LOG_PREFIX} error`, { code, message, status });
   return NextResponse.json({ error: { code, message } }, { status });
-}
-
-async function requireAdmin(req: Request) {
-  try {
-    console.debug(`${LOG_PREFIX} auth check start`);
-    const auth = req.headers.get("authorization") || "";
-    const token = auth.startsWith("Bearer ") ? auth.split(" ")[1] : "";
-    if (!token) {
-      console.debug(`${LOG_PREFIX} missing bearer token`);
-      return buildError("UNAUTHORIZED", "Missing token", 401);
-    }
-
-    const decoded: AnyObject = jwt.verify(token, secretKey as any) as AnyObject;
-    if (!decoded?.id) {
-      console.debug(`${LOG_PREFIX} token decoded but id missing`);
-      return buildError("UNAUTHORIZED", "Invalid token", 401);
-    }
-    console.debug(`${LOG_PREFIX} token decoded`, { userId: decoded.id });
-
-    const db = await connectDB(req);
-    if (!db) {
-      console.debug(`${LOG_PREFIX} DB connection failed during auth`);
-      return buildError("INTERNAL", "Database connection failed", 500);
-    }
-    const user = await db
-      .collection("users")
-      .findOne({ _id: new ObjectId(decoded.id) });
-    if (!user) {
-      console.debug(`${LOG_PREFIX} user not found for token`, {
-        userId: decoded.id,
-      });
-      return buildError("UNAUTHORIZED", "User not found", 401);
-    }
-
-    const isAdminFromDb = Boolean((user as AnyObject)?.isAdminUser);
-    const isAdminFallback = (user as AnyObject)?.mobileNumber === "8888888888";
-    console.debug(`${LOG_PREFIX} admin flags`, {
-      isAdminFromDb,
-      isAdminFallback,
-    });
-    if (!(isAdminFromDb || isAdminFallback)) {
-      return buildError("FORBIDDEN", "Admin access required", 403);
-    }
-    console.debug(`${LOG_PREFIX} auth check passed`);
-    return null;
-  } catch (err: any) {
-    console.debug(`${LOG_PREFIX} auth check failed`, { message: err?.message });
-    return buildError("UNAUTHORIZED", "Invalid or expired token", 401);
-  }
 }
 
 function toIso(value: any) {
@@ -87,6 +41,12 @@ function normalize(order: AnyObject) {
   if (cloned?.transactionData?.amount != null)
     cloned.transactionData.amount = String(cloned.transactionData.amount);
   if (cloned?.amountPaid != null) cloned.amountPaid = String(cloned.amountPaid);
+  if (cloned?.subtotal == null && cloned?.cartData?.cart?.items) {
+    cloned.subtotal = calculateCartSubtotal(cloned.cartData.cart.items);
+  }
+  if (cloned?.deliveryFee == null && cloned?.subtotal != null) {
+    cloned.deliveryFee = getDeliveryFee(Number(cloned.subtotal));
+  }
   if (Array.isArray(cloned.orderHistory)) {
     cloned.orderHistory = cloned.orderHistory.map((h: AnyObject) => ({
       ...h,
@@ -170,11 +130,14 @@ export async function PUT(
         }
       }
       update.$set.cartData = body.cartData;
-      update.$set.productCount = items.length || 0;
-      update.$set.totalProductCount = items.reduce(
-        (acc: number, it: any) => acc + Number(it?.quantity || 0),
-        0,
-      );
+      const totals = computeOrderTotalsFromCart(body.cartData);
+      update.$set.productCount = totals.productCount;
+      update.$set.totalProductCount = totals.totalProductCount;
+      update.$set.subtotal = totals.subtotal;
+      update.$set.deliveryFee = totals.deliveryFee;
+      update.$set.amountPaid = totals.amountPaid;
+      update.$set["transactionData.amount"] = totals.amountPaid;
+      update.$set.imgArr = totals.imgArr;
     }
 
     if ("orderStatus" in body) {
