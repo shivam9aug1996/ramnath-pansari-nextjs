@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
 import { connectDB } from "@/app/api/lib/dbconnection";
-import { secretKey } from "@/app/api/lib/keys";
+import { verifyJwt } from "@/app/api/lib/jwt";
 
 type AnyObject = { [key: string]: unknown };
 
@@ -18,7 +17,7 @@ export async function requireAdmin(req: Request) {
       return buildError("UNAUTHORIZED", "Missing token", 401);
     }
 
-    const decoded = jwt.verify(token, secretKey as string) as AnyObject;
+    const decoded = (await verifyJwt(token)) as AnyObject | null;
     if (!decoded?.id) {
       return buildError("UNAUTHORIZED", "Invalid token", 401);
     }

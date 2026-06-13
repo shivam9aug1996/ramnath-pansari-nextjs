@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import { connectDB } from "../../lib/dbconnection";
-import { secretKey } from "../../lib/keys";
+import { signJwt } from "../../lib/jwt";
 import { cookies } from "next/headers";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";
 
-const generateToken = (user: any, isGuestUser: boolean = false) => {
+const generateToken = async (user: any, isGuestUser: boolean = false) => {
   const payload = {
     id: user?._id?.toString(),
     mobileNumber: user?.mobileNumber,
@@ -14,7 +13,7 @@ const generateToken = (user: any, isGuestUser: boolean = false) => {
   };
   console.log("oiuytrdfghjkl", payload);
   const options = {};
-  return jwt.sign(payload, secretKey!, options);
+  return signJwt(payload, options);
 };
 
 export async function POST(req: NextRequest) {
@@ -61,7 +60,7 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        let token = generateToken(user, isGuestUser);
+        let token = await generateToken(user, isGuestUser);
         console.log("jhgfdsdfiop98765", token);
 
         const existingCart = await db
@@ -117,7 +116,7 @@ export async function POST(req: NextRequest) {
             { status: 500 },
           );
         }
-        const token = generateToken(user, isGuestUser);
+        const token = await generateToken(user, isGuestUser);
         await db.collection("carts").insertOne({
           userId: new ObjectId(user._id),
           items: [],

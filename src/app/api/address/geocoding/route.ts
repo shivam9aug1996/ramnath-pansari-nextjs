@@ -1,10 +1,12 @@
 import { isTokenVerified } from "@/json";
 import { NextRequest, NextResponse } from "next/server";
+
 type AddressComponents = {
   long_name: string;
   short_name: string;
   types: string[];
 };
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);

@@ -1,7 +1,5 @@
-import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
-import { deleteCookies } from "./app/actions";
-import { secretKey } from "./app/api/lib/keys";
+import { verifyJwt } from "./app/api/lib/jwt";
 import { log, logWarn } from "./app/api/lib/logger";
 
 type RateLimitEntry = { count: number; timestamp: number };
@@ -13,7 +11,7 @@ export async function verifyToken(
   req: NextRequest,
 ): Promise<boolean> {
   try {
-    const decoded = jwt.verify(token, secretKey!);
+    const decoded = await verifyJwt(token);
     void req?.headers?.get("user-agent");
     void req.headers.get("user-fingerprint");
     return Boolean(decoded);
@@ -30,7 +28,6 @@ export const isTokenVerified = async (
   if (token) {
     const verified = await verifyToken(token, req);
     if (!verified) {
-      deleteCookies();
       return NextResponse.json(
         { success: false, message: "Authentication failed" },
         { status: 401 },

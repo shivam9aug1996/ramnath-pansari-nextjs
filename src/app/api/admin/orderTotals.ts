@@ -3,11 +3,7 @@ import {
   getDeliveryFee,
   getPayableAmount,
 } from "@/app/api/utils/orderAmount";
-
-type CartItem = {
-  quantity?: number;
-  productDetails?: { discountedPrice?: number; image?: string };
-};
+import type { CartItem } from "@/types/api";
 
 export function computeOrderTotalsFromCart(cartData: {
   cart?: { items?: CartItem[] };

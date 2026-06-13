@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import type { ClientSession } from "mongodb";
-import jwt from "jsonwebtoken";
 import { connectDB, getClient, startTransaction, commitTransaction, abortTransaction } from "@/app/api/lib/dbconnection";
 import { requireAdmin } from "@/app/api/admin/requireAdmin";
-import { secretKey } from "@/app/api/lib/keys";
+import { verifyJwt } from "@/app/api/lib/jwt";
 import { deleteImage } from "@/app/api/lib/global";
 import {
   countAdminUsers,
@@ -20,12 +19,12 @@ function buildError(code: string, message: string, status: number) {
   return NextResponse.json({ error: { code, message } }, { status });
 }
 
-function getRequestUserId(req: Request) {
+async function getRequestUserId(req: Request) {
   try {
     const auth = req.headers.get("authorization") || "";
     const token = auth.startsWith("Bearer ") ? auth.split(" ")[1] : "";
     if (!token) return null;
-    const decoded = jwt.verify(token, secretKey as string) as { id?: string };
+    const decoded = (await verifyJwt(token)) as { id?: string } | null;
     return decoded?.id ?? null;
   } catch {
     return null;
@@ -141,7 +140,7 @@ export async function DELETE(req: Request, context: RouteContext) {
       return buildError("VALIDATION", "Invalid user id", 400);
     }
 
-    const requestUserId = getRequestUserId(req);
+    const requestUserId = await getRequestUserId(req);
     if (requestUserId === id) {
       return buildError("VALIDATION", "You cannot delete your own account", 400);
     }
