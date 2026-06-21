@@ -65,9 +65,10 @@ export async function PUT(req: NextRequest) {
         }
 
         const productObjectId = new ObjectId(productId);
+        // Read outside cart transaction so JioMart sync writes are always visible.
         const product = await db
           .collection("products")
-          .findOne({ _id: productObjectId }, { session });
+          .findOne({ _id: productObjectId });
 
         if (!product) {
           failedItems.push({ productId, reason: "Not Found" });

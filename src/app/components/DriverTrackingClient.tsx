@@ -641,7 +641,7 @@ export default function DriverTrackingClient({
             aria-label="Recenter map"
             style={{
               position: "absolute",
-              bottom: 14,
+              bottom: 40,
               right: 12,
               zIndex: 3,
               display: "flex",

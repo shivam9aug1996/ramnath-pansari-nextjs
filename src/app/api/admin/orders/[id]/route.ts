@@ -10,6 +10,10 @@ import {
   calculateCartSubtotal,
   getDeliveryFee,
 } from "@/app/api/utils/orderAmount";
+import {
+  releaseProductLocksForOrder,
+  shouldReleaseProductLocks,
+} from "@/app/api/utils/productPendingLock";
 
 type AnyObject = { [key: string]: any };
 
@@ -216,6 +220,11 @@ export async function PUT(
           const userId = String((updated as AnyObject)?.userId || "");
           const orderMongoId = String((updated as AnyObject)?._id || "");
           const humanOrderId = String((updated as AnyObject)?.orderId || "");
+          if (
+            shouldReleaseProductLocks(String(prevStatus || ""), nextStatus)
+          ) {
+            await releaseProductLocksForOrder(updated as AnyObject);
+          }
           if (userId && orderMongoId) {
             await syncActiveOrderToFirebase({
               userId,

@@ -1,4 +1,8 @@
 import { syncActiveOrderToFirebase } from "./syncActiveOrderToFirebase";
+import {
+  releaseProductLocksForOrder,
+  shouldReleaseProductLocks,
+} from "./productPendingLock";
 
 export async function updateOrderStatus(
   db: any,
@@ -13,6 +17,7 @@ export async function updateOrderStatus(
 
   if (!order) throw new Error("Order not found");
 
+  const prevStatus = order.orderStatus;
   const timestamp = new Date().toISOString();
   const updateResult = await db.collection("orders").updateOne(
     { orderId },
@@ -45,6 +50,10 @@ export async function updateOrderStatus(
     amountPaid: order.amountPaid,
     totalProductCount: order.totalProductCount,
   });
+
+  if (shouldReleaseProductLocks(prevStatus, newStatus)) {
+    await releaseProductLocksForOrder(order);
+  }
 
   return { newStatus, timestamp };
 }

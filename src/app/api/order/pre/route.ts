@@ -1,6 +1,8 @@
 import { isTokenVerified } from "@/json";
 import { NextRequest, NextResponse } from "next/server";
 import { encode } from "js-base64";
+import { validateCheckoutHoldsForPayment } from "@/app/api/utils/productPendingLock";
+import { logError } from "@/app/api/lib/logger";
 
 export async function POST(req: NextRequest) {
   if (req.method !== "POST") {
@@ -11,7 +13,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { amount, isLive = false } = await req.json();
+    const { amount, isLive = false, userId, productIds = [] } = await req.json();
 
     if (!amount || amount == 0) {
       return NextResponse.json(
@@ -23,6 +25,38 @@ export async function POST(req: NextRequest) {
     const tokenVerificationResponse = await isTokenVerified(req);
     if (tokenVerificationResponse) {
       return tokenVerificationResponse;
+    }
+
+    if (userId && Array.isArray(productIds) && productIds.length > 0) {
+      console.log("[product-lock] pre:validate:start", { userId, productIds });
+      try {
+        const holdResult = await validateCheckoutHoldsForPayment(
+          userId,
+          productIds,
+        );
+        if (!holdResult.ok) {
+          console.log("[product-lock] pre:validate:failed", {
+            userId,
+            heldProducts: holdResult.heldProducts,
+          });
+          return NextResponse.json(
+            {
+              message:
+                "Checkout session expired or items are on hold. Go back to cart and try again.",
+              code: "ITEMS_ON_HOLD",
+              heldProducts: holdResult.heldProducts,
+            },
+            { status: 409 },
+          );
+        }
+        console.log("[product-lock] pre:validate:success", { userId, productIds });
+      } catch (error) {
+        logError("[product-lock] pre:validate:error", error);
+        return NextResponse.json(
+          { error: "Failed to validate checkout holds" },
+          { status: 503 },
+        );
+      }
     }
 
     let credentials;

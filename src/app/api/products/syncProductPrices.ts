@@ -1,5 +1,7 @@
 import { ObjectId } from "mongodb";
+import { invalidateProductCache } from "../admin/products/productUtils";
 import { fetchVertexProductPricingBatch } from "./jiomartVertex";
+import { invalidateVertexPricingCache } from "./vertexPricingCache";
 import { log } from "../lib/logger";
 
 type SyncResult = {
@@ -33,6 +35,12 @@ export async function syncProductPrices(
     .find({ _id: { $in: objectIds } })
     .toArray();
 
+  const jiomartUids = existingProducts
+    .map((p) => p.jiomartUid)
+    .filter((uid): uid is string => Boolean(uid));
+
+  await invalidateVertexPricingCache(jiomartUids);
+
   const pricingResults = await fetchVertexProductPricingBatch(
     existingProducts.map((p) => ({
       name: p.name,
@@ -58,16 +66,36 @@ export async function syncProductPrices(
           productId: existingProduct._id.toString(),
           status: "not_found_in_jioMart",
           name: existingProduct.name,
+          oldIsOutOfStock: existingProduct.isOutOfStock,
+          newIsOutOfStock: true,
           error: "Product not found in JioMart Vertex search",
+        });
+
+        log("[cart-sync] syncProductPrices:not_found", {
+          productId: existingProduct._id.toString(),
+          name: existingProduct.name,
+          jiomartUid: existingProduct.jiomartUid ?? null,
         });
         continue;
       }
 
       const updateFields: Record<string, unknown> = {
-        maxQuantity: vertexData.maxQuantity,
-        isOutOfStock: vertexData.isOutOfStock,
+        isOutOfStock: Boolean(vertexData.isOutOfStock),
         lastUpdated: new Date(),
       };
+
+      if (vertexData.maxQuantity != null) {
+        updateFields.maxQuantity = vertexData.maxQuantity;
+      }
+
+      log("[cart-sync] syncProductPrices:update", {
+        productId: existingProduct._id.toString(),
+        name: existingProduct.name,
+        oldMaxQuantity: existingProduct.maxQuantity ?? null,
+        newMaxQuantity: vertexData.maxQuantity ?? null,
+        maxQuantityWritten: updateFields.maxQuantity ?? "unchanged",
+        isOutOfStock: vertexData.isOutOfStock,
+      });
 
       if (vertexData.price && vertexData.discountedPrice) {
         updateFields.price = vertexData.price;
@@ -115,7 +143,7 @@ export async function syncProductPrices(
         newDiscountedPrice:
           vertexData.discountedPrice ?? existingProduct.discountedPrice,
         oldMaxQuantity: existingProduct.maxQuantity,
-        newMaxQuantity: vertexData.maxQuantity,
+        newMaxQuantity: vertexData.maxQuantity ?? existingProduct.maxQuantity,
         oldIsOutOfStock: existingProduct.isOutOfStock,
         newIsOutOfStock: vertexData.isOutOfStock,
       });
@@ -127,6 +155,19 @@ export async function syncProductPrices(
         error: error instanceof Error ? error.message : String(error),
       });
     }
+  }
+
+  const hadUpdates = results.some(
+    (r) => r.status === "updated" || r.status === "not_found_in_jioMart",
+  );
+  if (hadUpdates) {
+    await invalidateProductCache();
+    log("[cart-sync] syncProductPrices:redis invalidated", {
+      productListKeys: "products:*",
+      updatedCount: results.filter((r) => r.status === "updated").length,
+      notFoundCount: results.filter((r) => r.status === "not_found_in_jioMart")
+        .length,
+    });
   }
 
   return results;

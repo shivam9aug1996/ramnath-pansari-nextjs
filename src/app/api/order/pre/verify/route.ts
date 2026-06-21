@@ -11,6 +11,12 @@ import {
   calculateCartSubtotal,
   getDeliveryFee,
 } from "@/app/api/utils/orderAmount";
+import {
+  commitOrderProductLocks,
+  extractProductIdsFromCart,
+  releaseProductLocksAfterFailedInsert,
+} from "@/app/api/utils/productPendingLock";
+import { logError } from "@/app/api/lib/logger";
 const orderid = require("order-id")("key");
 
 function storeImages(cart: { items?: CartItem[] }) {
@@ -123,6 +129,44 @@ export async function POST(req: NextRequest) {
       }
       const db = await connectDB(req);
       const id = orderid.generate();
+      const productIds = extractProductIdsFromCart(cartData);
+      console.log("[product-lock] verify:start", {
+        userId,
+        orderId: id,
+        productIds,
+      });
+
+      let lockResult;
+      try {
+        lockResult = await commitOrderProductLocks(userId, id, productIds);
+      } catch (error) {
+        logError("[product-lock] verify:lock-error", error);
+        return NextResponse.json(
+          { error: "Failed to reserve products for order", verified: false },
+          { status: 503 },
+        );
+      }
+
+      if (!lockResult.ok) {
+        console.log("[product-lock] verify:lock-failed", {
+          userId,
+          orderId: id,
+          code: lockResult.code,
+          heldProducts: lockResult.heldProducts,
+        });
+        return NextResponse.json(
+          {
+            message:
+              lockResult.code === "HOLD_EXPIRED"
+                ? "Checkout session expired. Go back to cart and try again."
+                : "One or more items are on hold for another order.",
+            code: lockResult.code,
+            heldProducts: lockResult.heldProducts,
+            verified: false,
+          },
+          { status: 409 },
+        );
+      }
 
       let imgArr = storeImages(cartData.cart);
 
@@ -132,24 +176,37 @@ export async function POST(req: NextRequest) {
       const deliveryFee = getDeliveryFee(subtotal);
       const amountPaid = (transactionData?.amount as number) || 0;
 
-      let result = await db.collection("orders").insertOne({
-        transactionData,
-        cartData,
-        addressData,
-        orderStatus: OrderStatus.CONFIRMED,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        orderId: id,
+      let result;
+      try {
+        result = await db.collection("orders").insertOne({
+          transactionData,
+          cartData,
+          addressData,
+          orderStatus: OrderStatus.CONFIRMED,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          orderId: id,
+          userId,
+          imgArr,
+          productCount: cartData?.cart?.items?.length,
+          totalProductCount,
+          orderHistory: [
+            { status: OrderStatus.CONFIRMED, timestamp: new Date() },
+          ],
+          amountPaid,
+          subtotal,
+          deliveryFee,
+        });
+      } catch (error) {
+        await releaseProductLocksAfterFailedInsert(id, productIds);
+        logError("[product-lock] verify:insert-error", error);
+        throw error;
+      }
+
+      console.log("[product-lock] verify:success", {
         userId,
-        imgArr,
-        productCount: cartData?.cart?.items?.length,
-        totalProductCount,
-        orderHistory: [
-          { status: OrderStatus.CONFIRMED, timestamp: new Date() },
-        ],
-        amountPaid,
-        subtotal,
-        deliveryFee,
+        orderId: id,
+        mongoOrderId: result.insertedId.toString(),
       });
 
       await syncActiveOrderToFirebase({
