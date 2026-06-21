@@ -6,7 +6,7 @@ const DeleteAccountInstructions = () => {
       <p>
         To delete your account, sign in to the app and navigate to the{" "}
         <strong>Profile</strong> section. There, you will find an option labeled{" "}
-        <strong>"Delete Account"</strong>. Click on it to proceed with the
+        <strong>{'"Delete Account"'}</strong>. Click on it to proceed with the
         deletion process.
       </p>
       <div>

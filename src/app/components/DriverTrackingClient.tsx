@@ -729,6 +729,7 @@ export default function DriverTrackingClient({
                   y: -BIKE_ICON_SIZE / 2,
                 })}
               >
+                {/* eslint-disable-next-line @next/next/no-img-element -- Canvas data URL inside Google Maps OverlayView */}
                 <img
                   src={bikeIconUrl}
                   alt=""

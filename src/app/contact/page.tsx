@@ -24,7 +24,7 @@ export default function ContactPage() {
         />
         <h1 style={{ fontSize: "2rem", marginTop: "1rem" }}>Contact Us</h1>
         <p style={{ fontSize: "1.1rem", color: "#666" }}>
-          We'd love to hear from you! Reach out to us using the details below.
+          {"We'd love to hear from you! Reach out to us using the details below."}
         </p>
       </header>
 

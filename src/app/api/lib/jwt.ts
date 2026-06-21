@@ -1,36 +1,46 @@
-import type { JwtPayload, SignOptions } from "jsonwebtoken";
+import { SignJWT, jwtVerify, type JWTPayload } from "jose";
 import { secretKey } from "./keys";
+import { logAuth } from "./logger";
 
-type JwtModule = typeof import("jsonwebtoken");
-
-let jwtModule: Promise<JwtModule> | null = null;
-
-function loadJwt(): Promise<JwtModule> {
-  if (!jwtModule) {
-    jwtModule = import("jsonwebtoken");
-  }
-  return jwtModule;
+function getSecretKeyBytes() {
+  if (!secretKey) return null;
+  return new TextEncoder().encode(secretKey);
 }
 
-export async function verifyJwt(
-  token: string,
-): Promise<string | JwtPayload | null> {
-  if (!secretKey) return null;
+export async function verifyJwt(token: string): Promise<JWTPayload | null> {
+  const key = getSecretKeyBytes();
+  if (!key) {
+    logAuth("verifyJwt:fail", { reason: "missing-secret-key" });
+    return null;
+  }
   try {
-    const jwt = await loadJwt();
-    return jwt.verify(token, secretKey);
-  } catch {
+    const { payload } = await jwtVerify(token, key);
+    return payload;
+  } catch (error) {
+    logAuth("verifyJwt:fail", {
+      reason: "verify-error",
+      message: error instanceof Error ? error.message : String(error),
+    });
     return null;
   }
 }
 
 export async function signJwt(
-  payload: string | Buffer | object,
-  options?: SignOptions,
+  payload: Record<string, unknown>,
+  options?: { expiresIn?: string },
 ): Promise<string> {
-  if (!secretKey) {
+  const key = getSecretKeyBytes();
+  if (!key) {
     throw new Error("SECRET_KEY is not configured");
   }
-  const jwt = await loadJwt();
-  return jwt.sign(payload, secretKey, options);
+
+  let jwt = new SignJWT(payload)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt();
+
+  if (options?.expiresIn) {
+    jwt = jwt.setExpirationTime(options.expiresIn);
+  }
+
+  return jwt.sign(key);
 }

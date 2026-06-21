@@ -94,7 +94,7 @@ const AddressMapClient: React.FC<AddressMapClientProps> = ({
           .catch(console.error);
       }
     }
-  }, [isLoaded]);
+  }, [isLoaded, initialAddress, initialLat, initialLng]);
 
   const onLoad = useCallback((mapInstance: google.maps.Map) => {
     setMap(mapInstance);

@@ -26,8 +26,7 @@ export default function SupportPage() {
           Customer Support
         </h1>
         <p style={{ fontSize: "1.1rem", color: "#666" }}>
-          We're here to help! Reach out for any queries or issues with the
-          Ramnath Pansari app.
+          {"We're here to help! Reach out for any queries or issues with the Ramnath Pansari app."}
         </p>
       </header>
 

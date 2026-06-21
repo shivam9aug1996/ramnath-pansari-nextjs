@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { TabConfig } from "../types/types";
 export function useTabDataFetch(
   config: TabConfig[],
@@ -7,7 +7,7 @@ export function useTabDataFetch(
   setDirtyTabs: (updater: any) => void,
 ) {
   const [loading, setLoading] = useState(true);
-  const fetchAllTabData = async () => {
+  const fetchAllTabData = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch("/api/task/data");
@@ -25,6 +25,6 @@ export function useTabDataFetch(
     } finally {
       setLoading(false);
     }
-  };
+  }, [config, currentValuesRef, initialValuesRef, setDirtyTabs]);
   return { fetchAllTabData, loading, setLoading };
 }

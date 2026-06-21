@@ -41,7 +41,7 @@ export function useTabsFormController(config: TabsFormProps["config"]) {
       hasFetchedRef.current = true;
       fetchAllTabData();
     }
-  }, [config]);
+  }, [config, fetchAllTabData]);
 
   useEffect(() => {
     config.forEach((tab) => {
@@ -70,13 +70,14 @@ export function useTabsFormController(config: TabsFormProps["config"]) {
           ...initialValuesRef.current[tab.key],
         };
       }
-      if (!validationErrors[tab.key]) {
+      setValidationErrors((prev) => {
+        if (prev[tab.key]) return prev;
         const errors: { [fieldName: string]: string } = {};
         tab.fields.forEach((field) => {
           errors[field.name] = "";
         });
-        setValidationErrors((prev) => ({ ...prev, [tab.key]: errors }));
-      }
+        return { ...prev, [tab.key]: errors };
+      });
     });
   }, [config]);
 
@@ -86,39 +87,45 @@ export function useTabsFormController(config: TabsFormProps["config"]) {
     });
   }, []);
 
-  const checkFieldDirty = (tabKey: string, fieldName: string) => {
-    const initial = initialValuesRef.current[tabKey];
-    const current = currentValuesRef.current[tabKey];
-    const field = config
-      .find((tab) => tab.key === tabKey)
-      ?.fields.find((f) => f.name === fieldName);
+  const checkFieldDirty = useCallback(
+    (tabKey: string, fieldName: string) => {
+      const initial = initialValuesRef.current[tabKey];
+      const current = currentValuesRef.current[tabKey];
+      const field = config
+        .find((tab) => tab.key === tabKey)
+        ?.fields.find((f) => f.name === fieldName);
 
-    if (field?.type === "multiselect" || field?.type === "checkboxes") {
-      const a = Array.isArray(initial[fieldName]) ? initial[fieldName] : [];
-      const b = Array.isArray(current[fieldName]) ? current[fieldName] : [];
-      if (a.length !== b.length) return true;
+      if (field?.type === "multiselect" || field?.type === "checkboxes") {
+        const a = Array.isArray(initial[fieldName]) ? initial[fieldName] : [];
+        const b = Array.isArray(current[fieldName]) ? current[fieldName] : [];
+        if (a.length !== b.length) return true;
 
-      return a.sort().join(",") !== b.sort().join(",");
-    }
-    return current[fieldName] != initial[fieldName];
-  };
+        return a.sort().join(",") !== b.sort().join(",");
+      }
+      return current[fieldName] != initial[fieldName];
+    },
+    [config],
+  );
 
-  const checkFieldDirtyName = (tabKey: string, fieldName: string) => {
-    const initial = initialValuesRef.current[tabKey];
-    const current = currentValuesRef.current[tabKey];
-    const field = config
-      .find((tab) => tab.key === tabKey)
-      ?.fields.find((f) => f.name === fieldName);
+  const checkFieldDirtyName = useCallback(
+    (tabKey: string, fieldName: string) => {
+      const initial = initialValuesRef.current[tabKey];
+      const current = currentValuesRef.current[tabKey];
+      const field = config
+        .find((tab) => tab.key === tabKey)
+        ?.fields.find((f) => f.name === fieldName);
 
-    if (field?.type === "multiselect" || field?.type === "checkboxes") {
-      const a = Array.isArray(initial[fieldName]) ? initial[fieldName] : [];
-      const b = Array.isArray(current[fieldName]) ? current[fieldName] : [];
-      if (a.length !== b.length) return fieldName;
+      if (field?.type === "multiselect" || field?.type === "checkboxes") {
+        const a = Array.isArray(initial[fieldName]) ? initial[fieldName] : [];
+        const b = Array.isArray(current[fieldName]) ? current[fieldName] : [];
+        if (a.length !== b.length) return fieldName;
 
-      return a.sort().join(",") !== b.sort().join(",") ? fieldName : "";
-    }
-    return current[fieldName] != initial[fieldName] ? fieldName : "";
-  };
+        return a.sort().join(",") !== b.sort().join(",") ? fieldName : "";
+      }
+      return current[fieldName] != initial[fieldName] ? fieldName : "";
+    },
+    [config],
+  );
 
   const handleInputBlur = useCallback(
     (tabKey: string, fieldName: string) => {
@@ -159,7 +166,7 @@ export function useTabsFormController(config: TabsFormProps["config"]) {
         };
       });
     },
-    [checkFieldDirty, currentValuesRef, setDirtyTabs, validateField],
+    [checkFieldDirty, checkFieldDirtyName, validateField],
   );
 
   const handleInputChange = (

@@ -4,6 +4,7 @@ import { signJwt } from "../../lib/jwt";
 import { cookies } from "next/headers";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";
+import { logAuth, logError, maskToken } from "../../lib/logger";
 
 const generateToken = async (user: any, isGuestUser: boolean = false) => {
   const payload = {
@@ -11,10 +12,23 @@ const generateToken = async (user: any, isGuestUser: boolean = false) => {
     mobileNumber: user?.mobileNumber,
     isGuestUser: isGuestUser,
   };
-  console.log("oiuytrdfghjkl", payload);
   const options = {};
   return signJwt(payload, options);
 };
+
+function setAuthCookies(token: string, mobileNumber: string, userId: unknown) {
+  cookies().set("ramnath_pansari_user_token", token, {});
+  cookies().set(
+    "ramnath_pansari_user_data",
+    JSON.stringify({ mobileNumber, userId }),
+    {},
+  );
+  logAuth("verifyOtp:set-cookies", {
+    mobileNumber,
+    userId: String(userId),
+    tokenPreview: maskToken(token),
+  });
+}
 
 export async function POST(req: NextRequest) {
   if (req.method !== "POST") {
@@ -33,16 +47,15 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     }
-    console.log(mobileNumber, otp, password);
+
+    logAuth("verifyOtp:start", { mobileNumber, hasOtp: Boolean(otp) });
 
     let status = "approved";
 
     if (status == "approved") {
       const db = await connectDB(req);
-      console.log("jhgfghjhgfghjk", db);
 
       const user = await db.collection("users").findOne({ mobileNumber });
-      console.log("us67890-r", user);
       const isGuestUser = mobileNumber === "9999999991";
       const isAdminUser = mobileNumber === "8888888888";
 
@@ -53,6 +66,10 @@ export async function POST(req: NextRequest) {
             user.password,
           );
           if (!isPasswordCorrect) {
+            logAuth("verifyOtp:deny", {
+              mobileNumber,
+              reason: "incorrect-password",
+            });
             return NextResponse.json(
               { error: "Incorrect password" },
               { status: 400 },
@@ -61,7 +78,6 @@ export async function POST(req: NextRequest) {
         }
 
         let token = await generateToken(user, isGuestUser);
-        console.log("jhgfdsdfiop98765", token);
 
         const existingCart = await db
           .collection("carts")
@@ -73,12 +89,16 @@ export async function POST(req: NextRequest) {
           });
         }
 
-        cookies().set("ramnath_pansari_user_token", token, {});
-        cookies().set(
-          "ramnath_pansari_user_data",
-          JSON.stringify({ mobileNumber, userId: user?._id }),
-          {},
-        );
+        setAuthCookies(token, mobileNumber, user?._id);
+
+        logAuth("verifyOtp:success", {
+          mobileNumber,
+          userId: user._id?.toString(),
+          isGuestUser,
+          isAdminUser,
+          userAlreadyRegistered: true,
+          tokenPreview: maskToken(token),
+        });
 
         const response = {
           message: "OTP successfully verified",
@@ -103,13 +123,11 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(newRes, { status: 200 });
       } else {
         const hash = await bcrypt.hashSync(password, 10);
-        console.log("hash", hash);
-        const result = await db
+        await db
           .collection("users")
           .insertOne({ mobileNumber, password: hash });
         const user = await db.collection("users").findOne({ mobileNumber });
 
-        console.log("34567890-=", result);
         if (!user) {
           return NextResponse.json(
             { error: "User creation failed" },
@@ -121,6 +139,17 @@ export async function POST(req: NextRequest) {
           userId: new ObjectId(user._id),
           items: [],
         });
+        setAuthCookies(token, mobileNumber, user._id);
+
+        logAuth("verifyOtp:success", {
+          mobileNumber,
+          userId: user._id?.toString(),
+          isGuestUser,
+          isAdminUser,
+          userAlreadyRegistered: false,
+          tokenPreview: maskToken(token),
+        });
+
         const response = {
           message: "OTP successfully verified",
           userAlreadyRegistered: false,
@@ -156,7 +185,7 @@ export async function POST(req: NextRequest) {
       );
     }
   } catch (error) {
-    console.error("Error:", error);
+    logError("[auth] verifyOtp:error", error);
     return NextResponse.json(
       { error: "Something went wrong" },
       { status: 500 },
