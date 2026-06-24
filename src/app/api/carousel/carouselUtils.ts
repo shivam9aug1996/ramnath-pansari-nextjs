@@ -3,6 +3,10 @@ import { ObjectId } from "mongodb";
 import { findCategoryById } from "@/app/api/admin/categories/categoryUtils";
 import type { CategoryNode } from "@/app/api/admin/categories/categoryUtils";
 import { getStoreSettings } from "@/app/api/offers/offerUtils";
+import {
+  STORE_SETTINGS_ID,
+  storeSettingsCollection,
+} from "@/app/api/offers/storeSettingsUtils";
 import type {
   CarouselActionType,
   CarouselBanner,
@@ -38,14 +42,14 @@ export async function saveCarouselBanners(
   db: Db,
   banners: CarouselBanner[],
 ): Promise<void> {
-  await db.collection("storeSettings").updateOne(
-    { _id: "global" },
+  await storeSettingsCollection(db).updateOne(
+    { _id: STORE_SETTINGS_ID },
     {
       $set: {
         carouselBanners: banners,
         updatedAt: new Date(),
       },
-      $setOnInsert: { _id: "global" },
+      $setOnInsert: { _id: STORE_SETTINGS_ID },
     },
     { upsert: true },
   );

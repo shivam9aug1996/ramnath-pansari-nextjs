@@ -9,13 +9,15 @@ import {
   type StoreSettingsDocument,
 } from "./offerTypes";
 import type { CarouselBanner } from "@/app/api/carousel/carouselTypes";
-
-const STORE_SETTINGS_ID = "global" as const;
+import {
+  STORE_SETTINGS_ID,
+  storeSettingsCollection,
+} from "./storeSettingsUtils";
 
 export async function getStoreSettings(db: Db): Promise<StoreSettingsDocument> {
-  const doc = await db
-    .collection("storeSettings")
-    .findOne({ _id: STORE_SETTINGS_ID });
+  const doc = await storeSettingsCollection(db).findOne({
+    _id: STORE_SETTINGS_ID,
+  });
 
   if (!doc) {
     const seeded: StoreSettingsDocument = {
@@ -24,7 +26,7 @@ export async function getStoreSettings(db: Db): Promise<StoreSettingsDocument> {
       carouselBanners: DEFAULT_CAROUSEL_BANNERS,
       updatedAt: new Date(),
     };
-    await db.collection("storeSettings").updateOne(
+    await storeSettingsCollection(db).updateOne(
       { _id: STORE_SETTINGS_ID },
       { $setOnInsert: seeded },
       { upsert: true },
@@ -37,7 +39,7 @@ export async function getStoreSettings(db: Db): Promise<StoreSettingsDocument> {
     DEFAULT_CAROUSEL_BANNERS;
 
   if (!doc.carouselBanners?.length) {
-    await db.collection("storeSettings").updateOne(
+    await storeSettingsCollection(db).updateOne(
       { _id: STORE_SETTINGS_ID },
       {
         $set: {
@@ -67,7 +69,7 @@ export async function getEnabledOffers(db: Db): Promise<Offer[]> {
 }
 
 export async function saveOffers(db: Db, offers: Offer[]): Promise<void> {
-  await db.collection("storeSettings").updateOne(
+  await storeSettingsCollection(db).updateOne(
     { _id: STORE_SETTINGS_ID },
     {
       $set: {
