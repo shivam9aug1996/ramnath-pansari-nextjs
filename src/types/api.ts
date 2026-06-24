@@ -13,6 +13,9 @@ export type CartItem = {
   productId: ObjectId;
   quantity: number;
   productDetails?: Record<string, unknown> | null;
+  isPromoFreebie?: boolean;
+  offerId?: string;
+  promoPrice?: number;
 };
 
 export type CartDocument = {

@@ -126,34 +126,6 @@ export async function getCategoryPath(
   return path;
 }
 
-async function upsertSugarProduct(
-  db: Db,
-  categoryPath: string[],
-) {
-  const sugarProduct = {
-    name: "UTTAM SUGAR Sulphurfree Sugar (Refined Safed Cheeni)",
-    categoryPath: categoryPath.map((id) => new ObjectId(id)),
-    image:
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sugar/i/a/q/-original-imagtxubkgmbwpa6.jpeg?q=70",
-    discountedPrice: 0,
-    price: 65,
-    size: "1 kg",
-    _id: new ObjectId("676da9f75763ded56d43032d"),
-    category: "Sugar",
-    jiomartUid: "676da9f75763ded56d43032d",
-    jiomartSlug: "uttam-sugar-sulphurfree",
-    skuCode: "676da9f75763ded56d43032d",
-    maxQuantity: 10,
-    isOutOfStock: false,
-    isSmartBazaar: true,
-    lastUpdated: new Date(),
-  };
-
-  await db
-    .collection("products")
-    .updateOne({ _id: sugarProduct._id }, { $set: sugarProduct }, { upsert: true });
-}
-
 async function flushRedisCache() {
   try {
     await RedisClient.flushAll();
@@ -205,7 +177,7 @@ export async function syncJiomartCategories(
   const results: JiomartSyncCategoryResult[] = [];
 
   if (wipeAll) {
-    await db.collection("products").deleteMany({});
+    await db.collection("products").deleteMany({ productFromJio: true });
     await db.collection("carts").updateMany({}, { $set: { items: [] } });
     await flushRedisCache();
   }
@@ -251,6 +223,8 @@ export async function syncJiomartCategories(
             transformedProducts.map((product) => ({
               ...product,
               _id: new ObjectId(),
+              productFromJio: true,
+              promoOnly: false,
               createdAt: new Date(),
               lastUpdated: new Date(),
             })),
@@ -258,25 +232,30 @@ export async function syncJiomartCategories(
         }
       } else {
         for (const product of transformedProducts) {
+          const existing = await db.collection("products").findOne({
+            jiomartUid: product.jiomartUid,
+          });
+          if (existing && existing.productFromJio === false) {
+            continue;
+          }
+
           await db.collection("products").updateOne(
             { jiomartUid: product.jiomartUid },
             {
               $set: {
                 ...product,
+                productFromJio: true,
                 lastUpdated: new Date(),
               },
               $setOnInsert: {
                 _id: new ObjectId(),
                 createdAt: new Date(),
+                promoOnly: false,
               },
             },
             { upsert: true },
           );
         }
-      }
-
-      if (categoryName === "Sugar") {
-        await upsertSugarProduct(db, categoryPath);
       }
 
       const categoryProducts = await db

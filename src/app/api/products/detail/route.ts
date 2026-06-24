@@ -27,6 +27,12 @@ export async function GET(req: NextRequest) {
         { status: 404 },
       );
     }
+    if ((product as { promoOnly?: boolean }).promoOnly) {
+      return NextResponse.json(
+        { message: "Product not found" },
+        { status: 404 },
+      );
+    }
     return NextResponse.json(formatProductDetailResponse(product), {
       status: 200,
     });

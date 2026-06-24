@@ -123,6 +123,7 @@ export async function GET(req: NextRequest) {
       .find({
         categoryPath: new ObjectId(categoryId),
         discountedPrice: { $ne: 0 },
+        promoOnly: { $ne: true },
       })
       .skip(skip)
       .limit(limit)
@@ -131,6 +132,7 @@ export async function GET(req: NextRequest) {
     const totalProducts = await db.collection("products").countDocuments({
       categoryPath: new ObjectId(categoryId),
       discountedPrice: { $ne: 0 },
+      promoOnly: { $ne: true },
     });
 
     const totalPages = Math.ceil(totalProducts / limit);

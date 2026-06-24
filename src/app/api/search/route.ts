@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
           },
         },
         {
-          $match: { discountedPrice: { $gt: 0 } },
+          $match: { discountedPrice: { $gt: 0 }, promoOnly: { $ne: true } },
         },
         {
           $count: "totalResults",
@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
           },
         },
         {
-          $match: { discountedPrice: { $gt: 0 } },
+          $match: { discountedPrice: { $gt: 0 }, promoOnly: { $ne: true } },
         },
         { $skip: skip },
         { $limit: limit },
@@ -92,14 +92,20 @@ export async function GET(req: NextRequest) {
 
       const results = await db
         .collection("products")
-        .find({ $text: { $search: query } })
+        .find({
+          $text: { $search: query },
+          promoOnly: { $ne: true },
+        })
         .limit(limit)
         .skip(skip)
         .toArray();
 
       const totalResults = await db
         .collection("products")
-        .countDocuments({ $text: { $search: query } });
+        .countDocuments({
+          $text: { $search: query },
+          promoOnly: { $ne: true },
+        });
 
       const totalPages = Math.ceil(totalResults / limit);
 

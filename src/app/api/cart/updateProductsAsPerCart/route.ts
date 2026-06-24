@@ -3,10 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../../lib/dbconnection";
 import { syncProductPrices } from "../../products/syncProductPrices";
 import { logError } from "../../lib/logger";
-import { acquireCheckoutHolds, releaseCheckoutHolds } from "../../utils/productPendingLock";
+import {
+  acquireCheckoutHolds,
+  releaseCheckoutHolds,
+} from "../../utils/productPendingLock";
 import AsyncLock from "async-lock";
 
-const lock = new AsyncLock({ timeout: 20000 });
+const lock = new AsyncLock({ timeout: 20_000 });
 
 export async function PUT(req: NextRequest) {
   try {

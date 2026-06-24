@@ -11,6 +11,10 @@ import {
   startTransaction,
 } from "../lib/dbconnection";
 import AsyncLock from "async-lock";
+import {
+  applyOffersToCart,
+  movePromoItemsToTop,
+} from "../offers/applyOffers";
 import { log, logError } from "../lib/logger";
 
 const lock = new AsyncLock({ timeout: 20000 });
@@ -162,55 +166,13 @@ export async function PUT(req: NextRequest) {
         const latestTotalAmount =
           previousTotalAmount + amountToBeAdd - amountToBeRemove;
 
-        const pObId = new ObjectId("676da9f75763ded56d43032d");
-        const freeItem = await db
-          .collection("products")
-          .findOne({ _id: pObId });
-
-        const freeItemInCart = cart.items.findIndex((item: CartItem) =>
-          item.productId.equals(pObId),
-        );
-
-        log("cart free item check", {
-          latestTotalAmount,
-          previousTotalAmount,
-          freeItemInCart,
-        });
-
         await db
           .collection("carts")
           .updateOne({ userId: userObjectId }, asMongoUpdate(updateAction), {
             session,
           });
 
-        if (freeItemInCart === -1 && latestTotalAmount >= 1000) {
-          log("cart adding free item");
-          let newUpdateAction = {
-            $push: {
-              items: {
-                productId: pObId,
-                productDetails: freeItem,
-                quantity: 1,
-              },
-            },
-          };
-          await db.collection("carts").updateOne(
-            {
-              userId: userObjectId,
-            },
-            asMongoUpdate(newUpdateAction),
-            { session },
-          );
-        } else if (freeItemInCart !== -1 && latestTotalAmount < 1000) {
-          let newUpdateAction = { $pull: { items: { productId: pObId } } };
-          await db.collection("carts").updateOne(
-            {
-              userId: userObjectId,
-            },
-            asMongoUpdate(newUpdateAction),
-            { session },
-          );
-        }
+        await finalizeCartWithOffers(db, userObjectId, session);
 
         await commitTransaction(session);
 
@@ -276,13 +238,19 @@ export async function GET(req: NextRequest) {
 
     if (!cart) {
       return NextResponse.json(
-        { cart: { userId, items: [] } },
+        { cart: { userId, items: [] }, orderDiscount: 0 },
         { status: 200 },
       );
     }
-    const updatedCart = moveFreeItemToTop(cart);
 
-    return NextResponse.json({ cart: updatedCart }, { status: 200 });
+    const { items, orderDiscount } = await applyOffersToCart(db, cart.items);
+    await db
+      .collection("carts")
+      .updateOne({ userId: new ObjectId(userId) }, { $set: { items } });
+
+    const updatedCart = movePromoItemsToTop({ ...cart, items });
+
+    return NextResponse.json({ cart: updatedCart, orderDiscount }, { status: 200 });
   } catch (error) {
     logError("cart GET error:", error);
     return NextResponse.json(
@@ -290,6 +258,21 @@ export async function GET(req: NextRequest) {
       { status: 500 },
     );
   }
+}
+
+async function finalizeCartWithOffers(
+  db: Awaited<ReturnType<typeof connectDB>>,
+  userObjectId: import("mongodb").ObjectId,
+  session: ClientSession,
+) {
+  const cart = await db
+    .collection("carts")
+    .findOne({ userId: userObjectId }, { session });
+  const currentItems = (cart?.items as CartItem[]) ?? [];
+  const { items } = await applyOffersToCart(db, currentItems);
+  await db
+    .collection("carts")
+    .updateOne({ userId: userObjectId }, { $set: { items } }, { session });
 }
 
 const calculateTotalAmount = (products: CartItem[] = []): number => {
@@ -306,25 +289,3 @@ const calculateTotalAmount = (products: CartItem[] = []): number => {
   }, 0);
 };
 
-const FREE_ITEM_ID = "676da9f75763ded56d43032d";
-
-function moveFreeItemToTop(cart: {
-  items?: CartItem[];
-  [key: string]: unknown;
-}) {
-  if (!cart?.items?.length) return cart;
-
-  const index = cart.items.findIndex(
-    (item: CartItem) =>
-      item.productId?.toString() === FREE_ITEM_ID ||
-      (item.productDetails as { _id?: string })?._id?.toString() ===
-        FREE_ITEM_ID,
-  );
-
-  if (index > 0) {
-    const [freeItem] = cart?.items?.splice(index, 1);
-    cart?.items?.unshift(freeItem);
-  }
-
-  return cart;
-}

@@ -39,7 +39,7 @@ export async function GET(req: Request) {
       productTotal,
       productInStock,
       productOutOfStock,
-      productHidden,
+      productPromoOnly,
       categoryRoots,
       userTotal,
       userAdmins,
@@ -78,7 +78,7 @@ export async function GET(req: Request) {
       }),
       db.collection("products").countDocuments({
         ...productFilter,
-        discountedPrice: 0,
+        promoOnly: true,
       }),
       db.collection("categories").find({}).toArray(),
       db.collection("users").countDocuments({}),
@@ -108,7 +108,7 @@ export async function GET(req: Request) {
           total: productTotal,
           inStock: productInStock,
           outOfStock: productOutOfStock,
-          hidden: productHidden,
+          promoOnly: productPromoOnly,
         },
         categories: categoryStats,
         users: {

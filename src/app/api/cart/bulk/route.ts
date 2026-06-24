@@ -10,6 +10,7 @@ import {
   getClient,
   startTransaction,
 } from "../../lib/dbconnection";
+import { applyOffersToCart } from "../../offers/applyOffers";
 import { logError } from "../../lib/logger";
 import AsyncLock from "async-lock";
 
@@ -80,6 +81,11 @@ export async function PUT(req: NextRequest) {
           continue;
         }
 
+        if ((product as { promoOnly?: boolean }).promoOnly) {
+          failedItems.push({ productId, reason: "Promo only" });
+          continue;
+        }
+
         const itemIndex = updatedItems.findIndex((i) =>
           i.productId.equals(productObjectId),
         );
@@ -100,30 +106,21 @@ export async function PUT(req: NextRequest) {
         }
       }
 
-      const latestTotalAmount = calculateTotalAmount(updatedItems);
-      const pObId = new ObjectId("676da9f75763ded56d43032d");
-      const freeItem = await db
-        .collection("products")
-        .findOne({ _id: pObId }, { session });
-      const freeItemIndex = updatedItems.findIndex((i) =>
-        i.productId.equals(pObId),
+      // Client sends paid lines only; strip any promo metadata if present
+      updatedItems = updatedItems.filter(
+        (item) => !(item as { isPromoFreebie?: boolean }).isPromoFreebie,
       );
 
-      if (latestTotalAmount >= 1000 && freeItemIndex === -1 && freeItem) {
-        updatedItems.unshift({
-          productId: pObId,
-          productDetails: freeItem,
-          quantity: 1,
-        });
-      } else if (latestTotalAmount < 1000 && freeItemIndex !== -1) {
-        updatedItems.splice(freeItemIndex, 1);
-      }
+      const { items: finalItems, orderDiscount } = await applyOffersToCart(
+        db,
+        updatedItems,
+      );
 
       await db
         .collection("carts")
         .updateOne(
           { userId: userObjectId },
-          { $set: { items: updatedItems } },
+          { $set: { items: finalItems } },
           { session },
         );
 
@@ -133,6 +130,7 @@ export async function PUT(req: NextRequest) {
         {
           message: "Cart updated successfully",
           failedItems,
+          orderDiscount,
         },
         { status: 200 },
       );

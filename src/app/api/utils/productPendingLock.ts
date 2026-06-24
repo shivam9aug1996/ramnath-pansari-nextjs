@@ -39,10 +39,22 @@ export function pendingProductKey(productId: string) {
 }
 
 export function extractProductIdsFromCart(cartData: {
-  cart?: { items?: Array<{ productId?: unknown; productDetails?: { _id?: unknown } }> };
+  cart?: {
+    items?: Array<{
+      productId?: unknown;
+      isPromoFreebie?: boolean;
+      productDetails?: { _id?: unknown; discountedPrice?: number };
+    }>;
+  };
 }): string[] {
   const ids =
     cartData?.cart?.items
+      ?.filter((item) => {
+        if (item?.isPromoFreebie) return false;
+        const sellingPrice = item?.productDetails?.discountedPrice ?? 0;
+        if (sellingPrice === 0) return false;
+        return true;
+      })
       ?.map((item) => {
         const fromDetails = item?.productDetails?._id;
         const raw = fromDetails ?? item?.productId;

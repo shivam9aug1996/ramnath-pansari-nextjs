@@ -27,9 +27,10 @@ export async function GET(req: Request) {
     const search = (searchParams.get("search") || "").trim();
     const categoryId = (searchParams.get("categoryId") || "").trim();
     const stock = (searchParams.get("stock") || "").trim();
+    const promoOnly = (searchParams.get("promoOnly") || "").trim();
 
     const db = await connectDB(req);
-    const baseFilter = buildProductListFilter({ categoryId, stock });
+    const baseFilter = buildProductListFilter({ categoryId, stock, promoOnly });
     const searchFilter = buildProductSearchFilter(search);
     const finalFilter =
       Object.keys(searchFilter).length > 0
@@ -83,6 +84,10 @@ export async function POST(req: Request) {
     const payload = buildProductWritePayload(body, resolvedPath);
     payload._id = new ObjectId();
     payload.createdAt = new Date();
+    payload.productFromJio = false;
+    if (payload.promoOnly == null) {
+      payload.promoOnly = false;
+    }
 
     await db.collection("products").insertOne(payload);
     await invalidateProductCache();

@@ -26,6 +26,8 @@ export type ProductDocument = {
   createdAt?: Date;
   lastUpdated?: Date;
   isDeleted?: boolean;
+  promoOnly?: boolean;
+  productFromJio?: boolean;
   [key: string]: unknown;
 };
 
@@ -44,6 +46,8 @@ export type NormalizedProduct = {
   foodType?: "veg" | "non-veg";
   skuCode?: string;
   jiomartUid?: string;
+  promoOnly: boolean;
+  productFromJio: boolean;
   createdAt?: string;
   lastUpdated?: string;
 };
@@ -81,6 +85,8 @@ export function normalizeProductForResponse(
     foodType: product.foodType,
     skuCode: product.skuCode ? String(product.skuCode) : undefined,
     jiomartUid: product.jiomartUid ? String(product.jiomartUid) : undefined,
+    promoOnly: Boolean(product.promoOnly),
+    productFromJio: Boolean(product.productFromJio),
     createdAt: toIso(product.createdAt),
     lastUpdated: toIso(product.lastUpdated),
   };
@@ -103,6 +109,7 @@ export function buildProductSearchFilter(search: string) {
 export function buildProductListFilter(params: {
   categoryId?: string;
   stock?: string;
+  promoOnly?: string;
 }) {
   const filter: Record<string, unknown> = { isDeleted: { $ne: true } };
 
@@ -110,12 +117,16 @@ export function buildProductListFilter(params: {
     filter.categoryPath = new ObjectId(params.categoryId);
   }
 
+  if (params.promoOnly === "true") {
+    filter.promoOnly = true;
+  } else if (params.promoOnly === "false") {
+    filter.promoOnly = { $ne: true };
+  }
+
   if (params.stock === "in_stock") {
     filter.isOutOfStock = { $ne: true };
   } else if (params.stock === "out_of_stock") {
     filter.isOutOfStock = true;
-  } else if (params.stock === "hidden") {
-    filter.discountedPrice = 0;
   }
 
   return filter;
@@ -182,8 +193,20 @@ export function buildProductWritePayload(
   if (body.foodType === "veg" || body.foodType === "non-veg") {
     payload.foodType = body.foodType;
   }
+  if (body.promoOnly != null) {
+    payload.promoOnly = Boolean(body.promoOnly);
+  }
 
   return payload;
+}
+
+/** Customer-facing catalog — exclude promo-only SKUs. */
+export function buildCustomerCatalogFilter(extra: Record<string, unknown> = {}) {
+  return {
+    ...extra,
+    isDeleted: { $ne: true },
+    promoOnly: { $ne: true },
+  };
 }
 
 export async function invalidateProductCache() {
