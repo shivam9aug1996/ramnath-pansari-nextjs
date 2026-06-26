@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { requireAdmin } from "@/app/api/admin/requireAdmin";
+import { bumpSyncVersion } from "@/app/api/app/syncVersionsUtils";
 import {
   addCategoryToParent,
   buildNewCategory,
@@ -51,6 +52,8 @@ export async function POST(req: Request) {
     } else {
       await db.collection("categories").insertOne(newCategory);
     }
+
+    await bumpSyncVersion(db, "category");
 
     return NextResponse.json(
       { category: normalizeSingleCategory(newCategory) },

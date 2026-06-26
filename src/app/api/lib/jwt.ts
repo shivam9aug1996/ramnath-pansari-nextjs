@@ -1,6 +1,5 @@
 import { SignJWT, jwtVerify, type JWTPayload } from "jose";
 import { secretKey } from "./keys";
-import { logAuth } from "./logger";
 
 function getSecretKeyBytes() {
   if (!secretKey) return null;
@@ -10,17 +9,12 @@ function getSecretKeyBytes() {
 export async function verifyJwt(token: string): Promise<JWTPayload | null> {
   const key = getSecretKeyBytes();
   if (!key) {
-    logAuth("verifyJwt:fail", { reason: "missing-secret-key" });
     return null;
   }
   try {
     const { payload } = await jwtVerify(token, key);
     return payload;
-  } catch (error) {
-    logAuth("verifyJwt:fail", {
-      reason: "verify-error",
-      message: error instanceof Error ? error.message : String(error),
-    });
+  } catch {
     return null;
   }
 }

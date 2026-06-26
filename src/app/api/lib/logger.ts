@@ -17,7 +17,3 @@ export const maskToken = (token?: string | null) => {
   if (token.length <= 12) return "***";
   return `${token.slice(0, 6)}...${token.slice(-4)}`;
 };
-
-export const logAuth = (step: string, data: Record<string, unknown>) => {
-  if (isDev) console.log(`[auth] ${step}`, data);
-};

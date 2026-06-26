@@ -2,6 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../lib/dbconnection";
 import { log, logError } from "../lib/logger";
 
+const AUTOCOMPLETE_SEARCH_INDEX = "autocomplete-index";
+
+function buildAutocompleteSearch(query: string) {
+  return {
+    index: AUTOCOMPLETE_SEARCH_INDEX,
+    autocomplete: {
+      query,
+      path: "name",
+      fuzzy: {
+        maxEdits: 1,
+        prefixLength: 2,
+        maxExpansions: 50,
+      },
+    },
+  };
+}
+
 export async function GET(req: NextRequest) {
   const startedAt = Date.now();
 
@@ -33,13 +50,11 @@ export async function GET(req: NextRequest) {
 
     if (searchType === "autocomplete") {
       const skip = (page - 1) * limit;
+      const autocompleteSearch = buildAutocompleteSearch(query);
 
       const totalAgg = [
         {
-          $search: {
-            index: "autocomplete-index",
-            autocomplete: { query: query, path: "name" },
-          },
+          $search: autocompleteSearch,
         },
         {
           $match: { discountedPrice: { $gt: 0 }, promoOnly: { $ne: true } },
@@ -60,10 +75,7 @@ export async function GET(req: NextRequest) {
 
       const agg = [
         {
-          $search: {
-            index: "autocomplete-index",
-            autocomplete: { query: query, path: "name" },
-          },
+          $search: autocompleteSearch,
         },
         {
           $match: { discountedPrice: { $gt: 0 }, promoOnly: { $ne: true } },

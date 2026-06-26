@@ -3,15 +3,19 @@ import {
   getDeliveryFee,
   getPayableAmount,
 } from "@/app/api/utils/orderAmount";
+import type { DeliverySettings } from "@/app/api/delivery/deliverySettingsTypes";
 import type { CartItem } from "@/types/api";
 
-export function computeOrderTotalsFromCart(cartData: {
-  cart?: { items?: CartItem[] };
-}) {
+export function computeOrderTotalsFromCart(
+  cartData: {
+    cart?: { items?: CartItem[] };
+  },
+  deliverySettings: DeliverySettings,
+) {
   const items = cartData?.cart?.items ?? [];
   const subtotal = calculateCartSubtotal(items);
-  const deliveryFee = getDeliveryFee(subtotal);
-  const amountPaid = getPayableAmount(subtotal);
+  const deliveryFee = getDeliveryFee(subtotal, deliverySettings);
+  const amountPaid = getPayableAmount(subtotal, deliverySettings);
 
   return {
     subtotal,

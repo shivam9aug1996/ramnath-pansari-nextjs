@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { requireAdmin } from "@/app/api/admin/requireAdmin";
+import { bumpSyncVersion } from "@/app/api/app/syncVersionsUtils";
 import {
   CategoryNode,
   countCategoryChildren,
@@ -95,6 +96,7 @@ export async function PUT(req: Request, context: RouteContext) {
         { $set: patch },
       );
       const updated = await db.collection("categories").findOne({ _id: rootDoc._id });
+      await bumpSyncVersion(db, "category");
       return NextResponse.json({
         category: normalizeSingleCategory(updated as CategoryNode),
       });
@@ -110,6 +112,8 @@ export async function PUT(req: Request, context: RouteContext) {
     if (!updatedNode) {
       return buildError("INTERNAL", "Failed to update category", 500);
     }
+
+    await bumpSyncVersion(db, "category");
 
     return NextResponse.json({
       category: normalizeSingleCategory(updatedNode),
@@ -173,6 +177,8 @@ export async function DELETE(req: Request, context: RouteContext) {
         { $set: { children: updatedChildren } },
       );
     }
+
+    await bumpSyncVersion(db, "category");
 
     return NextResponse.json({ success: true });
   } catch (error) {

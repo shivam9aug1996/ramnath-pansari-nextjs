@@ -1,7 +1,11 @@
 import { CartItem } from "@/types/api";
+import {
+  DEFAULT_DELIVERY_SETTINGS,
+  type DeliverySettings,
+} from "@/app/api/delivery/deliverySettingsTypes";
 
-export const FREE_DELIVERY_MIN = 200;
-export const SHIPPING_FEE = 50;
+export const FREE_DELIVERY_MIN = DEFAULT_DELIVERY_SETTINGS.freeDeliveryMin;
+export const SHIPPING_FEE = DEFAULT_DELIVERY_SETTINGS.shippingFee;
 
 export function calculateCartSubtotal(items: CartItem[] = []): number {
   return items.reduce((total, product) => {
@@ -15,15 +19,24 @@ export function calculateCartSubtotal(items: CartItem[] = []): number {
   }, 0);
 }
 
-export function getDeliveryFee(subtotal: number): number {
+export function getDeliveryFee(
+  subtotal: number,
+  settings: DeliverySettings = DEFAULT_DELIVERY_SETTINGS,
+): number {
   if (!subtotal || subtotal <= 0) return 0;
-  return subtotal >= FREE_DELIVERY_MIN ? 0 : SHIPPING_FEE;
+  return subtotal >= settings.freeDeliveryMin ? 0 : settings.shippingFee;
 }
 
-export function getPayableAmount(subtotal: number): number {
-  return parseFloat((subtotal + getDeliveryFee(subtotal)).toFixed(2));
+export function getPayableAmount(
+  subtotal: number,
+  settings: DeliverySettings = DEFAULT_DELIVERY_SETTINGS,
+): number {
+  return parseFloat((subtotal + getDeliveryFee(subtotal, settings)).toFixed(2));
 }
 
-export function getPayableAmountFromCart(items: CartItem[] = []): number {
-  return getPayableAmount(calculateCartSubtotal(items));
+export function getPayableAmountFromCart(
+  items: CartItem[] = [],
+  settings: DeliverySettings = DEFAULT_DELIVERY_SETTINGS,
+): number {
+  return getPayableAmount(calculateCartSubtotal(items), settings);
 }

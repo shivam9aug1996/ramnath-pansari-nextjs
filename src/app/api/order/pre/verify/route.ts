@@ -11,6 +11,8 @@ import {
   calculateCartSubtotal,
   getDeliveryFee,
 } from "@/app/api/utils/orderAmount";
+import { getDeliverySettings } from "@/app/api/delivery/deliverySettingsUtils";
+import { getStoreConfig, validateOrderPlacement } from "@/app/api/store/storeConfigUtils";
 import {
   commitOrderProductLocks,
   extractProductIdsFromCart,
@@ -128,6 +130,19 @@ export async function POST(req: NextRequest) {
         transactionData.isLive = isLive;
       }
       const db = await connectDB(req);
+      const storeConfig = await getStoreConfig(db);
+      const placementCheck = validateOrderPlacement(addressData, storeConfig);
+      if (!placementCheck.ok) {
+        return NextResponse.json(
+          {
+            message: placementCheck.message,
+            code: placementCheck.code,
+            verified: false,
+          },
+          { status: 400 },
+        );
+      }
+
       const id = orderid.generate();
       const productIds = extractProductIdsFromCart(cartData);
       console.log("[product-lock] verify:start", {
@@ -173,7 +188,8 @@ export async function POST(req: NextRequest) {
       const totalProductCount = getTotalProductCount(cartData?.cart);
       const cartItems = cartData?.cart?.items ?? [];
       const subtotal = calculateCartSubtotal(cartItems);
-      const deliveryFee = getDeliveryFee(subtotal);
+      const deliverySettings = await getDeliverySettings(db);
+      const deliveryFee = getDeliveryFee(subtotal, deliverySettings);
       const amountPaid = (transactionData?.amount as number) || 0;
 
       let result;

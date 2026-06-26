@@ -7,6 +7,7 @@ import {
   STORE_SETTINGS_ID,
   storeSettingsCollection,
 } from "@/app/api/offers/storeSettingsUtils";
+import { bumpSyncVersion } from "@/app/api/app/syncVersionsUtils";
 import type {
   CarouselActionType,
   CarouselBanner,
@@ -53,6 +54,7 @@ export async function saveCarouselBanners(
     },
     { upsert: true },
   );
+  await bumpSyncVersion(db, "carousel");
 }
 
 export function normalizeCarouselBannerForResponse(

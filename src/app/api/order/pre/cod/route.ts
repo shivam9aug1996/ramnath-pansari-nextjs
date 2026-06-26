@@ -10,6 +10,8 @@ import {
   getDeliveryFee,
   getPayableAmountFromCart,
 } from "@/app/api/utils/orderAmount";
+import { getDeliverySettings } from "@/app/api/delivery/deliverySettingsUtils";
+import { getStoreConfig, validateOrderPlacement } from "@/app/api/store/storeConfigUtils";
 import {
   commitOrderProductLocks,
   extractProductIdsFromCart,
@@ -79,8 +81,20 @@ export async function POST(req: NextRequest) {
 
     const cartItems = cartData?.cart?.items ?? [];
     const subtotal = calculateCartSubtotal(cartItems);
-    const deliveryFee = getDeliveryFee(subtotal);
-    const expectedAmount = getPayableAmountFromCart(cartItems);
+    const db = await connectDB(req);
+    const deliverySettings = await getDeliverySettings(db);
+    const storeConfig = await getStoreConfig(db);
+
+    const placementCheck = validateOrderPlacement(addressData, storeConfig);
+    if (!placementCheck.ok) {
+      return NextResponse.json(
+        { message: placementCheck.message, code: placementCheck.code },
+        { status: 400 },
+      );
+    }
+
+    const deliveryFee = getDeliveryFee(subtotal, deliverySettings);
+    const expectedAmount = getPayableAmountFromCart(cartItems, deliverySettings);
 
     if (Math.abs(Number(amount) - expectedAmount) > 0.01) {
       return NextResponse.json(
@@ -92,8 +106,6 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     }
-
-    const db = await connectDB(req);
 
     const id = orderid.generate();
     const productIds = extractProductIdsFromCart(cartData);

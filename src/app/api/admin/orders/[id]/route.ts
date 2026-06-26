@@ -6,6 +6,7 @@ import type { ExpoPushMessage } from "expo-server-sdk";
 import { syncActiveOrderToFirebase } from "@/app/api/utils/syncActiveOrderToFirebase";
 import { requireAdmin } from "@/app/api/admin/requireAdmin";
 import { computeOrderTotalsFromCart } from "@/app/api/admin/orderTotals";
+import { getDeliverySettings } from "@/app/api/delivery/deliverySettingsUtils";
 import {
   calculateCartSubtotal,
   getDeliveryFee,
@@ -134,7 +135,8 @@ export async function PUT(
         }
       }
       update.$set.cartData = body.cartData;
-      const totals = computeOrderTotalsFromCart(body.cartData);
+      const deliverySettings = await getDeliverySettings(db);
+      const totals = computeOrderTotalsFromCart(body.cartData, deliverySettings);
       update.$set.productCount = totals.productCount;
       update.$set.totalProductCount = totals.totalProductCount;
       update.$set.subtotal = totals.subtotal;

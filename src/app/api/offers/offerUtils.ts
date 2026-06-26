@@ -2,17 +2,24 @@ import type { Db } from "mongodb";
 import { ObjectId } from "mongodb";
 import {
   DEFAULT_CAROUSEL_BANNERS,
+  DEFAULT_DELIVERY_SETTINGS,
   DEFAULT_OFFERS,
+  DEFAULT_STORE_CONFIG,
   type DiscountReward,
   type FreebieReward,
   type Offer,
   type StoreSettingsDocument,
 } from "./offerTypes";
 import type { CarouselBanner } from "@/app/api/carousel/carouselTypes";
+import type { DeliverySettings } from "@/app/api/delivery/deliverySettingsTypes";
+import { normalizeDeliverySettings } from "@/app/api/delivery/deliverySettingsUtils";
+import { normalizeStoreConfig } from "@/app/api/store/storeConfigUtils";
+import type { StoreConfig } from "@/app/api/store/storeConfigTypes";
 import {
   STORE_SETTINGS_ID,
   storeSettingsCollection,
 } from "./storeSettingsUtils";
+import { bumpSyncVersion } from "@/app/api/app/syncVersionsUtils";
 
 export async function getStoreSettings(db: Db): Promise<StoreSettingsDocument> {
   const doc = await storeSettingsCollection(db).findOne({
@@ -24,6 +31,8 @@ export async function getStoreSettings(db: Db): Promise<StoreSettingsDocument> {
       _id: STORE_SETTINGS_ID,
       offers: DEFAULT_OFFERS,
       carouselBanners: DEFAULT_CAROUSEL_BANNERS,
+      deliverySettings: DEFAULT_DELIVERY_SETTINGS,
+      storeConfig: DEFAULT_STORE_CONFIG,
       updatedAt: new Date(),
     };
     await storeSettingsCollection(db).updateOne(
@@ -54,6 +63,12 @@ export async function getStoreSettings(db: Db): Promise<StoreSettingsDocument> {
     _id: STORE_SETTINGS_ID,
     offers: (doc.offers as Offer[]) ?? [],
     carouselBanners,
+    deliverySettings: normalizeDeliverySettings(
+      doc.deliverySettings as DeliverySettings | undefined,
+    ),
+    storeConfig: normalizeStoreConfig(
+      doc.storeConfig as StoreConfig | undefined,
+    ),
     updatedAt: doc.updatedAt ? new Date(doc.updatedAt) : new Date(),
   };
 }
@@ -80,6 +95,7 @@ export async function saveOffers(db: Db, offers: Offer[]): Promise<void> {
     },
     { upsert: true },
   );
+  await bumpSyncVersion(db, "offers");
 }
 
 export function normalizeOfferForResponse(offer: Offer): Offer {
