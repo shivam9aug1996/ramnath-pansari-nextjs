@@ -5,6 +5,7 @@ export type CarouselBanner = {
   enabled: boolean;
   sortOrder: number;
   imageUrl: string;
+  blurhash?: string;
   actionType: CarouselActionType;
   categoryId?: string;
   categoryName?: string;

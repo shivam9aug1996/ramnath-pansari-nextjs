@@ -4,6 +4,15 @@ import { signJwt } from "../../lib/jwt";
 import { cookies } from "next/headers";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";
+import {
+  ADMIN_MOBILE_FALLBACK,
+  GUEST_MOBILE,
+} from "@/app/api/admin/users/userUtils";
+import {
+  clearAdminOtp,
+  isAdminLoginAttempt,
+  verifyAdminOtp,
+} from "../adminOtpUtils";
 
 const generateToken = async (user: any, isGuestUser: boolean = false) => {
   const payload = {
@@ -37,125 +46,159 @@ export async function POST(req: NextRequest) {
 
     if (!mobileNumber || !password) {
       return NextResponse.json(
-        { message: "Missing mobile number or otp" },
+        { message: "Missing mobile number or password" },
         { status: 400 },
       );
     }
 
-    let status = "approved";
+    const db = await connectDB(req);
+    const user = await db.collection("users").findOne({ mobileNumber });
+    const isGuestUser = mobileNumber === GUEST_MOBILE;
 
-    if (status == "approved") {
-      const db = await connectDB(req);
+    if (isAdminLoginAttempt(mobileNumber, user)) {
+      if (!otp) {
+        return NextResponse.json(
+          { error: "OTP is required for admin login" },
+          { status: 400 },
+        );
+      }
 
-      const user = await db.collection("users").findOne({ mobileNumber });
-      const isGuestUser = mobileNumber === "9999999991";
-      const isAdminUser = mobileNumber === "8888888888";
+      if (!user) {
+        return NextResponse.json(
+          { error: "Admin account not found" },
+          { status: 404 },
+        );
+      }
 
-      if (user) {
-        if (password) {
-          const isPasswordCorrect = await bcrypt.compare(
-            password,
-            user.password,
-          );
-          if (!isPasswordCorrect) {
-            return NextResponse.json(
-              { error: "Incorrect password" },
-              { status: 400 },
-            );
-          }
-        }
+      const isPasswordCorrect = await bcrypt.compare(password, user.password);
+      if (!isPasswordCorrect) {
+        await clearAdminOtp(db, mobileNumber);
+        return NextResponse.json(
+          { error: "Incorrect password" },
+          { status: 400 },
+        );
+      }
 
-        let token = await generateToken(user, isGuestUser);
+      const isOtpValid = await verifyAdminOtp(db, mobileNumber, String(otp));
+      if (!isOtpValid) {
+        return NextResponse.json(
+          { error: "Incorrect OTP. Please enter the correct code." },
+          { status: 400 },
+        );
+      }
 
-        const existingCart = await db
-          .collection("carts")
-          .findOne({ userId: new ObjectId(user._id) });
-        if (!existingCart) {
-          await db.collection("carts").insertOne({
-            userId: new ObjectId(user._id),
-            items: [],
-          });
-        }
+      const token = await generateToken(user, false);
 
-        setAuthCookies(token, mobileNumber, user?._id);
-
-        const response = {
-          message: "OTP successfully verified",
-          userAlreadyRegistered: true,
-          userData: { ...user, userAlreadyRegistered: true },
-          token: token,
-        };
-        const newRes = isGuestUser
-          ? {
-              ...response,
-              isGuestUser: true,
-              userData: { ...user, name: "Guest User", isGuestUser: true },
-            }
-          : isAdminUser
-            ? {
-                ...response,
-                isAdminUser: true,
-                userData: { ...user, name: "Admin User", isAdminUser: true },
-              }
-            : response;
-
-        return NextResponse.json(newRes, { status: 200 });
-      } else {
-        const hash = await bcrypt.hashSync(password, 10);
-        await db
-          .collection("users")
-          .insertOne({ mobileNumber, password: hash });
-        const user = await db.collection("users").findOne({ mobileNumber });
-
-        if (!user) {
-          return NextResponse.json(
-            { error: "User creation failed" },
-            { status: 500 },
-          );
-        }
-        const token = await generateToken(user, isGuestUser);
+      const existingCart = await db
+        .collection("carts")
+        .findOne({ userId: new ObjectId(user._id) });
+      if (!existingCart) {
         await db.collection("carts").insertOne({
           userId: new ObjectId(user._id),
           items: [],
         });
-        setAuthCookies(token, mobileNumber, user._id);
-
-        const response = {
-          message: "OTP successfully verified",
-          userAlreadyRegistered: false,
-          userData: { ...user, userAlreadyRegistered: false },
-          token: token,
-        };
-        const newRes = isGuestUser
-          ? {
-              ...response,
-              isGuestUser: true,
-              userData: { ...user, name: "Guest User", isGuestUser: true },
-            }
-          : isAdminUser
-            ? {
-                ...response,
-                isAdminUser: true,
-                userData: { ...user, name: "Admin User", isAdminUser: true },
-              }
-            : response;
-        return NextResponse.json(newRes, { status: 200 });
       }
-    } else if (status == "pending") {
+
+      setAuthCookies(token, mobileNumber, user._id);
+
       return NextResponse.json(
         {
-          error: "Incorrect OTP. Please enter the correct code.",
+          message: "OTP successfully verified",
+          userAlreadyRegistered: true,
+          isAdminUser: true,
+          userData: {
+            ...user,
+            userAlreadyRegistered: true,
+            name: "Admin User",
+            isAdminUser: true,
+          },
+          token,
         },
-        { status: 400 },
-      );
-    } else if (status == "error" || status == "") {
-      return NextResponse.json(
-        { error: "Error from twillio" },
-        { status: 400 },
+        { status: 200 },
       );
     }
-  } catch (error) {
-   // logError("[auth] verifyOtp:error", error);
+
+    if (mobileNumber === ADMIN_MOBILE_FALLBACK && !user) {
+      return NextResponse.json(
+        { error: "Admin account not found" },
+        { status: 404 },
+      );
+    }
+
+    if (user) {
+      const isPasswordCorrect = await bcrypt.compare(password, user.password);
+      if (!isPasswordCorrect) {
+        return NextResponse.json(
+          { error: "Incorrect password" },
+          { status: 400 },
+        );
+      }
+
+      const token = await generateToken(user, isGuestUser);
+
+      const existingCart = await db
+        .collection("carts")
+        .findOne({ userId: new ObjectId(user._id) });
+      if (!existingCart) {
+        await db.collection("carts").insertOne({
+          userId: new ObjectId(user._id),
+          items: [],
+        });
+      }
+
+      setAuthCookies(token, mobileNumber, user?._id);
+
+      const response = {
+        message: "OTP successfully verified",
+        userAlreadyRegistered: true,
+        userData: { ...user, userAlreadyRegistered: true },
+        token,
+      };
+      const newRes = isGuestUser
+        ? {
+            ...response,
+            isGuestUser: true,
+            userData: { ...user, name: "Guest User", isGuestUser: true },
+          }
+        : response;
+
+      return NextResponse.json(newRes, { status: 200 });
+    }
+
+    const hash = await bcrypt.hashSync(password, 10);
+    await db.collection("users").insertOne({ mobileNumber, password: hash });
+    const newUser = await db.collection("users").findOne({ mobileNumber });
+
+    if (!newUser) {
+      return NextResponse.json(
+        { error: "User creation failed" },
+        { status: 500 },
+      );
+    }
+
+    const token = await generateToken(newUser, isGuestUser);
+    await db.collection("carts").insertOne({
+      userId: new ObjectId(newUser._id),
+      items: [],
+    });
+    setAuthCookies(token, mobileNumber, newUser._id);
+
+    const response = {
+      message: "OTP successfully verified",
+      userAlreadyRegistered: false,
+      userData: { ...newUser, userAlreadyRegistered: false },
+      token,
+    };
+    const newRes = isGuestUser
+      ? {
+          ...response,
+          isGuestUser: true,
+          userData: { ...newUser, name: "Guest User", isGuestUser: true },
+        }
+      : response;
+
+    return NextResponse.json(newRes, { status: 200 });
+  } catch {
     return NextResponse.json(
       { error: "Something went wrong" },
       { status: 500 },

@@ -8,6 +8,7 @@ import {
   storeSettingsCollection,
 } from "@/app/api/offers/storeSettingsUtils";
 import { bumpSyncVersion } from "@/app/api/app/syncVersionsUtils";
+import { blurhashFromImageUrl } from "./carouselBlurhash";
 import type {
   CarouselActionType,
   CarouselBanner,
@@ -155,7 +156,53 @@ export function buildCarouselBannerFromInput(
       actionType === "category"
         ? body.categoryName?.trim() || existing?.categoryName
         : undefined,
+    blurhash: existing?.blurhash,
     createdAt: existing?.createdAt ?? now,
     updatedAt: now,
   };
+}
+
+export async function ensureCarouselBannerBlurhash(
+  banner: CarouselBanner,
+  options?: { previousImageUrl?: string; force?: boolean },
+): Promise<CarouselBanner> {
+  const imageUrl = banner.imageUrl.trim();
+  if (!imageUrl) {
+    return { ...banner, blurhash: undefined };
+  }
+
+  const imageUrlChanged =
+    options?.previousImageUrl != null &&
+    options.previousImageUrl.trim() !== imageUrl;
+
+  if (!options?.force && banner.blurhash && !imageUrlChanged) {
+    return banner;
+  }
+
+  try {
+    const blurhash = await blurhashFromImageUrl(imageUrl);
+    return { ...banner, blurhash };
+  } catch (error) {
+    console.warn("[carousel] blurhash generation failed:", imageUrl, error);
+    return imageUrlChanged ? { ...banner, blurhash: undefined } : banner;
+  }
+}
+
+export async function backfillCarouselBannerBlurhashes(
+  banners: CarouselBanner[],
+): Promise<{ banners: CarouselBanner[]; updated: number }> {
+  let updated = 0;
+  const next = await Promise.all(
+    banners.map(async (banner) => {
+      if (banner.blurhash || !banner.imageUrl.trim()) {
+        return banner;
+      }
+      const withBlurhash = await ensureCarouselBannerBlurhash(banner);
+      if (withBlurhash.blurhash) {
+        updated += 1;
+      }
+      return withBlurhash;
+    }),
+  );
+  return { banners: next, updated };
 }

@@ -4,6 +4,7 @@ import { requireAdmin } from "@/app/api/admin/requireAdmin";
 import {
   buildCarouselBannerFromInput,
   compareCarouselBanners,
+  ensureCarouselBannerBlurhash,
   getAllCarouselBanners,
   normalizeCarouselBannerForResponse,
   saveCarouselBanners,
@@ -38,12 +39,16 @@ export async function PUT(req: Request, context: RouteContext) {
       return buildError("NOT_FOUND", "Carousel banner not found", 404);
     }
 
-    const merged = buildCarouselBannerFromInput(
-      {
-        ...body,
-        actionType: body.actionType ?? banners[index].actionType,
-      },
-      banners[index],
+    const existing = banners[index];
+    const merged = await ensureCarouselBannerBlurhash(
+      buildCarouselBannerFromInput(
+        {
+          ...body,
+          actionType: body.actionType ?? existing.actionType,
+        },
+        existing,
+      ),
+      { previousImageUrl: existing.imageUrl },
     );
 
     const categoryCheck = await validateCarouselCategoryExists(db, merged);

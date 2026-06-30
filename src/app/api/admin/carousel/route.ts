@@ -4,6 +4,7 @@ import { requireAdmin } from "@/app/api/admin/requireAdmin";
 import {
   buildCarouselBannerFromInput,
   compareCarouselBanners,
+  ensureCarouselBannerBlurhash,
   getAllCarouselBanners,
   normalizeCarouselBannerForResponse,
   saveCarouselBanners,
@@ -54,7 +55,8 @@ export async function POST(req: Request) {
     }
 
     const banners = await getAllCarouselBanners(db);
-    const newBanner = buildCarouselBannerFromInput(body);
+    const built = buildCarouselBannerFromInput(body);
+    const newBanner = await ensureCarouselBannerBlurhash(built);
     const updated = [...banners, newBanner].sort(compareCarouselBanners);
     await saveCarouselBanners(db, updated);
 

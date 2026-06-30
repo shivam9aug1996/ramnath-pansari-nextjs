@@ -136,7 +136,10 @@ export async function PUT(
       }
       update.$set.cartData = body.cartData;
       const deliverySettings = await getDeliverySettings(db);
-      const totals = computeOrderTotalsFromCart(body.cartData, deliverySettings);
+      const totals = computeOrderTotalsFromCart(
+        body.cartData,
+        deliverySettings,
+      );
       update.$set.productCount = totals.productCount;
       update.$set.totalProductCount = totals.totalProductCount;
       update.$set.subtotal = totals.subtotal;
@@ -222,9 +225,7 @@ export async function PUT(
           const userId = String((updated as AnyObject)?.userId || "");
           const orderMongoId = String((updated as AnyObject)?._id || "");
           const humanOrderId = String((updated as AnyObject)?.orderId || "");
-          if (
-            shouldReleaseProductLocks(String(prevStatus || ""), nextStatus)
-          ) {
+          if (shouldReleaseProductLocks(String(prevStatus || ""), nextStatus)) {
             await releaseProductLocksForOrder(updated as AnyObject);
           }
           if (userId && orderMongoId) {
@@ -243,15 +244,43 @@ export async function PUT(
               .collection("pushTokens")
               .findOne({ userId });
             const tokens: string[] = tokensDoc?.tokens || [];
+            const displayOrderId = humanOrderId || orderMongoId.slice(-6);
+
             if (tokens.length) {
-              const titleMap: AnyObject = {
-                delivered: "Your order has been delivered",
-                out_for_delivery: "Your order is out for delivery",
-                confirmed: "Your order is confirmed",
-                canceled: "Your order was canceled",
+              const displayOrderId = humanOrderId || orderMongoId.slice(-6);
+
+              const pushCopy: Record<
+                string,
+                { title: string; subtitle: string; body: string }
+              > = {
+                delivered: {
+                  title: "Order Delivered 🎉",
+                  subtitle: `Order #${displayOrderId}`,
+                  body: "Your order has been delivered successfully. Thank you for shopping with us!",
+                },
+                out_for_delivery: {
+                  title: "Out for Delivery 🚚",
+                  subtitle: `Order #${displayOrderId}`,
+                  body: "Our delivery partner is on the way and will reach you soon.",
+                },
+                confirmed: {
+                  title: "Order Confirmed ✅",
+                  subtitle: `Order #${displayOrderId}`,
+                  body: "We're preparing your items and will notify you once they're dispatched.",
+                },
+                canceled: {
+                  title: "Order Canceled",
+                  subtitle: `Order #${displayOrderId}`,
+                  body: "Your order has been canceled. Please contact support if you need any assistance.",
+                },
               };
-              const title =
-                titleMap[nextStatus] || `Order status updated to ${nextStatus}`;
+              
+              const { title, subtitle, body } = pushCopy[nextStatus] ?? {
+                title: "Order Updated",
+                subtitle: `Order #${displayOrderId}`,
+                body: `Your order status changed to ${String(nextStatus).replace(/_/g, " ")}.`,
+              };
+              
               const expo = new Expo({});
               const messages: ExpoPushMessage[] = tokens.map(
                 (t): ExpoPushMessage => ({
@@ -264,6 +293,8 @@ export async function PUT(
                   },
                   priority: "high",
                   title,
+                  body,
+                  subtitle,
                 }),
               );
               const tickets = await expo.sendPushNotificationsAsync(messages);
