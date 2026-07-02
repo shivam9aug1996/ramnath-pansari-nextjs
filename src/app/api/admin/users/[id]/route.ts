@@ -105,6 +105,12 @@ export async function PUT(req: Request, context: RouteContext) {
     if (patch.isAdminUser !== undefined) {
       updateData.isAdminUser = patch.isAdminUser;
     }
+    if (patch.isDriverUser !== undefined) {
+      updateData.isDriverUser = patch.isDriverUser;
+      if (patch.isDriverUser) {
+        updateData.driverId = id;
+      }
+    }
     if (patch.password) {
       updateData.password = await hashPassword(patch.password);
     }

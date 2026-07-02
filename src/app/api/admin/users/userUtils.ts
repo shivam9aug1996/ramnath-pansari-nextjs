@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 
 export const ADMIN_MOBILE_FALLBACK = "8888888888";
 export const GUEST_MOBILE = "9999999991";
+export const DRIVER_MOBILE_FALLBACK = "7777777771";
 
 export type UserDocument = {
   _id?: ObjectId;
@@ -12,6 +13,7 @@ export type UserDocument = {
   profileImage?: unknown;
   khataUrl?: string;
   isAdminUser?: boolean;
+  isDriverUser?: boolean;
   createdAt?: Date;
   [key: string]: unknown;
 };
@@ -24,6 +26,8 @@ export type NormalizedUser = {
   profileImage: unknown;
   isAdminUser: boolean;
   isGuestUser: boolean;
+  isDriverUser: boolean;
+  driverId?: string;
   orderCount?: number;
   createdAt?: string;
 };
@@ -48,6 +52,12 @@ export function resolveIsGuest(user: UserDocument) {
   return user.mobileNumber === GUEST_MOBILE;
 }
 
+export function resolveIsDriver(user: UserDocument) {
+  return (
+    Boolean(user.isDriverUser) || user.mobileNumber === DRIVER_MOBILE_FALLBACK
+  );
+}
+
 export function normalizeUserForResponse(
   user: UserDocument | null,
   extras?: { orderCount?: number },
@@ -62,6 +72,13 @@ export function normalizeUserForResponse(
     profileImage: user.profileImage ?? null,
     isAdminUser: resolveIsAdmin(user),
     isGuestUser: resolveIsGuest(user),
+    isDriverUser: resolveIsDriver(user),
+    driverId:
+      resolveIsDriver(user) && user.driverId != null && String(user.driverId).trim()
+        ? String(user.driverId)
+        : resolveIsDriver(user)
+          ? user._id?.toString()
+          : undefined,
     orderCount: extras?.orderCount,
     createdAt: toIso(user.createdAt),
   };
@@ -85,9 +102,14 @@ export function buildUserListFilter(role?: string) {
     ];
   } else if (role === "customer") {
     filter.isAdminUser = { $ne: true };
-    filter.mobileNumber = { $nin: [ADMIN_MOBILE_FALLBACK, GUEST_MOBILE] };
+    filter.isDriverUser = { $ne: true };
+    filter.mobileNumber = {
+      $nin: [ADMIN_MOBILE_FALLBACK, GUEST_MOBILE, DRIVER_MOBILE_FALLBACK],
+    };
   } else if (role === "guest") {
     filter.mobileNumber = GUEST_MOBILE;
+  } else if (role === "driver") {
+    filter.isDriverUser = true;
   }
 
   return filter;
@@ -111,6 +133,7 @@ export function validateUserCreateInput(body: Record<string, unknown>) {
     password,
     name: name || undefined,
     isAdminUser: Boolean(body.isAdminUser),
+    isDriverUser: Boolean(body.isDriverUser),
   };
 }
 
@@ -119,6 +142,7 @@ export function validateUserUpdateInput(body: Record<string, unknown>) {
     name?: string;
     khataUrl?: string | null;
     isAdminUser?: boolean;
+    isDriverUser?: boolean;
     password?: string;
   } = {};
 
@@ -136,6 +160,10 @@ export function validateUserUpdateInput(body: Record<string, unknown>) {
 
   if (body.isAdminUser !== undefined) {
     patch.isAdminUser = Boolean(body.isAdminUser);
+  }
+
+  if (body.isDriverUser !== undefined) {
+    patch.isDriverUser = Boolean(body.isDriverUser);
   }
 
   if (body.password !== undefined && body.password !== "") {

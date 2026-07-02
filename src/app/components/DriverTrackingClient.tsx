@@ -20,6 +20,28 @@ type LocationEntry = {
 
 type LatLng = { lat: number; lng: number };
 
+function normalizeLocationEntry(raw: unknown): LocationEntry | null {
+  if (!raw || typeof raw !== "object") return null;
+
+  const entry = raw as Record<string, unknown>;
+  const lat = parseFloat(String(entry.lat ?? entry.latitude ?? ""));
+  const lng = parseFloat(String(entry.lng ?? entry.longitude ?? ""));
+
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+    return null;
+  }
+
+  let timestamp = 0;
+  if (typeof entry.timestamp === "number" && Number.isFinite(entry.timestamp)) {
+    timestamp = entry.timestamp;
+  } else if (typeof entry.timestamp === "string") {
+    const parsed = Date.parse(entry.timestamp);
+    timestamp = Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  return { lat, lng, timestamp };
+}
+
 const EMBEDDED_MAP_HEIGHT = 272;
 const STANDALONE_MAP_HEIGHT = 300;
 const ROUTE_COLOR = "#1B7D3A";
@@ -542,7 +564,15 @@ export default function DriverTrackingClient({
           return;
         }
 
-        const locationArray: LocationEntry[] = Object.values(data);
+        const locationArray: LocationEntry[] = Object.values(data)
+          .map(normalizeLocationEntry)
+          .filter((entry): entry is LocationEntry => entry !== null);
+
+        if (locationArray.length === 0) {
+          setIsWaitingForDriver(true);
+          return;
+        }
+
         locationArray.sort((a, b) => b.timestamp - a.timestamp);
         const newLocation = locationArray[0];
 
@@ -585,7 +615,6 @@ export default function DriverTrackingClient({
           : {}),
       }}
     >
-      {embedded && <MockLocationSender orderId={orderId} compact />}
 
       <div
         style={{

@@ -3,7 +3,9 @@ import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
 import {
   ADMIN_MOBILE_FALLBACK,
+  DRIVER_MOBILE_FALLBACK,
   resolveIsAdmin,
+  resolveIsDriver,
   type UserDocument,
 } from "@/app/api/admin/users/userUtils";
 import { log, logError, logWarn } from "@/app/api/lib/logger";
@@ -24,12 +26,24 @@ export function isAdminMobile(mobileNumber: string) {
   return mobileNumber === ADMIN_MOBILE_FALLBACK;
 }
 
+export function isDriverMobile(mobileNumber: string) {
+  return mobileNumber === DRIVER_MOBILE_FALLBACK;
+}
+
 export function isAdminLoginAttempt(
   mobileNumber: string,
   user: UserDocument | null,
 ) {
   if (!isAdminMobile(mobileNumber) || !user) return false;
   return resolveIsAdmin(user);
+}
+
+export function isDriverLoginAttempt(
+  mobileNumber: string,
+  user: UserDocument | null,
+) {
+  if (!isDriverMobile(mobileNumber) || !user) return false;
+  return resolveIsDriver(user);
 }
 
 export function maskEmail(email: string) {
@@ -55,11 +69,12 @@ function getSmtpConfig() {
   };
 }
 
-async function sendAdminOtpEmail(otp: string) {
+async function sendRoleOtpEmail(otp: string, role: "admin" | "driver") {
   const smtpConfig = getSmtpConfig();
+  const roleLabel = role === "admin" ? "admin" : "driver";
 
   if (!smtpConfig) {
-    log("[admin-otp] SMTP not configured. OTP for dev:", otp);
+    log(`[${roleLabel}-otp] SMTP not configured. OTP for dev:`, otp);
     if (process.env.NODE_ENV === "production") {
       throw new Error("SMTP is not configured");
     }
@@ -72,9 +87,9 @@ async function sendAdminOtpEmail(otp: string) {
     await transporter.sendMail({
       from: smtpConfig.auth.user,
       to: ADMIN_OTP_EMAIL,
-      subject: "Ramnath Pansari admin login OTP",
-      text: `Your admin login OTP is ${otp}. It expires in 10 minutes.`,
-      html: `<p>Your admin login OTP is <strong>${otp}</strong>.</p><p>It expires in 10 minutes.</p>`,
+      subject: `Ramnath Pansari ${roleLabel} login OTP`,
+      text: `Your ${roleLabel} login OTP is ${otp}. It expires in 10 minutes.`,
+      html: `<p>Your ${roleLabel} login OTP is <strong>${otp}</strong>.</p><p>It expires in 10 minutes.</p>`,
     });
   } catch (error) {
     const isAuthError =
@@ -85,7 +100,7 @@ async function sendAdminOtpEmail(otp: string) {
 
     if (process.env.NODE_ENV !== "production") {
       logWarn(
-        "[admin-otp] Email send failed; using dev fallback OTP:",
+        `[${roleLabel}-otp] Email send failed; using dev fallback OTP:`,
         otp,
         isAuthError
           ? "(Gmail needs an App Password in SMTP_PASS, not your login password)"
@@ -104,7 +119,11 @@ async function sendAdminOtpEmail(otp: string) {
   }
 }
 
-export async function createAndSendAdminOtp(db: Db, mobileNumber: string) {
+async function createAndSendRoleOtp(
+  db: Db,
+  mobileNumber: string,
+  role: "admin" | "driver",
+) {
   const otp = generateOtp();
   const otpHash = await bcrypt.hash(otp, 10);
   const now = new Date();
@@ -119,9 +138,17 @@ export async function createAndSendAdminOtp(db: Db, mobileNumber: string) {
     .collection<AdminOtpRecord>("adminOtps")
     .updateOne({ mobileNumber }, { $set: record }, { upsert: true });
 
-  await sendAdminOtpEmail(otp);
+  await sendRoleOtpEmail(otp, role);
 
   return { otpSentTo: maskEmail(ADMIN_OTP_EMAIL) };
+}
+
+export async function createAndSendAdminOtp(db: Db, mobileNumber: string) {
+  return createAndSendRoleOtp(db, mobileNumber, "admin");
+}
+
+export async function createAndSendDriverOtp(db: Db, mobileNumber: string) {
+  return createAndSendRoleOtp(db, mobileNumber, "driver");
 }
 
 export async function verifyAdminOtp(

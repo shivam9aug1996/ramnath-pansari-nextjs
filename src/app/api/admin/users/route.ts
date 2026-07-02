@@ -81,15 +81,25 @@ export async function POST(req: Request) {
 
     const passwordHash = await hashPassword(validation.password!);
     const now = new Date();
-    const payload = {
+    const payload: Record<string, unknown> = {
       mobileNumber: validation.mobileNumber,
       password: passwordHash,
       ...(validation.name ? { name: validation.name } : {}),
       ...(validation.isAdminUser ? { isAdminUser: true } : {}),
+      ...(validation.isDriverUser || validation.mobileNumber === "7777777771"
+        ? { isDriverUser: true }
+        : {}),
       createdAt: now,
     };
 
     const result = await db.collection("users").insertOne(payload);
+
+    if (validation.isDriverUser || validation.mobileNumber === "7777777771") {
+      await db.collection("users").updateOne(
+        { _id: result.insertedId },
+        { $set: { driverId: result.insertedId.toString() } },
+      );
+    }
     await db.collection("carts").insertOne({
       userId: new ObjectId(result.insertedId),
       items: [],

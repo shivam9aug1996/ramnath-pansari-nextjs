@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../../lib/dbconnection";
 import {
   createAndSendAdminOtp,
+  createAndSendDriverOtp,
   isAdminLoginAttempt,
+  isDriverLoginAttempt,
 } from "../adminOtpUtils";
 import { logError } from "../../lib/logger";
 
@@ -35,6 +37,7 @@ export async function POST(req: NextRequest) {
             userAlreadyRegistered: true,
             message: "OTP sent successfully",
             requiresEmailOtp: true,
+            loginRole: "admin",
             otpSentTo,
           },
           { status: 200 },
@@ -43,6 +46,28 @@ export async function POST(req: NextRequest) {
         logError("sendOtp admin email failed", error);
         return NextResponse.json(
           { error: "Failed to send admin OTP email" },
+          { status: 500 },
+        );
+      }
+    }
+
+    if (isDriverLoginAttempt(mobileNumber, user)) {
+      try {
+        const { otpSentTo } = await createAndSendDriverOtp(db, mobileNumber);
+        return NextResponse.json(
+          {
+            userAlreadyRegistered: true,
+            message: "OTP sent successfully",
+            requiresEmailOtp: true,
+            loginRole: "driver",
+            otpSentTo,
+          },
+          { status: 200 },
+        );
+      } catch (error) {
+        logError("sendOtp driver email failed", error);
+        return NextResponse.json(
+          { error: "Failed to send driver OTP email" },
           { status: 500 },
         );
       }
