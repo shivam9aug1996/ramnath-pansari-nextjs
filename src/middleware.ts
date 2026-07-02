@@ -47,6 +47,7 @@ const ALLOWED_ORIGINS = new Set([
   "http://localhost:19006",
   "http://127.0.0.1:8081",
   "http://127.0.0.1:19006",
+  "https://ramnath-pansari.vercel.app"
   // add your LAN Expo web origin if you open the app by IP, e.g.:
   // "http://10.150.228.133:8081",
 ]);
