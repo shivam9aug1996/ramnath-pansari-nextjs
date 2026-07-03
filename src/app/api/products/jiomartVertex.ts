@@ -465,14 +465,14 @@ export function deriveVertexSearchQuery(product: {
   name: string;
   jiomartSlug?: string;
 }): string {
+  const trimmedName = product.name.trim();
+  if (trimmedName) return trimmedName;
+
   if (product.jiomartSlug) {
-    const parts = product.jiomartSlug.split("-");
-    return parts.slice(0, 4).join(" ");
+    return slugToName(product.jiomartSlug);
   }
 
-  return product.name
-    .replace(/\s+\d+(\.\d+)?\s*(kg|g|l|ml|pack|pcs?)\b.*$/i, "")
-    .trim();
+  return trimmedName;
 }
 
 class VertexSearchCache {
@@ -567,25 +567,20 @@ function resolveVertexPricingFromItems(
     };
   }
 
-  if (variant.slug) {
-    const slugMatch = findMatchingVariantInSearchResults(items, {
-      name: productName,
-      jiomartUid: options?.jiomartUid || String(variant.uid),
-      jiomartSlug: variant.slug,
-    });
-
-    if (slugMatch && String(slugMatch.item.uid) === String(variant.uid)) {
-      const variantListingPrice = extractPrice(slugMatch.item);
-      if (variantListingPrice) {
-        return {
-          price: variantListingPrice.price,
-          discountedPrice: variantListingPrice.discountedPrice,
-          maxQuantity,
-          isOutOfStock: false,
-          matched: true,
-        };
-      }
-    }
+  const topLevelVariantItem = items.find(
+    (candidate) => String(candidate.uid) === String(variant.uid),
+  );
+  const variantListingPrice = topLevelVariantItem
+    ? extractPrice(topLevelVariantItem)
+    : null;
+  if (variantListingPrice) {
+    return {
+      price: variantListingPrice.price,
+      discountedPrice: variantListingPrice.discountedPrice,
+      maxQuantity,
+      isOutOfStock: false,
+      matched: true,
+    };
   }
 
   return {
