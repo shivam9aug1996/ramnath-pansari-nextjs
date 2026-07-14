@@ -6,6 +6,7 @@ import {
 } from "@/app/api/offers/storeSettingsUtils";
 import {
   DEFAULT_SYNC_VERSIONS,
+  SYNC_VERSION_KEYS,
   type SyncStateClientVersions,
   type SyncStateFetchFlags,
   type SyncStateResponse,
@@ -26,6 +27,7 @@ export function normalizeSyncVersions(
       versions?.storeConfig ?? DEFAULT_SYNC_VERSIONS.storeConfig,
     ),
     category: Number(versions?.category ?? DEFAULT_SYNC_VERSIONS.category),
+    product: Number(versions?.product ?? DEFAULT_SYNC_VERSIONS.product),
   };
 }
 
@@ -94,6 +96,7 @@ export function buildGlobalFetchFlags(
     ),
     storeConfig: shouldFetchResource(client?.storeConfig, server.storeConfig),
     category: shouldFetchResource(client?.category, server.category),
+    product: shouldFetchResource(client?.product, server.product),
   };
 }
 
@@ -110,6 +113,59 @@ export async function bumpSyncVersion(
       $set: { updatedAt: new Date() },
     },
   );
+}
+
+export function validateSyncVersionsInput(
+  input: Partial<SyncVersions> | null | undefined,
+): { valid: true; versions: Partial<SyncVersions> } | { valid: false; message: string } {
+  if (!input || typeof input !== "object" || Array.isArray(input)) {
+    return { valid: false, message: "Body must be an object of version numbers" };
+  }
+
+  const versions: Partial<SyncVersions> = {};
+  let hasAny = false;
+
+  for (const key of SYNC_VERSION_KEYS) {
+    if (input[key] === undefined) continue;
+    hasAny = true;
+    const value = Number(input[key]);
+    if (!Number.isInteger(value) || value < 1) {
+      return {
+        valid: false,
+        message: `${key} must be an integer >= 1`,
+      };
+    }
+    versions[key] = value;
+  }
+
+  if (!hasAny) {
+    return { valid: false, message: "Provide at least one sync version field" };
+  }
+
+  return { valid: true, versions };
+}
+
+/** Manually set one or more server sync versions (admin). */
+export async function setSyncVersions(
+  db: Db,
+  partial: Partial<SyncVersions>,
+): Promise<SyncVersions> {
+  await ensureSyncVersionsDocument(db);
+
+  const current = await getSyncVersions(db);
+  const next = normalizeSyncVersions({ ...current, ...partial });
+
+  await syncVersionsDocCollection(db).updateOne(
+    { _id: SYNC_VERSIONS_DOC_ID },
+    {
+      $set: {
+        ...next,
+        updatedAt: new Date(),
+      },
+    },
+  );
+
+  return next;
 }
 
 export async function buildSyncStateResponse(

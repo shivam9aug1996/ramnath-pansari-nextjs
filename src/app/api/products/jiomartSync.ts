@@ -1,7 +1,7 @@
 import { ObjectId, type Db } from "mongodb";
 import categoryConfig from "./categoryConfig";
 import { fetchVertexProducts, transformVertexProducts } from "./jiomartVertex";
-import RedisClient from "../lib/redisClient";
+import { invalidateProductCache } from "@/app/api/admin/products/productUtils";
 import { log, logError } from "../lib/logger";
 
 export type JiomartSyncCategoryInfo = {
@@ -126,11 +126,11 @@ export async function getCategoryPath(
   return path;
 }
 
-async function flushRedisCache() {
+async function flushProductListRedisCache() {
   try {
-    await RedisClient.flushAll();
+    await invalidateProductCache();
   } catch (error) {
-    log("Redis flush skipped:", error);
+    log("Redis products:* flush skipped:", error);
   }
 }
 
@@ -179,7 +179,7 @@ export async function syncJiomartCategories(
   if (wipeAll) {
     await db.collection("products").deleteMany({ productFromJio: true });
     await db.collection("carts").updateMany({}, { $set: { items: [] } });
-    await flushRedisCache();
+    await flushProductListRedisCache();
   }
 
   for (const categoryName of options.categories) {
@@ -283,7 +283,7 @@ export async function syncJiomartCategories(
     }
   }
 
-  await flushRedisCache();
+  await flushProductListRedisCache();
 
   return {
     message: "Categories sync completed",

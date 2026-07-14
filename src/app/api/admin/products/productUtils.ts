@@ -209,13 +209,17 @@ export function buildCustomerCatalogFilter(extra: Record<string, unknown> = {}) 
   };
 }
 
-export async function invalidateProductCache() {
+export async function invalidateProductCache(): Promise<{ deleted: number }> {
   try {
     const RedisClient = (await import("@/app/api/lib/redisClient")).default;
     const redis = await RedisClient.getInstance();
     const keys = await redis.keys("products:*");
-    if (keys.length > 0) await redis.del(keys);
+    if (keys.length > 0) {
+      await redis.del(keys);
+    }
+    return { deleted: keys.length };
   } catch {
     // Redis optional
+    return { deleted: 0 };
   }
 }

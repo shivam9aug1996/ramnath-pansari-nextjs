@@ -4,7 +4,17 @@ export type SyncVersions = {
   deliverySettings: number;
   storeConfig: number;
   category: number;
+  product: number;
 };
+
+export const SYNC_VERSION_KEYS = [
+  "carousel",
+  "offers",
+  "deliverySettings",
+  "storeConfig",
+  "category",
+  "product",
+] as const satisfies ReadonlyArray<keyof SyncVersions>;
 
 export const DEFAULT_SYNC_VERSIONS: SyncVersions = {
   carousel: 1,
@@ -12,6 +22,7 @@ export const DEFAULT_SYNC_VERSIONS: SyncVersions = {
   deliverySettings: 1,
   storeConfig: 1,
   category: 1,
+  product: 1,
 };
 
 /** Separate storeSettings doc — only version counters, not config payloads. */
@@ -28,6 +39,7 @@ export type SyncStateFetchFlags = {
   deliverySettings: boolean;
   storeConfig: boolean;
   category: boolean;
+  product: boolean;
 };
 
 export type SyncStateResponse = {

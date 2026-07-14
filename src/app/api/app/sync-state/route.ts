@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
             deliverySettings: false,
             storeConfig: false,
             category: false,
+            product: false,
           },
         },
         { status: 200 },

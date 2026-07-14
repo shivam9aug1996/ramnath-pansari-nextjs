@@ -2,11 +2,30 @@ import { NextRequest, NextResponse } from "next/server";
 import { isTokenVerified } from "@/json";
 import { connectDB } from "../../lib/dbconnection";
 
+const DATE_ONLY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
+function parseIstDayBoundary(
+  value: string,
+  boundary: "start" | "end",
+): Date | null {
+  if (!DATE_ONLY_PATTERN.test(value)) {
+    return null;
+  }
+
+  const suffix =
+    boundary === "start" ? "T00:00:00.000+05:30" : "T23:59:59.999+05:30";
+  const parsed = new Date(`${value}${suffix}`);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("userId");
     const status = searchParams.get("status");
+    const orderId = searchParams.get("orderId")?.trim();
+    const dateFrom = searchParams.get("dateFrom")?.trim();
+    const dateTo = searchParams.get("dateTo")?.trim();
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "10", 10);
 
@@ -31,6 +50,38 @@ export async function GET(req: NextRequest) {
         .filter(Boolean);
       filter.orderStatus =
         statuses.length > 1 ? { $in: statuses } : statuses[0];
+    }
+
+    if (orderId) {
+      filter.orderId = { $regex: orderId, $options: "i" };
+    }
+
+    if (dateFrom || dateTo) {
+      const createdAt: Record<string, Date> = {};
+
+      if (dateFrom) {
+        const start = parseIstDayBoundary(dateFrom, "start");
+        if (!start) {
+          return NextResponse.json(
+            { message: "Invalid dateFrom format. Use YYYY-MM-DD." },
+            { status: 400 },
+          );
+        }
+        createdAt.$gte = start;
+      }
+
+      if (dateTo) {
+        const end = parseIstDayBoundary(dateTo, "end");
+        if (!end) {
+          return NextResponse.json(
+            { message: "Invalid dateTo format. Use YYYY-MM-DD." },
+            { status: 400 },
+          );
+        }
+        createdAt.$lte = end;
+      }
+
+      filter.createdAt = createdAt;
     }
 
     const orders = await db
