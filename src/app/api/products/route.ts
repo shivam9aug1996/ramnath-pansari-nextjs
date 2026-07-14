@@ -96,23 +96,23 @@ export async function GET(req: NextRequest) {
       return tokenVerificationResponse;
     }
 
-    const cacheKey = `products:${categoryId}:page:${page}:limit:${limit}`;
-    log("products cache key", cacheKey);
+    // const cacheKey = `products:${categoryId}:page:${page}:limit:${limit}`;
+    // log("products cache key", cacheKey);
 
-    let redis = null;
-    try {
-      redis = await RedisClient.getInstance();
-    } catch (error) {
-      logError("redis get error", error);
-    }
+    // let redis = null;
+    // try {
+    //   redis = await RedisClient.getInstance();
+    // } catch (error) {
+    //   logError("redis get error", error);
+    // }
 
-    const cachedData = await redis?.get(cacheKey);
+    // const cachedData = await redis?.get(cacheKey);
 
-    if (cachedData) {
-      let data = JSON.parse(cachedData);
+    // if (cachedData) {
+    //   let data = JSON.parse(cachedData);
 
-      return NextResponse.json({ ...data }, { status: 200 });
-    }
+    //   return NextResponse.json({ ...data }, { status: 200 });
+    // }
 
     const db = await connectDB(req);
 
@@ -145,15 +145,15 @@ export async function GET(req: NextRequest) {
       categoryId,
     };
 
-    if (redis) {
-      try {
-        await redis.set(cacheKey, JSON.stringify(responseData), {
-          EX: 3600,
-        });
-      } catch (error) {
-        logError("redis get error", error);
-      }
-    }
+    // if (redis) {
+    //   try {
+    //     await redis.set(cacheKey, JSON.stringify(responseData), {
+    //       EX: 3600,
+    //     });
+    //   } catch (error) {
+    //     logError("redis get error", error);
+    //   }
+    // }
 
     return NextResponse.json(responseData, { status: 200 });
   } catch (error) {
