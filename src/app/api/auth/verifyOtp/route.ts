@@ -34,12 +34,22 @@ const generateToken = async (
   return signJwt(payload, options);
 };
 
+function authCookieOptions() {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax" as const,
+    path: "/",
+  };
+}
+
 function setAuthCookies(token: string, mobileNumber: string, userId: unknown) {
-  cookies().set("ramnath_pansari_user_token", token, {});
+  const options = authCookieOptions();
+  cookies().set("ramnath_pansari_user_token", token, options);
   cookies().set(
     "ramnath_pansari_user_data",
     JSON.stringify({ mobileNumber, userId }),
-    {},
+    options,
   );
 }
 
