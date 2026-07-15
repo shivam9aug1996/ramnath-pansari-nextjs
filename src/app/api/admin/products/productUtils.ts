@@ -48,6 +48,7 @@ export type NormalizedProduct = {
   jiomartUid?: string;
   promoOnly: boolean;
   productFromJio: boolean;
+  isDeleted: boolean;
   createdAt?: string;
   lastUpdated?: string;
 };
@@ -87,6 +88,7 @@ export function normalizeProductForResponse(
     jiomartUid: product.jiomartUid ? String(product.jiomartUid) : undefined,
     promoOnly: Boolean(product.promoOnly),
     productFromJio: Boolean(product.productFromJio),
+    isDeleted: Boolean(product.isDeleted),
     createdAt: toIso(product.createdAt),
     lastUpdated: toIso(product.lastUpdated),
   };
@@ -110,8 +112,17 @@ export function buildProductListFilter(params: {
   categoryId?: string;
   stock?: string;
   promoOnly?: string;
+  deleted?: string;
 }) {
-  const filter: Record<string, unknown> = { isDeleted: { $ne: true } };
+  const filter: Record<string, unknown> = {};
+
+  if (params.deleted === "true") {
+    filter.isDeleted = true;
+  } else if (params.deleted === "all") {
+    // include active + soft-deleted
+  } else {
+    filter.isDeleted = { $ne: true };
+  }
 
   if (params.categoryId && ObjectId.isValid(params.categoryId)) {
     filter.categoryPath = new ObjectId(params.categoryId);

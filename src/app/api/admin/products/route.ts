@@ -28,9 +28,15 @@ export async function GET(req: Request) {
     const categoryId = (searchParams.get("categoryId") || "").trim();
     const stock = (searchParams.get("stock") || "").trim();
     const promoOnly = (searchParams.get("promoOnly") || "").trim();
+    const deleted = (searchParams.get("deleted") || "").trim();
 
     const db = await connectDB(req);
-    const baseFilter = buildProductListFilter({ categoryId, stock, promoOnly });
+    const baseFilter = buildProductListFilter({
+      categoryId,
+      stock,
+      promoOnly,
+      deleted,
+    });
     const searchFilter = buildProductSearchFilter(search);
     const finalFilter =
       Object.keys(searchFilter).length > 0

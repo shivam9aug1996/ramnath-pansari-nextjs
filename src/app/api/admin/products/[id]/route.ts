@@ -36,7 +36,6 @@ export async function GET(req: Request, context: RouteContext) {
     const db = await connectDB(req);
     const product = await db.collection("products").findOne({
       _id: new ObjectId(id),
-      isDeleted: { $ne: true },
     });
 
     if (!product) {
@@ -126,10 +125,13 @@ export async function DELETE(req: Request, context: RouteContext) {
       return buildError("VALIDATION", "Invalid product id", 400);
     }
 
+    const permanent =
+      new URL(req.url).searchParams.get("permanent") === "true";
+
     const db = await connectDB(req);
     const existing = await db.collection("products").findOne({
       _id: new ObjectId(id),
-      isDeleted: { $ne: true },
+      ...(permanent ? {} : { isDeleted: { $ne: true } }),
     });
     if (!existing) {
       return buildError("NOT_FOUND", "Product not found", 404);
@@ -141,17 +143,26 @@ export async function DELETE(req: Request, context: RouteContext) {
       return buildError("CONFLICT", deleteGuard.message ?? "Blocked by live offer", 409);
     }
 
-    const result = await db.collection("products").updateOne(
-      { _id: new ObjectId(id), isDeleted: { $ne: true } },
-      { $set: { isDeleted: true, lastUpdated: new Date() } },
-    );
+    if (permanent) {
+      const result = await db.collection("products").deleteOne({
+        _id: new ObjectId(id),
+      });
+      if (result.deletedCount === 0) {
+        return buildError("NOT_FOUND", "Product not found", 404);
+      }
+    } else {
+      const result = await db.collection("products").updateOne(
+        { _id: new ObjectId(id), isDeleted: { $ne: true } },
+        { $set: { isDeleted: true, lastUpdated: new Date() } },
+      );
 
-    if (result.matchedCount === 0) {
-      return buildError("NOT_FOUND", "Product not found", 404);
+      if (result.matchedCount === 0) {
+        return buildError("NOT_FOUND", "Product not found", 404);
+      }
     }
 
     await invalidateProductCache();
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, permanent });
   } catch (error) {
     console.error("[admin/products/:id] DELETE error:", error);
     return buildError("INTERNAL", "Failed to delete product", 500);
