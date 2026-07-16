@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { verifyJwt } from "@/app/api/lib/jwt";
 import { getTokenCandidatesFromRequest } from "@/app/api/lib/authToken";
+import { requireAppCheck } from "@/app/api/lib/appCheck";
 
 type AnyObject = { [key: string]: unknown };
 
@@ -11,6 +12,11 @@ function buildError(code: string, message: string, status: number) {
 }
 
 export async function requireAdmin(req: Request) {
+  const appCheckResponse = await requireAppCheck(req);
+  if (appCheckResponse) {
+    return appCheckResponse;
+  }
+
   const candidates = getTokenCandidatesFromRequest(req);
 
   if (candidates.length === 0) {

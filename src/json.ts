@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyJwt } from "./app/api/lib/jwt";
 import { getTokenCandidatesFromRequest } from "./app/api/lib/authToken";
+import { requireAppCheck } from "./app/api/lib/appCheck";
 import { log, logWarn } from "./app/api/lib/logger";
 
 type RateLimitEntry = { count: number; timestamp: number };
@@ -24,6 +25,11 @@ export async function verifyToken(
 export const isTokenVerified = async (
   req: NextRequest,
 ): Promise<NextResponse | ""> => {
+  const appCheckResponse = await requireAppCheck(req);
+  if (appCheckResponse) {
+    return appCheckResponse;
+  }
+
   const candidates = getTokenCandidatesFromRequest(req);
 
   for (const { token } of candidates) {

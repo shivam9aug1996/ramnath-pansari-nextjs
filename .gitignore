@@ -38,3 +38,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+
+*-firebase-adminsdk*.json
+ramnath-pansari-6aea0-firebase-adminsdk.json

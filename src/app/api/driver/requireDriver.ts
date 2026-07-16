@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { verifyJwt } from "@/app/api/lib/jwt";
 import { getTokenCandidatesFromRequest } from "@/app/api/lib/authToken";
+import { requireAppCheck } from "@/app/api/lib/appCheck";
 import type { UserDocument } from "@/app/api/admin/users/userUtils";
 import { resolveIsDriver } from "@/app/api/admin/users/userUtils";
 
@@ -21,6 +22,11 @@ export type DriverAuthContext = {
 export async function requireDriver(
   req: Request,
 ): Promise<{ error: NextResponse } | DriverAuthContext> {
+  const appCheckResponse = await requireAppCheck(req);
+  if (appCheckResponse) {
+    return { error: appCheckResponse };
+  }
+
   const candidates = getTokenCandidatesFromRequest(req);
 
   if (candidates.length === 0) {

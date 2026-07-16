@@ -42,7 +42,7 @@ function applyCorsHeaders(response: NextResponse, origin: string | null) {
   response.headers.set("Access-Control-Allow-Credentials", "true");
   response.headers.set(
     "Access-Control-Allow-Headers",
-    "authorization, content-type, x-requested-with",
+    "authorization, content-type, x-requested-with, x-firebase-appcheck",
   );
   response.headers.set(
     "Access-Control-Allow-Methods",
