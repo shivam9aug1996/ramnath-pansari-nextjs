@@ -100,15 +100,36 @@ export async function GET(req: NextRequest) {
         totalProductCount: 1,
         orderHistory: 1,
         amountPaid: 1,
+        "cartData.cart.items.productDetails.name": 1,
       })
       .toArray();
+
+    const shapedOrders = orders.map((order) => {
+      const productNames = (
+        order?.cartData?.cart?.items as
+          | Array<{ productDetails?: { name?: string } }>
+          | undefined
+      )
+        ?.map((item) => item?.productDetails?.name?.trim())
+        .filter((name): name is string => Boolean(name))
+        .slice(0, 6);
+
+      const { cartData: _cartData, ...rest } = order as {
+        cartData?: unknown;
+      } & Record<string, unknown>;
+
+      return {
+        ...rest,
+        productNames: productNames ?? [],
+      };
+    });
 
     const totalOrders = await db.collection("orders").countDocuments(filter);
 
     const totalPages = Math.ceil(totalOrders / limit);
 
     return NextResponse.json(
-      { orders, totalOrders, totalPages, currentPage: page },
+      { orders: shapedOrders, totalOrders, totalPages, currentPage: page },
       { status: 200 },
     );
   } catch (error) {

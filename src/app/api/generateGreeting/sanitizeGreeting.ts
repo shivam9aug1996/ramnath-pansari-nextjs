@@ -16,6 +16,17 @@ Rules:
 - Do not ask questions or invite replies.
 - If you cannot comply, output exactly: Happy shopping! 🛒`;
 
+export const GREETING_BATCH_SYSTEM_PROMPT = `You write homepage banner text for a grocery delivery app.
+
+Rules:
+- Return ONLY valid JSON: {"weather":"...","cart":"..."}
+- No markdown fences, labels, or extra keys.
+- Each value is one banner sentence, max 25 words, at most one emoji, warm and casual.
+- Light Hinglish is OK.
+- Do not ask questions.
+- weather and cart must be different lines.
+- If you cannot comply, return {"weather":"Happy shopping! 🛒","cart":"Welcome back! Ready to discover something new?"}`;
+
 export function sanitizeGreeting(
   raw: string | undefined | null,
   fallback: string = DEFAULT_FALLBACK,
@@ -49,4 +60,43 @@ export function sanitizeGreeting(
   }
 
   return text;
+}
+
+export function parseBatchGreetingResponse(
+  raw: string | undefined | null,
+  fallbacks: { weather: string; cart: string },
+): { weather: string; cart: string } {
+  if (!raw?.trim()) {
+    return fallbacks;
+  }
+
+  let text = raw.trim();
+  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenced?.[1]) {
+    text = fenced[1].trim();
+  }
+
+  const objectMatch = text.match(/\{[\s\S]*\}/);
+  if (objectMatch) {
+    text = objectMatch[0];
+  }
+
+  try {
+    const parsed = JSON.parse(text) as {
+      weather?: unknown;
+      cart?: unknown;
+    };
+    return {
+      weather: sanitizeGreeting(
+        typeof parsed.weather === "string" ? parsed.weather : null,
+        fallbacks.weather,
+      ),
+      cart: sanitizeGreeting(
+        typeof parsed.cart === "string" ? parsed.cart : null,
+        fallbacks.cart,
+      ),
+    };
+  } catch {
+    return fallbacks;
+  }
 }
