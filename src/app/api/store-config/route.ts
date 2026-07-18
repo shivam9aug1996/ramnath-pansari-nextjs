@@ -13,9 +13,6 @@ export async function GET(req: Request) {
       { storeConfig: normalizeStoreConfig(storeConfig) },
       {
         status: 200,
-        headers: {
-          "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
-        },
       },
     );
   } catch (error) {

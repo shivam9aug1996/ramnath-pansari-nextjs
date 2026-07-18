@@ -8,6 +8,27 @@ type RateLimitEntry = { count: number; timestamp: number };
 
 const requestCounts: Record<string, RateLimitEntry> = {};
 
+
+type AuthUser = {
+  id: string;
+  mobileNumber?: string;
+  isGuestUser?: boolean;
+  isDriverUser?: boolean;
+};
+
+async function getVerifiedUser(token: string): Promise<AuthUser | null> {
+  const payload = await verifyJwt(token);
+  if (!payload || typeof payload.id !== "string" || !payload.id) {
+    return null;
+  }
+  return {
+    id: payload.id,
+    mobileNumber: typeof payload.mobileNumber === "string" ? payload.mobileNumber : undefined,
+    isGuestUser: Boolean(payload.isGuestUser),
+    isDriverUser: Boolean(payload.isDriverUser),
+  };
+}
+
 export async function verifyToken(
   token: string,
   req: NextRequest,
@@ -22,6 +43,23 @@ export async function verifyToken(
   }
 }
 
+const GUEST_ALLOWED = [
+  { method: "POST", path: "/api/app/sync-state" },
+  { method: "GET", path: "/api/carousel" },
+  { method: "GET", path: "/api/category" },
+  { method: "GET", path: "/api/products" },
+  { method: "GET", path: "/api/products/detail" },
+  { method: "GET", path: "/api/search" }, // you missed this in the array
+  { method: "POST", path: "/api/save-push-token" },
+  { method: "POST", path: "/api/generateGreeting" },
+] as const;
+
+function isGuestAllowed(req: NextRequest) {
+  const path = req.nextUrl.pathname; // better than req.url.includes
+  const method = req.method.toUpperCase();
+  return GUEST_ALLOWED.some((r) => r.method === method && r.path === path);
+}
+
 export const isTokenVerified = async (
   req: NextRequest,
 ): Promise<NextResponse | ""> => {
@@ -29,12 +67,22 @@ export const isTokenVerified = async (
   if (appCheckResponse) {
     return appCheckResponse;
   }
+  
 
   const candidates = getTokenCandidatesFromRequest(req);
-
   for (const { token } of candidates) {
+    if(token === "guest_token" && isGuestAllowed(req)) {
+      return "";
+    }else if(token === "guest_token" && !isGuestAllowed(req)) {
+      return NextResponse.json(
+        { success: false, message: "Not allowed" },
+        { status: 403 },
+      );
+    }
     const verified = await verifyToken(token, req);
-    if (verified) {
+    
+    const user = await getVerifiedUser(token);
+    if (user && verified) {
       return "";
     }
   }
