@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../../lib/dbconnection";
 import { logError } from "../../lib/logger";
 import { CartItem } from "@/types/api";
+import { isTokenVerified } from "@/json";
 
 export async function PATCH(req: NextRequest) {
   try {
@@ -11,6 +12,11 @@ export async function PATCH(req: NextRequest) {
 
     if (!userId || !ObjectId.isValid(userId)) {
       return NextResponse.json({ message: "Invalid user ID" }, { status: 400 });
+    }
+
+    const tokenVerificationResponse = await isTokenVerified(req);
+    if (tokenVerificationResponse) {
+      return tokenVerificationResponse;
     }
 
     const db = await connectDB(req);

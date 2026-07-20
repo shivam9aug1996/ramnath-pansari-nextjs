@@ -54,6 +54,24 @@ const GUEST_ALLOWED = [
   { method: "POST", path: "/api/generateGreeting" },
 ] as const;
 
+const DRIVER_ALLOWED = [
+  { method: "POST", path: "/api/logout" },
+  { method: "POST", path: "/api/private" },
+  { method: "GET", path: "/api/profile" },
+  { method: "PATCH", path: "/api/profile" }, // drop if drivers shouldn't edit profile
+  { method: "POST", path: "/api/save-push-token" },
+] as const;
+
+function isDriverAllowed(req: NextRequest) {
+  const path = req.nextUrl.pathname;
+  const method = req.method.toUpperCase();
+  // All driver APIs
+  if (path.startsWith("/api/driver")) return true;
+  // Auth stays open via middleware / auth routes; keep explicit if needed
+  if (path.startsWith("/api/auth")) return true;
+  return DRIVER_ALLOWED.some((r) => r.method === method && r.path === path);
+}
+
 function isGuestAllowed(req: NextRequest) {
   const path = req.nextUrl.pathname; // better than req.url.includes
   const method = req.method.toUpperCase();
@@ -83,6 +101,18 @@ export const isTokenVerified = async (
     
     const user = await getVerifiedUser(token);
     if (user && verified) {
+      if (user.isDriverUser && !isDriverAllowed(req)) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: {
+              code: "FORBIDDEN",
+              message: "Driver accounts cannot access customer APIs",
+            },
+          },
+          { status: 403 },
+        );
+      }
       return "";
     }
   }
