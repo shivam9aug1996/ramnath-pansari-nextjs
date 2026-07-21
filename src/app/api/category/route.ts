@@ -118,6 +118,10 @@ const findCategoryById = (
 
 export async function GET(req: NextRequest) {
   try {
+    const tokenVerificationResponse = await isTokenVerified(req);
+    if (tokenVerificationResponse) {
+      return tokenVerificationResponse;
+    }
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("categoryId");
 

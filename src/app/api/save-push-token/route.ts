@@ -1,3 +1,4 @@
+import { isTokenVerified } from "@/json";
 import { connectDB } from "../lib/dbconnection";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,6 +9,10 @@ export async function POST(req: NextRequest) {
     isGuestUser = false,
     isAdminUser = false,
   } = await req.json();
+  const tokenVerificationResponse = await isTokenVerified(req);
+  if (tokenVerificationResponse) {
+    return tokenVerificationResponse;
+  }
 
   if (!token || !userId) {
     return NextResponse.json(

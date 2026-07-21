@@ -10,29 +10,33 @@ import type { SyncStateClientVersions } from "@/app/api/app/syncVersionsTypes";
 
 export async function POST(req: NextRequest) {
   try {
+    const tokenVerificationResponse = await isTokenVerified(req);
+    if (tokenVerificationResponse) {
+      return tokenVerificationResponse;
+    }
     const body = (await req.json()) as { client?: SyncStateClientVersions };
     const client = body?.client ?? {};
     const db = await connectDB(req);
 
-    const authError = await isTokenVerified(req);
-    if (authError) {
-      const server = await getSyncVersions(db);
-      const fetch = buildGlobalFetchFlags(client, server);
-      return NextResponse.json(
-        {
-          server,
-          fetch: {
-            ...fetch,
-            offers: false,
-            deliverySettings: false,
-            storeConfig: false,
-            category: false,
-            product: false,
-          },
-        },
-        { status: 200 },
-      );
-    }
+    // const authError = await isTokenVerified(req);
+    // if (authError) {
+    //   const server = await getSyncVersions(db);
+    //   const fetch = buildGlobalFetchFlags(client, server);
+    //   return NextResponse.json(
+    //     {
+    //       server,
+    //       fetch: {
+    //         ...fetch,
+    //         offers: false,
+    //         deliverySettings: false,
+    //         storeConfig: false,
+    //         category: false,
+    //         product: false,
+    //       },
+    //     },
+    //     { status: 200 },
+    //   );
+    // }
 
     const response = await buildSyncStateResponse(db, client);
 

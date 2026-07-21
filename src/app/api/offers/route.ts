@@ -6,6 +6,8 @@ import {
   normalizeOfferForResponse,
 } from "@/app/api/offers/offerUtils";
 import type { Offer } from "@/app/api/offers/offerTypes";
+import { isTokenVerified } from "@/json";
+import { NextRequest } from "next/server";
 
 async function enrichOffersWithProductSnapshots(
   db: Awaited<ReturnType<typeof connectDB>>,
@@ -44,8 +46,12 @@ async function enrichOffersWithProductSnapshots(
   );
 }
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
+    const tokenVerificationResponse = await isTokenVerified(req);
+    if (tokenVerificationResponse) {
+      return tokenVerificationResponse;
+    }
     const db = await connectDB(req);
     const offers = await getEnabledOffers(db);
     const enriched = await enrichOffersWithProductSnapshots(db, offers);

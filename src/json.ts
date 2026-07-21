@@ -14,6 +14,7 @@ type AuthUser = {
   mobileNumber?: string;
   isGuestUser?: boolean;
   isDriverUser?: boolean;
+  isAdminUser?: boolean;
 };
 
 async function getVerifiedUser(token: string): Promise<AuthUser | null> {
@@ -26,6 +27,7 @@ async function getVerifiedUser(token: string): Promise<AuthUser | null> {
     mobileNumber: typeof payload.mobileNumber === "string" ? payload.mobileNumber : undefined,
     isGuestUser: Boolean(payload.isGuestUser),
     isDriverUser: Boolean(payload.isDriverUser),
+    isAdminUser: Boolean(payload.isAdminUser),
   };
 }
 
@@ -49,7 +51,7 @@ const GUEST_ALLOWED = [
   { method: "GET", path: "/api/category" },
   { method: "GET", path: "/api/products" },
   { method: "GET", path: "/api/products/detail" },
-  { method: "GET", path: "/api/search" }, // you missed this in the array
+  { method: "GET", path: "/api/search" },
   { method: "POST", path: "/api/save-push-token" },
   { method: "POST", path: "/api/generateGreeting" },
 ] as const;
@@ -61,6 +63,21 @@ const DRIVER_ALLOWED = [
   { method: "PATCH", path: "/api/profile" }, // drop if drivers shouldn't edit profile
   { method: "POST", path: "/api/save-push-token" },
 ] as const;
+
+const ADMIN_ALLOWED = [
+  { method: "POST", path: "/api/logout" },
+  { method: "POST", path: "/api/private" },
+  { method: "POST", path: "/api/save-push-token" },
+  // add anything else the admin UI truly needs outside /api/admin
+] as const;
+function isAdminAllowed(req: NextRequest) {
+  const path = req.nextUrl.pathname;
+  const method = req.method.toUpperCase();
+  if (path.startsWith("/api/admin")) return true;
+  if (path.startsWith("/api/auth")) return true;
+  // explicitly NOT /api/driver
+  return ADMIN_ALLOWED.some((r) => r.method === method && r.path === path);
+}
 
 function isDriverAllowed(req: NextRequest) {
   const path = req.nextUrl.pathname;
@@ -88,6 +105,7 @@ export const isTokenVerified = async (
   
 
   const candidates = getTokenCandidatesFromRequest(req);
+  console.log("candidates", candidates);
   for (const { token } of candidates) {
     if(token === "guest_token" && isGuestAllowed(req)) {
       return "";
@@ -108,6 +126,18 @@ export const isTokenVerified = async (
             error: {
               code: "FORBIDDEN",
               message: "Driver accounts cannot access customer APIs",
+            },
+          },
+          { status: 403 },
+        );
+      }
+      if (user.isAdminUser && !isAdminAllowed(req)) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: {
+              code: "FORBIDDEN",
+              message: "Admin accounts cannot access customer or driver APIs",
             },
           },
           { status: 403 },

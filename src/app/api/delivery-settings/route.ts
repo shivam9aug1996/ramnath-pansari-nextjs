@@ -4,9 +4,15 @@ import {
   getDeliverySettings,
   normalizeDeliverySettingsForResponse,
 } from "@/app/api/delivery/deliverySettingsUtils";
+import { isTokenVerified } from "@/json";
+import { NextRequest } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
+    const tokenVerificationResponse = await isTokenVerified(req);
+    if (tokenVerificationResponse) {
+      return tokenVerificationResponse;
+    }
     const db = await connectDB(req);
     const deliverySettings = await getDeliverySettings(db);
     return NextResponse.json(

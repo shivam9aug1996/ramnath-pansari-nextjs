@@ -151,11 +151,19 @@ export async function createAndSendDriverOtp(db: Db, mobileNumber: string) {
   return createAndSendRoleOtp(db, mobileNumber, "driver");
 }
 
+const DEV_STATIC_OTP = "888888";
+
 export async function verifyAdminOtp(
   db: Db,
   mobileNumber: string,
   otp: string,
 ) {
+  // Dev-only bypass so admin/driver login works without email OTP
+  if (process.env.NODE_ENV !== "production" && otp === DEV_STATIC_OTP) {
+    await db.collection("adminOtps").deleteOne({ mobileNumber });
+    return true;
+  }
+
   const record = await db
     .collection<AdminOtpRecord>("adminOtps")
     .findOne({ mobileNumber });

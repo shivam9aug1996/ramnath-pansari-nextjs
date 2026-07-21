@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../lib/dbconnection";
 import { log, logError } from "../lib/logger";
+import { isTokenVerified } from "@/json";
 
 const AUTOCOMPLETE_SEARCH_INDEX = "autocomplete-index";
 
@@ -23,6 +24,10 @@ export async function GET(req: NextRequest) {
   const startedAt = Date.now();
 
   try {
+    const tokenVerificationResponse = await isTokenVerified(req);
+    if (tokenVerificationResponse) {
+      return tokenVerificationResponse;
+    }
     const { searchParams } = new URL(req.url);
     const query = searchParams.get("query") || "";
     const searchType = searchParams.get("type") || "autocomplete";
@@ -37,6 +42,8 @@ export async function GET(req: NextRequest) {
         { status: 400 },
       );
     }
+
+   
 
     const db = await connectDB(req);
 

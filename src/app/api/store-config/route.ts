@@ -4,9 +4,15 @@ import {
   getStoreConfig,
   normalizeStoreConfig,
 } from "@/app/api/store/storeConfigUtils";
+import { isTokenVerified } from "@/json";
+import { NextRequest } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
+    const tokenVerificationResponse = await isTokenVerified(req);
+    if (tokenVerificationResponse) {
+      return tokenVerificationResponse;
+    }
     const db = await connectDB(req);
     const storeConfig = await getStoreConfig(db);
     return NextResponse.json(

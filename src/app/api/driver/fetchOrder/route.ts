@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../../lib/dbconnection";
+import { isTokenVerified } from "@/json";
 
 export async function GET(req: NextRequest) {
   try {
+    const tokenVerificationResponse = await isTokenVerified(req);
+    if (tokenVerificationResponse) {
+      return tokenVerificationResponse;
+    }
     const { searchParams } = new URL(req.url);
     const orderId = searchParams.get("orderId");
 
