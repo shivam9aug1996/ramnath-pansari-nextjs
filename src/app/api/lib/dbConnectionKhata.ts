@@ -1,5 +1,5 @@
 import type { Db, MongoClient, ClientSession } from "mongodb";
-import clientKhataPromise from "./mongodbKhata";
+import getKhataClientPromise from "./mongodbKhata";
 import { log, logError } from "./logger";
 const DB_NAME = "basic-crud";
 let cachedDb: Db | null = null;
@@ -9,16 +9,17 @@ export const connectDB = async (_req?: unknown): Promise<Db> => {
     return cachedDb;
   }
   try {
-    const client = await clientKhataPromise;
+    const client = await getKhataClientPromise();
     cachedDb = client.db(DB_NAME);
     return cachedDb;
   } catch (error) {
+    cachedDb = null;
     logError("connectDB khata failed", error);
     throw error;
   }
 };
 export const getClient = async (): Promise<MongoClient> => {
-  return clientKhataPromise;
+  return getKhataClientPromise();
 };
 export const startSession = async () => {
   try {

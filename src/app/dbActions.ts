@@ -1,11 +1,11 @@
 "use server";
 
-import clientPromise from "./api/lib/mongodb";
+import getClientPromise from "./api/lib/mongodb";
 
 export async function testDatabaseConnection() {
   let isConnected = false;
   try {
-    const mongoClient = await clientPromise;
+    const mongoClient = await getClientPromise();
 
     await mongoClient.db("admin").command({ ping: 1 });
     console.log(

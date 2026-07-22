@@ -1,5 +1,5 @@
 import type { Db, MongoClient, ClientSession } from "mongodb";
-import clientPromise from "./mongodb";
+import getClientPromise from "./mongodb";
 import { log, logError } from "./logger";
 
 const DB_NAME = "basic-crud";
@@ -12,17 +12,18 @@ export const connectDB = async (_req?: unknown): Promise<Db> => {
   }
 
   try {
-    const client = await clientPromise;
+    const client = await getClientPromise();
     cachedDb = client.db(DB_NAME);
     return cachedDb;
   } catch (error) {
+    cachedDb = null;
     logError("connectDB failed", error);
     throw error;
   }
 };
 
 export const getClient = async (): Promise<MongoClient> => {
-  return clientPromise;
+  return getClientPromise();
 };
 
 export const startSession = async () => {
