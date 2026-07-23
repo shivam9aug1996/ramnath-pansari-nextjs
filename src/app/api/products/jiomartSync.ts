@@ -258,6 +258,30 @@ export async function syncJiomartCategories(
         }
       }
 
+      // Leftovers: JioMart products in this category that were not in this fetch → OOS
+      const fetchedUids = transformedProducts.map(
+        (product) => product.jiomartUid,
+      );
+      const orphanResult = await db.collection("products").updateMany(
+        {
+          productFromJio: true,
+          category: categoryName,
+          jiomartUid: { $nin: fetchedUids },
+        },
+        {
+          $set: {
+            isOutOfStock: true,
+            lastUpdated: new Date(),
+          },
+        },
+      );
+
+      if (orphanResult.modifiedCount > 0) {
+        log(
+          `[jiomart] marked ${orphanResult.modifiedCount} orphan products OOS in ${categoryName}`,
+        );
+      }
+
       const categoryProducts = await db
         .collection("products")
         .find({
