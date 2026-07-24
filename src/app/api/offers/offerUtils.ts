@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 import {
   DEFAULT_CAROUSEL_BANNERS,
   DEFAULT_DELIVERY_SETTINGS,
+  DEFAULT_HOME_PRODUCT_PROMO,
   DEFAULT_OFFERS,
   DEFAULT_STORE_CONFIG,
   type DiscountReward,
@@ -15,6 +16,7 @@ import type { DeliverySettings } from "@/app/api/delivery/deliverySettingsTypes"
 import { normalizeDeliverySettings } from "@/app/api/delivery/deliverySettingsUtils";
 import { normalizeStoreConfig } from "@/app/api/store/storeConfigUtils";
 import type { StoreConfig } from "@/app/api/store/storeConfigTypes";
+import type { HomeProductPromo } from "@/app/api/home-promo/homePromoTypes";
 import {
   STORE_SETTINGS_ID,
   storeSettingsCollection,
@@ -33,6 +35,7 @@ export async function getStoreSettings(db: Db): Promise<StoreSettingsDocument> {
       carouselBanners: DEFAULT_CAROUSEL_BANNERS,
       deliverySettings: DEFAULT_DELIVERY_SETTINGS,
       storeConfig: DEFAULT_STORE_CONFIG,
+      homeProductPromo: DEFAULT_HOME_PRODUCT_PROMO,
       updatedAt: new Date(),
     };
     await storeSettingsCollection(db).updateOne(
@@ -59,6 +62,10 @@ export async function getStoreSettings(db: Db): Promise<StoreSettingsDocument> {
     );
   }
 
+  const homeProductPromo =
+    (doc.homeProductPromo as HomeProductPromo | undefined) ??
+    DEFAULT_HOME_PRODUCT_PROMO;
+
   return {
     _id: STORE_SETTINGS_ID,
     offers: (doc.offers as Offer[]) ?? [],
@@ -69,6 +76,7 @@ export async function getStoreSettings(db: Db): Promise<StoreSettingsDocument> {
     storeConfig: normalizeStoreConfig(
       doc.storeConfig as StoreConfig | undefined,
     ),
+    homeProductPromo,
     updatedAt: doc.updatedAt ? new Date(doc.updatedAt) : new Date(),
   };
 }

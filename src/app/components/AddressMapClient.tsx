@@ -203,10 +203,17 @@ const AddressMapClient: React.FC<AddressMapClientProps> = ({
     }
 
     if (selectedLocation) {
+      const payload = JSON.stringify(selectedLocation);
       if (typeof window !== "undefined" && (window as any).ReactNativeWebView) {
-        (window as any).ReactNativeWebView.postMessage(
-          JSON.stringify(selectedLocation),
-        );
+        (window as any).ReactNativeWebView.postMessage(payload);
+      } else if (
+        typeof window !== "undefined" &&
+        window.parent &&
+        window.parent !== window
+      ) {
+        const params = new URLSearchParams(window.location.search);
+        const parentOrigin = params.get("parentOrigin") || "*";
+        window.parent.postMessage(payload, parentOrigin);
       }
     }
   };

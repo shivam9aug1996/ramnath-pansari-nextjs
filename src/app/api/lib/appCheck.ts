@@ -34,6 +34,9 @@ function isBrowserClientRequest(req: Request): boolean {
     "localhost:19006",
     "127.0.0.1:19006",
     "ramnath-pansari.vercel.app",
+    "10.150.236.125:3000",
+    "10.150.236.125:8081",
+    "10.150.236.125:19006",
   ];
 
   if (browserOrigins.some((host) => combined.includes(host))) {

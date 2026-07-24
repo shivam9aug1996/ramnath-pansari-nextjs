@@ -11,6 +11,9 @@ const ALLOWED_ORIGINS = new Set([
   "http://127.0.0.1:19006",
   "https://ramnath-pansari.vercel.app",
   "http://localhost:3000",
+  "http://10.150.236.125:3000",
+  "http://10.150.236.125:8081",
+  "http://10.150.236.125:19006",
   // add your LAN Expo web origin if you open the app by IP, e.g.:
   // "http://10.150.228.133:8081",
 ]);
@@ -27,6 +30,7 @@ const PUBLIC_GET_PATHS = new Set([
   "/api/offers",
   "/api/store-config",
   "/api/delivery-settings",
+  "/api/home-promo",
 ]);
 
 function isAllowedOrigin(origin: string | null): origin is string {
@@ -142,7 +146,11 @@ export async function middleware(request: NextRequest) {
   const authorization = request.headers.get("authorization");
   const bearerToken = getTokenFromAuthorizationHeader(authorization);
   const cookieToken = request.cookies.get("ramnath_pansari_user_token")?.value;
-  const userToken = bearerToken || cookieToken || "";
+  // iframe embeds cannot set Authorization headers — allow mapAuth query on addressMap only
+  const mapAuthToken = currentPath.includes("/addressMap")
+    ? request.nextUrl.searchParams.get("mapAuth")?.trim() || ""
+    : "";
+  const userToken = bearerToken || cookieToken || mapAuthToken || "";
 
   if (!userToken) {
     if (isPublicApiRequest(request, currentPath)) {
