@@ -4,6 +4,15 @@ import { fetchVertexProducts, transformVertexProducts } from "./jiomartVertex";
 import { invalidateProductCache } from "@/app/api/admin/products/productUtils";
 import { log, logError } from "../lib/logger";
 
+/** Always prints — needed for Vercel/prod sync debugging (`log` is dev-only). */
+function syncLog(message: string, data?: Record<string, unknown>) {
+  if (data) {
+    console.log(message, data);
+  } else {
+    console.log(message);
+  }
+}
+
 export type JiomartSyncCategoryInfo = {
   name: string;
   syncAvailable: boolean;
@@ -175,14 +184,31 @@ export async function syncJiomartCategories(
 ): Promise<JiomartSyncResult> {
   const wipeAll = Boolean(options.wipeAll);
   const results: JiomartSyncCategoryResult[] = [];
+  const startedAt = Date.now();
+
+  syncLog("[jiomart-sync] start", {
+    wipeAll,
+    categoryCount: options.categories.length,
+    categories: options.categories,
+  });
 
   if (wipeAll) {
-    await db.collection("products").deleteMany({ productFromJio: true });
+    const beforeJioCount = await db.collection("products").countDocuments({
+      productFromJio: true,
+    });
+    const deleteResult = await db
+      .collection("products")
+      .deleteMany({ productFromJio: true });
     await db.collection("carts").updateMany({}, { $set: { items: [] } });
     await flushProductListRedisCache();
+    syncLog("[jiomart-sync] wipeAll done", {
+      jioProductsBefore: beforeJioCount,
+      deleted: deleteResult.deletedCount,
+    });
   }
 
   for (const categoryName of options.categories) {
+    const categoryStartedAt = Date.now();
     try {
       const config =
         categoryConfig[categoryName as keyof typeof categoryConfig];
@@ -196,12 +222,33 @@ export async function syncJiomartCategories(
         );
       }
 
+      syncLog("[jiomart-sync] category start", {
+        category: categoryName,
+        vertex: config.vertex,
+      });
+
       const vertexItems = await fetchVertexProducts(config.vertex);
+      syncLog("[jiomart-sync] vertex fetch", {
+        category: categoryName,
+        vertexItemCount: vertexItems.length,
+        sampleUids: vertexItems.slice(0, 5).map((item) => item.uid),
+      });
+
       if (!vertexItems.length) {
         throw new Error("No products found in JioMart response");
       }
 
       const categoryPath = await getCategoryPath(db, categoryName);
+      syncLog("[jiomart-sync] category path", {
+        category: categoryName,
+        categoryPath,
+      });
+
+      const existingInCategory = await db.collection("products").countDocuments({
+        productFromJio: true,
+        category: categoryName,
+      });
+
       const transformedProducts = (
         await transformVertexProducts(
           vertexItems,
@@ -213,9 +260,24 @@ export async function syncJiomartCategories(
         categoryPath: categoryPath.map((id) => new ObjectId(id)),
       }));
 
-      log(
-        `Fetched ${vertexItems.length} items, transformed ${transformedProducts.length} products for ${categoryName}`,
-      );
+      syncLog("[jiomart-sync] transform", {
+        category: categoryName,
+        vertexItemCount: vertexItems.length,
+        transformedCount: transformedProducts.length,
+        droppedFromTransform: vertexItems.length - transformedProducts.length,
+        existingJioInCategory: existingInCategory,
+        sample: transformedProducts.slice(0, 3).map((product) => ({
+          jiomartUid: product.jiomartUid,
+          name: product.name,
+          price: product.price,
+          discountedPrice: product.discountedPrice,
+          size: product.size,
+        })),
+      });
+
+      let upserted = 0;
+      let skippedManual = 0;
+      let inserted = 0;
 
       if (wipeAll) {
         if (transformedProducts.length) {
@@ -229,16 +291,28 @@ export async function syncJiomartCategories(
               lastUpdated: new Date(),
             })),
           );
+          inserted = transformedProducts.length;
         }
+        syncLog("[jiomart-sync] wipeAll insert", {
+          category: categoryName,
+          inserted,
+        });
       } else {
         for (const product of transformedProducts) {
           const existing = await db.collection("products").findOne({
             jiomartUid: product.jiomartUid,
           });
           if (existing && existing.productFromJio === false) {
+            skippedManual += 1;
+            syncLog("[jiomart-sync] skip manual product", {
+              category: categoryName,
+              jiomartUid: product.jiomartUid,
+              name: product.name,
+            });
             continue;
           }
 
+          const wasInsert = !existing;
           await db.collection("products").updateOne(
             { jiomartUid: product.jiomartUid },
             {
@@ -255,19 +329,46 @@ export async function syncJiomartCategories(
             },
             { upsert: true },
           );
+          upserted += 1;
+          if (wasInsert) inserted += 1;
         }
+        syncLog("[jiomart-sync] upsert summary", {
+          category: categoryName,
+          upserted,
+          inserted,
+          updated: upserted - inserted,
+          skippedManual,
+        });
       }
 
       // Leftovers: JioMart products in this category that were not in this fetch → OOS
       const fetchedUids = transformedProducts.map(
         (product) => product.jiomartUid,
       );
+      const orphanFilter = {
+        productFromJio: true,
+        category: categoryName,
+        jiomartUid: { $nin: fetchedUids },
+      };
+      const orphansBefore = await db
+        .collection("products")
+        .find(orphanFilter, {
+          projection: {
+            name: 1,
+            jiomartUid: 1,
+            price: 1,
+            discountedPrice: 1,
+            isOutOfStock: 1,
+          },
+        })
+        .limit(20)
+        .toArray();
+      const orphanCountBefore = await db
+        .collection("products")
+        .countDocuments(orphanFilter);
+
       const orphanResult = await db.collection("products").updateMany(
-        {
-          productFromJio: true,
-          category: categoryName,
-          jiomartUid: { $nin: fetchedUids },
-        },
+        orphanFilter,
         {
           $set: {
             isOutOfStock: true,
@@ -276,11 +377,20 @@ export async function syncJiomartCategories(
         },
       );
 
-      if (orphanResult.modifiedCount > 0) {
-        log(
-          `[jiomart] marked ${orphanResult.modifiedCount} orphan products OOS in ${categoryName}`,
-        );
-      }
+      syncLog("[jiomart-sync] orphans", {
+        category: categoryName,
+        fetchedUidCount: fetchedUids.length,
+        orphanCountBefore,
+        matched: orphanResult.matchedCount,
+        modified: orphanResult.modifiedCount,
+        sample: orphansBefore.map((product) => ({
+          jiomartUid: product.jiomartUid,
+          name: product.name,
+          price: product.price,
+          discountedPrice: product.discountedPrice,
+          wasAlreadyOos: product.isOutOfStock,
+        })),
+      });
 
       const categoryProducts = await db
         .collection("products")
@@ -291,15 +401,33 @@ export async function syncJiomartCategories(
         })
         .toArray();
 
+      const jioInCategory = categoryProducts.filter(
+        (product) => product.productFromJio === true,
+      ).length;
+      const oosInCategory = categoryProducts.filter(
+        (product) => product.isOutOfStock === true,
+      ).length;
+
       results.push({
         category: categoryName,
         syncedProducts: transformedProducts.length,
         totalProducts: categoryProducts.length,
       });
 
-      log(`Updated ${categoryName}: ${categoryProducts.length} products`);
+      syncLog("[jiomart-sync] category done", {
+        category: categoryName,
+        syncedProducts: transformedProducts.length,
+        totalProducts: categoryProducts.length,
+        jioInCategory,
+        oosInCategory,
+        leftoverEstimate: Math.max(
+          0,
+          categoryProducts.length - transformedProducts.length,
+        ),
+        durationMs: Date.now() - categoryStartedAt,
+      });
     } catch (error) {
-      logError(`Error processing ${categoryName}:`, error);
+      logError(`[jiomart-sync] category failed: ${categoryName}`, error);
       results.push({
         category: categoryName,
         error: error instanceof Error ? error.message : String(error),
@@ -308,6 +436,24 @@ export async function syncJiomartCategories(
   }
 
   await flushProductListRedisCache();
+
+  const succeeded = results.filter((row) => !row.error).length;
+  const failed = results.filter((row) => row.error).length;
+  syncLog("[jiomart-sync] complete", {
+    wipeAll,
+    succeeded,
+    failed,
+    durationMs: Date.now() - startedAt,
+    results: results.map((row) =>
+      row.error
+        ? { category: row.category, error: row.error }
+        : {
+            category: row.category,
+            synced: row.syncedProducts,
+            total: row.totalProducts,
+          },
+    ),
+  });
 
   return {
     message: "Categories sync completed",
