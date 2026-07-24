@@ -6,6 +6,9 @@ import { log, logError } from "../lib/logger";
 
 /** Always prints — needed for Vercel/prod sync debugging (`log` is dev-only). */
 function syncLog(message: string, data?: Record<string, unknown>) {
+  if(process.env.NODE_ENV === "production") {
+    return;
+  }
   if (data) {
     console.log(message, data);
   } else {
