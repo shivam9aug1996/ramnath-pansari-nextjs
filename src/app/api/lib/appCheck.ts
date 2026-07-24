@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { verifyAppCheckToken } from "@/app/api/lib/appCheckVerify";
-import { log, logWarn, maskToken } from "@/app/api/lib/logger";
+import { maskToken } from "@/app/api/lib/logger";
 
 export const APP_CHECK_HEADER = "x-firebase-appcheck";
 
@@ -18,6 +18,49 @@ function requestPath(req: Request): string {
   } catch {
     return "";
   }
+}
+
+/** Always log (incl. production) so Android App Check token presence is visible. */
+function appCheckLog(
+  level: "info" | "warn",
+  message: string,
+  meta: Record<string, unknown>,
+) {
+  const line = `[app-check] ${message}`;
+  if (level === "warn") {
+    console.warn(line, meta);
+  } else {
+    console.log(line, meta);
+  }
+}
+
+function clientHints(req: Request) {
+  const ua = (req.headers.get("user-agent") || "").trim();
+  const origin = (req.headers.get("origin") || "").trim();
+  const uaLower = ua.toLowerCase();
+  let platform: "android" | "ios" | "web" | "unknown" = "unknown";
+  if (uaLower.includes("android")) platform = "android";
+  else if (
+    uaLower.includes("iphone") ||
+    uaLower.includes("ipad") ||
+    uaLower.includes("ios")
+  ) {
+    platform = "ios";
+  } else if (
+    uaLower.includes("mozilla") ||
+    uaLower.includes("chrome") ||
+    uaLower.includes("safari")
+  ) {
+    platform = "web";
+  }
+
+  return {
+    platform,
+    userAgent: ua ? ua.slice(0, 120) : null,
+    origin: origin || null,
+    method: req.method,
+    path: requestPath(req),
+  };
 }
 
 /** Browser clients (Expo web / Next admin) — no native App Attest / Play Integrity. */
@@ -98,33 +141,55 @@ export async function evaluateAppCheck(req: Request): Promise<AppCheckResult> {
  */
 export async function requireAppCheck(req: Request): Promise<NextResponse | ""> {
   const mode = getAppCheckMode();
+  const hints = clientHints(req);
+  const rawHeader = req.headers.get(APP_CHECK_HEADER);
+  const hasHeader = Boolean(rawHeader?.trim());
+
+  // Always emit a presence line first so Android → backend token flow is easy to grep.
+  appCheckLog("info", "request", {
+    ...hints,
+    mode,
+    hasAppCheckHeader: hasHeader,
+    tokenPreview: rawHeader,
+    tokenLength: rawHeader?.trim()?.length ?? 0,
+  });
+
   const result = await evaluateAppCheck(req);
 
   if (result.status === "ok") {
-    log("[app-check] ok", {
+    appCheckLog("info", "ok — token accepted from client", {
+      ...hints,
+      mode,
       appId: result.appId,
       expiresInSec: result.expiresInSec,
       exp: result.exp,
-      mode,
+      tokenPreview: rawHeader,
     });
     return "";
   }
 
   if (result.status === "skipped") {
-    log("[app-check] skipped", { reason: result.reason, mode });
+    appCheckLog("info", "skipped", {
+      ...hints,
+      mode,
+      reason: result.reason,
+      hasAppCheckHeader: hasHeader,
+      tokenPreview: rawHeader,
+    });
     return "";
   }
 
   if (result.status === "missing") {
-    logWarn("[app-check] missing header", {
+    appCheckLog("warn", "MISSING — no X-Firebase-AppCheck from client", {
+      ...hints,
       mode,
-      path: requestPath(req),
     });
   } else {
-    logWarn("[app-check] invalid token", {
+    appCheckLog("warn", "INVALID — header present but verify failed", {
+      ...hints,
       mode,
-      path: requestPath(req),
-      token: maskToken(req.headers.get(APP_CHECK_HEADER)),
+      tokenPreview: rawHeader,
+      tokenLength: rawHeader?.trim()?.length ?? 0,
       error:
         result.error instanceof Error
           ? result.error.message
