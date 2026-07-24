@@ -129,6 +129,50 @@ function applyMiddlewareRateLimits(
   return null;
 }
 
+const APP_CHECK_HEADER = "x-firebase-appcheck";
+
+function maskAppCheckToken(token?: string | null): string | null {
+  if (!token) return null;
+  if (token.length <= 12) return "***";
+  return `${token.slice(0, 6)}...${token.slice(-4)}`;
+}
+
+/** Edge-safe presence log — runs even when middleware returns 401 before route handlers. */
+function logAppCheckPresence(request: NextRequest, authOutcome: string) {
+  if (!request.nextUrl.pathname.startsWith("/api/")) return;
+
+  const raw = request.headers.get(APP_CHECK_HEADER);
+  const ua = (request.headers.get("user-agent") || "").trim();
+  const uaLower = ua.toLowerCase();
+  let platform: "android" | "ios" | "web" | "unknown" = "unknown";
+  if (uaLower.includes("android")) platform = "android";
+  else if (
+    uaLower.includes("iphone") ||
+    uaLower.includes("ipad") ||
+    uaLower.includes("ios")
+  ) {
+    platform = "ios";
+  } else if (
+    uaLower.includes("mozilla") ||
+    uaLower.includes("chrome") ||
+    uaLower.includes("safari")
+  ) {
+    platform = "web";
+  }
+
+  // console.warn so it shows under Vercel "Warning" console filters
+  console.warn("[app-check] middleware", {
+    path: request.nextUrl.pathname,
+    method: request.method,
+    platform,
+    authOutcome,
+    hasAppCheckHeader: Boolean(raw?.trim()),
+    tokenPreview: maskAppCheckToken(raw),
+    tokenLength: raw?.trim()?.length ?? 0,
+    userAgent: ua ? ua.slice(0, 120) : null,
+  });
+}
+
 export async function middleware(request: NextRequest) {
   const origin = request.headers.get("origin");
   const currentPath = request.nextUrl.pathname;
@@ -154,10 +198,12 @@ export async function middleware(request: NextRequest) {
 
   if (!userToken) {
     if (isPublicApiRequest(request, currentPath)) {
+      logAppCheckPresence(request, "public_no_auth");
       return applyCorsHeaders(NextResponse.next(), origin);
     }
 
     if (currentPath.includes("/addressMap")) {
+      logAppCheckPresence(request, "401_missing_auth");
       return applyCorsHeaders(
         new NextResponse(
           JSON.stringify({ success: false, message: "Authentication failed" }),
@@ -167,6 +213,7 @@ export async function middleware(request: NextRequest) {
       );
     }
 
+    logAppCheckPresence(request, "401_missing_auth");
     return applyCorsHeaders(
       new NextResponse(
         JSON.stringify({ success: false, message: "Authentication failed" }),
@@ -176,6 +223,7 @@ export async function middleware(request: NextRequest) {
     );
   }
 
+  logAppCheckPresence(request, "auth_present");
   return applyCorsHeaders(NextResponse.next(), origin);
 }
 

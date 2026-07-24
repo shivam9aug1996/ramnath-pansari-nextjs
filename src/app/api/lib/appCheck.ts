@@ -20,18 +20,9 @@ function requestPath(req: Request): string {
   }
 }
 
-/** Always log (incl. production) so Android App Check token presence is visible. */
-function appCheckLog(
-  level: "info" | "warn",
-  message: string,
-  meta: Record<string, unknown>,
-) {
-  const line = `[app-check] ${message}`;
-  if (level === "warn") {
-    console.warn(line, meta);
-  } else {
-    console.log(line, meta);
-  }
+/** Always log via warn so Vercel Runtime Logs "Warning" filter shows App Check. */
+function appCheckLog(message: string, meta: Record<string, unknown>) {
+  console.warn(`[app-check] ${message}`, meta);
 }
 
 function clientHints(req: Request) {
@@ -146,49 +137,49 @@ export async function requireAppCheck(req: Request): Promise<NextResponse | ""> 
   const hasHeader = Boolean(rawHeader?.trim());
 
   // Always emit a presence line first so Android → backend token flow is easy to grep.
-  appCheckLog("info", "request", {
+  appCheckLog("request", {
     ...hints,
     mode,
     hasAppCheckHeader: hasHeader,
-    tokenPreview: rawHeader,
+    tokenPreview: maskToken(rawHeader),
     tokenLength: rawHeader?.trim()?.length ?? 0,
   });
 
   const result = await evaluateAppCheck(req);
 
   if (result.status === "ok") {
-    appCheckLog("info", "ok — token accepted from client", {
+    appCheckLog("ok — token accepted from client", {
       ...hints,
       mode,
       appId: result.appId,
       expiresInSec: result.expiresInSec,
       exp: result.exp,
-      tokenPreview: rawHeader,
+      tokenPreview: maskToken(rawHeader),
     });
     return "";
   }
 
   if (result.status === "skipped") {
-    appCheckLog("info", "skipped", {
+    appCheckLog("skipped", {
       ...hints,
       mode,
       reason: result.reason,
       hasAppCheckHeader: hasHeader,
-      tokenPreview: rawHeader,
+      tokenPreview: maskToken(rawHeader),
     });
     return "";
   }
 
   if (result.status === "missing") {
-    appCheckLog("warn", "MISSING — no X-Firebase-AppCheck from client", {
+    appCheckLog("MISSING — no X-Firebase-AppCheck from client", {
       ...hints,
       mode,
     });
   } else {
-    appCheckLog("warn", "INVALID — header present but verify failed", {
+    appCheckLog("INVALID — header present but verify failed", {
       ...hints,
       mode,
-      tokenPreview: rawHeader,
+      tokenPreview: maskToken(rawHeader),
       tokenLength: rawHeader?.trim()?.length ?? 0,
       error:
         result.error instanceof Error
