@@ -1,6 +1,4 @@
 const categoryConfig = {
-
-  // ===== Cooking Essentials =====
   Atta: {
     categoryIds: "28985",
     category: "Atta",
@@ -10,8 +8,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "atta-flours-sooji",
-      l3Category: "atta",
-    },
+      l3Category: "atta"
+    }
   },
   Besan: {
     categoryIds: "28985",
@@ -22,8 +20,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "atta-flours-sooji",
-      l3Category: "besan",
-    },
+      l3Category: "besan"
+    }
   },
   Maida: {
     categoryIds: "28985",
@@ -34,8 +32,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "atta-flours-sooji",
-      l3Category: "maida",
-    },
+      l3Category: "maida"
+    }
   },
   "Toor Dal": {
     categoryIds: "28986",
@@ -46,8 +44,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "toor-dal-l3",
-    },
+      l3Category: "toor-dal-l3"
+    }
   },
   "Moong Dal": {
     categoryIds: "28986",
@@ -58,8 +56,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "moong-dal-l3",
-    },
+      l3Category: "moong-dal-l3"
+    }
   },
   "Urad Dal": {
     categoryIds: "28986",
@@ -70,8 +68,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "urad-dal-l3",
-    },
+      l3Category: "urad-dal-l3"
+    }
   },
   "Masoor Dal": {
     categoryIds: "28986",
@@ -82,8 +80,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "masoor-dal-l3",
-    },
+      l3Category: "masoor-dal-l3"
+    }
   },
   "Chana Dal": {
     categoryIds: "28986",
@@ -94,8 +92,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "chana-dal-l3",
-    },
+      l3Category: "chana-dal-l3"
+    }
   },
   "Kabuli Chana": {
     categoryIds: "28986",
@@ -106,8 +104,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "kabuli-chana",
-    },
+      l3Category: "kabuli-chana"
+    }
   },
   "Mustard Oil": {
     categoryIds: "28989",
@@ -118,8 +116,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "edible-oils",
-      l3Category: "mustard-oil-l3",
-    },
+      l3Category: "mustard-oil-l3"
+    }
   },
   "Groundnut Oil": {
     categoryIds: "28989",
@@ -130,8 +128,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "edible-oils",
-      l3Category: "groundnut-oil",
-    },
+      l3Category: "groundnut-oil"
+    }
   },
   "Olive Oil": {
     categoryIds: "28989",
@@ -142,8 +140,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "edible-oils",
-      l3Category: "olive-oil-l3",
-    },
+      l3Category: "olive-oil-l3"
+    }
   },
   "Sunflower Oil": {
     categoryIds: "28989",
@@ -154,8 +152,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "edible-oils",
-      l3Category: "sunflower-oil-l3",
-    },
+      l3Category: "sunflower-oil-l3"
+    }
   },
   Sugar: {
     categoryIds: "28991",
@@ -166,8 +164,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "salt-sugar-jaggery",
-      l3Category: "sugar-l3",
-    },
+      l3Category: "sugar-l3"
+    }
   },
   Ghee: {
     categoryIds: "28993",
@@ -178,11 +176,9 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "ghee",
-      l3Category: "ghee-l3",
-    },
+      l3Category: "ghee-l3"
+    }
   },
-
-  // ===== Biscuits, Drinks & Packaged Foods =====
   Oats: {
     categoryIds: "28999",
     category: "Oats",
@@ -192,8 +188,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "breakfast-cereals",
-      l3Category: "oats",
-    },
+      l3Category: "oats"
+    }
   },
   Muesli: {
     categoryIds: "28999",
@@ -204,8 +200,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "breakfast-cereals",
-      l3Category: "muesli",
-    },
+      l3Category: "muesli"
+    }
   },
   Flakes: {
     categoryIds: "28999",
@@ -216,8 +212,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "breakfast-cereals",
-      l3Category: "flakes",
-    },
+      l3Category: "flakes"
+    }
   },
   "Tomato Ketchup & Sauces": {
     categoryIds: "29008",
@@ -228,8 +224,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "spread-sauces-ketchup",
-      l3Category: "tomato-ketchup-sauces",
-    },
+      l3Category: "tomato-ketchup-sauces"
+    }
   },
   "Dips, Dressings, Chilli & Soya Sauce": {
     categoryIds: "29008",
@@ -240,8 +236,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "spread-sauces-ketchup",
-      l3Category: "dips-dressings-chilli-and-soya-sauce-l3",
-    },
+      l3Category: "dips-dressings-chilli-and-soya-sauce-l3"
+    }
   },
   Mayonnaise: {
     categoryIds: "29008",
@@ -252,8 +248,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "spread-sauces-ketchup",
-      l3Category: "mayonnaise",
-    },
+      l3Category: "mayonnaise"
+    }
   },
   Jam: {
     categoryIds: "29008",
@@ -264,8 +260,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "spread-sauces-ketchup",
-      l3Category: "jam",
-    },
+      l3Category: "jam"
+    }
   },
   Honey: {
     categoryIds: "29008",
@@ -276,8 +272,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "spread-sauces-ketchup",
-      l3Category: "honey",
-    },
+      l3Category: "honey"
+    }
   },
   "Choco & Nut Spread": {
     categoryIds: "29008",
@@ -288,8 +284,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "spread-sauces-ketchup",
-      l3Category: "choco-nut-spread",
-    },
+      l3Category: "choco-nut-spread"
+    }
   },
   "Exotic & Flavoured Tea": {
     categoryIds: "29661",
@@ -300,8 +296,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "tea-coffee",
-      l3Category: "exotic-flavoured-tea",
-    },
+      l3Category: "exotic-flavoured-tea"
+    }
   },
   "Gourmet Tea & Tea Bags": {
     categoryIds: "29661",
@@ -312,8 +308,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "tea-coffee",
-      l3Category: "gourmet-tea-tea-bags-l3",
-    },
+      l3Category: "gourmet-tea-tea-bags-l3"
+    }
   },
   "Leaf & Dust Tea": {
     categoryIds: "29661",
@@ -324,8 +320,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "tea-coffee",
-      l3Category: "leaf-dust-tea",
-    },
+      l3Category: "leaf-dust-tea"
+    }
   },
   "Tea Additive": {
     categoryIds: "29661",
@@ -336,8 +332,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "tea-coffee",
-      l3Category: "tea-additive",
-    },
+      l3Category: "tea-additive"
+    }
   },
   "Ground Coffee": {
     categoryIds: "29662",
@@ -348,8 +344,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "tea-coffee",
-      l3Category: "ground-coffee",
-    },
+      l3Category: "ground-coffee"
+    }
   },
   "Instant Coffee": {
     categoryIds: "29662",
@@ -360,23 +356,9 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "tea-coffee",
-      l3Category: "instant-coffee",
-    },
+      l3Category: "instant-coffee"
+    }
   },
-  "Speciality Coffee": {
-    categoryIds: "29662",
-    category: "Speciality Coffee",
-    facetFilters: "category_level.level4:Speciality Coffee",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "biscuits-drinks-packaged-foods",
-      l2Category: "tea-coffee",
-      l3Category: "speciality-coffee",
-    },
-  },
-
-  // ===== Fresh =====
   Milk: {
     categoryIds: "29011",
     category: "Milk",
@@ -386,8 +368,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "milk-milk-products",
-      l3Category: "milk",
-    },
+      l3Category: "milk"
+    }
   },
   "Milk Powder & Cream": {
     categoryIds: "29011",
@@ -398,8 +380,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "milk-milk-products",
-      l3Category: "milk-powder-cream",
-    },
+      l3Category: "milk-powder-cream"
+    }
   },
   Curd: {
     categoryIds: "29011",
@@ -410,8 +392,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "milk-milk-products",
-      l3Category: "curd",
-    },
+      l3Category: "curd"
+    }
   },
   "Butter & Margarine": {
     categoryIds: "29011",
@@ -422,8 +404,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "milk-milk-products",
-      l3Category: "butter-margarine",
-    },
+      l3Category: "butter-margarine"
+    }
   },
   Cheese: {
     categoryIds: "29010",
@@ -434,20 +416,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "cheese-paneer-tofu",
-      l3Category: "cheese-l3",
-    },
-  },
-  Paneer: {
-    categoryIds: "29010",
-    category: "Paneer",
-    facetFilters: "category_level.level4:Paneer",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "fresh-l1",
-      l2Category: "cheese-paneer-tofu",
-      l3Category: "paneer",
-    },
+      l3Category: "cheese-l3"
+    }
   },
   "Buns, Pavs & Pizza Base": {
     categoryIds: "267",
@@ -458,32 +428,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "breads-chapatis",
-      l3Category: "buns-pavs-pizza-base",
-    },
-  },
-  "Milk, Wheat & Multigrain Bread": {
-    categoryIds: "267",
-    category: "Milk, Wheat & Multigrain Bread",
-    facetFilters: "category_level.level4:Milk, Wheat & Multigrain Bread",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "fresh-l1",
-      l2Category: "breads-chapatis",
-      l3Category: "milk-wheat-multigrain-bread",
-    },
-  },
-  "Speciality Breads": {
-    categoryIds: "267",
-    category: "Speciality Breads",
-    facetFilters: "category_level.level4:Speciality Breads",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "fresh-l1",
-      l2Category: "breads-chapatis",
-      l3Category: "speciality-breads",
-    },
+      l3Category: "buns-pavs-pizza-base"
+    }
   },
   Rusk: {
     categoryIds: "102",
@@ -494,32 +440,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "cakes-rusk-more-l2",
-      l3Category: "rusk",
-    },
-  },
-  Others: {
-    categoryIds: "12452",
-    category: "Others",
-    facetFilters: "category_level.level4:Others",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "fresh-l1",
-      l2Category: "fresh-fruits",
-      l3Category: "others-l3",
-    },
-  },
-  "Bakery Biscuits & Cookies": {
-    categoryIds: "11995",
-    category: "Bakery Biscuits & Cookies",
-    facetFilters: "category_level.level4:Bakery Biscuits & Cookies",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "fresh-l1",
-      l2Category: "cakes-rusk-more-l2",
-      l3Category: "bakery-biscuits-cookies-l3",
-    },
+      l3Category: "rusk"
+    }
   },
   "Speciality & Other Cakes": {
     categoryIds: "10409",
@@ -530,8 +452,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "cakes-rusk-more-l2",
-      l3Category: "speciality-other-cakes",
-    },
+      l3Category: "speciality-other-cakes"
+    }
   },
   "Sliced & Bar Cakes": {
     categoryIds: "12195",
@@ -542,32 +464,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "cakes-rusk-more-l2",
-      l3Category: "sliced-bar-cakes-l3",
-    },
-  },
-  Khari: {
-    categoryIds: "2819",
-    category: "Khari",
-    facetFilters: "category_level.level4:Khari",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "fresh-l1",
-      l2Category: "cakes-rusk-more-l2",
-      l3Category: "khari",
-    },
-  },
-  "Cup Cakes & Muffins": {
-    categoryIds: "2760",
-    category: "Cup Cakes & Muffins",
-    facetFilters: "category_level.level4:Cup Cakes & Muffins",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "fresh-l1",
-      l2Category: "cakes-rusk-more-l2",
-      l3Category: "cup-cakes-muffins",
-    },
+      l3Category: "sliced-bar-cakes-l3"
+    }
   },
   "Cream Rolls": {
     categoryIds: "2739",
@@ -578,20 +476,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "cakes-rusk-more-l2",
-      l3Category: "cream-rolls",
-    },
-  },
-  "Fresh Batter": {
-    categoryIds: "2743",
-    category: "Fresh Batter",
-    facetFilters: "category_level.level4:Fresh Batter",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "fresh-l1",
-      l2Category: "batter-chutney",
-      l3Category: "fresh-batter",
-    },
+      l3Category: "cream-rolls"
+    }
   },
   "Milkshake & Smoothies": {
     categoryIds: "2806",
@@ -602,8 +488,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "milk-milk-products",
-      l3Category: "milkshake-smoothies",
-    },
+      l3Category: "milkshake-smoothies"
+    }
   },
   "Flavoured Milk": {
     categoryIds: "2784",
@@ -614,8 +500,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "milk-milk-products",
-      l3Category: "flavoured-milk",
-    },
+      l3Category: "flavoured-milk"
+    }
   },
   "Yogurt & Shrikhand": {
     categoryIds: "2812",
@@ -626,8 +512,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "milk-milk-products",
-      l3Category: "yogurt-shrikhand",
-    },
+      l3Category: "yogurt-shrikhand"
+    }
   },
   "Speciality Milk": {
     categoryIds: "2809",
@@ -638,8 +524,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "milk-milk-products",
-      l3Category: "speciality-milk",
-    },
+      l3Category: "speciality-milk"
+    }
   },
   "Condensed Milk": {
     categoryIds: "2778",
@@ -650,8 +536,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "milk-milk-products",
-      l3Category: "condensed-milk",
-    },
+      l3Category: "condensed-milk"
+    }
   },
   "Buttermilk and Lassi": {
     categoryIds: "2774",
@@ -662,32 +548,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "milk-milk-products",
-      l3Category: "buttermilk-and-lassi",
-    },
-  },
-  Khoya: {
-    categoryIds: "2800",
-    category: "Khoya",
-    facetFilters: "category_level.level4:Khoya",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "fresh-l1",
-      l2Category: "milk-milk-products",
-      l3Category: "khoya",
-    },
-  },
-  Kheer: {
-    categoryIds: "2797",
-    category: "Kheer",
-    facetFilters: "category_level.level4:Kheer",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "fresh-l1",
-      l2Category: "milk-milk-products",
-      l3Category: "kheer",
-    },
+      l3Category: "buttermilk-and-lassi"
+    }
   },
   Tofu: {
     categoryIds: "2764",
@@ -698,20 +560,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "fresh-l1",
       l2Category: "cheese-paneer-tofu",
-      l3Category: "tofu",
-    },
-  },
-  "Chips & Corn Snacks": {
-    categoryIds: "12033",
-    category: "Chips & Corn Snacks",
-    facetFilters: "category_level.level4:Chips & Corn Snacks",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "biscuits-drinks-packaged-foods",
-      l2Category: "chips-namkeens",
-      l3Category: "chips-corn-snacks-l3",
-    },
+      l3Category: "tofu"
+    }
   },
   "Namkeen & Savoury Snacks": {
     categoryIds: "2040",
@@ -722,32 +572,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "chips-namkeens",
-      l3Category: "namkeen-savoury-snacks",
-    },
-  },
-  "Roasted Chana": {
-    categoryIds: "2123",
-    category: "Roasted Chana",
-    facetFilters: "category_level.level4:Roasted Chana",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "biscuits-drinks-packaged-foods",
-      l2Category: "chips-namkeens",
-      l3Category: "roasted-chana",
-    },
-  },
-  "Sweet Snacks": {
-    categoryIds: "2116",
-    category: "Sweet Snacks",
-    facetFilters: "category_level.level4:Sweet Snacks",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "biscuits-drinks-packaged-foods",
-      l2Category: "chips-namkeens",
-      l3Category: "sweet-snacks",
-    },
+      l3Category: "namkeen-savoury-snacks"
+    }
   },
   "Marie, Health, Digestive": {
     categoryIds: "2094",
@@ -758,8 +584,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "biscuits-cookies",
-      l3Category: "marie-health-digestive",
-    },
+      l3Category: "marie-health-digestive"
+    }
   },
   "Glucose & Milk Biscuits": {
     categoryIds: "2082",
@@ -770,8 +596,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "biscuits-cookies",
-      l3Category: "glucose-milk-biscuits",
-    },
+      l3Category: "glucose-milk-biscuits"
+    }
   },
   Cookies: {
     categoryIds: "2089",
@@ -782,8 +608,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "biscuits-cookies",
-      l3Category: "cookies",
-    },
+      l3Category: "cookies"
+    }
   },
   "Salted Biscuits": {
     categoryIds: "2086",
@@ -794,8 +620,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "biscuits-cookies",
-      l3Category: "salted-biscuits",
-    },
+      l3Category: "salted-biscuits"
+    }
   },
   "Other Biscuits": {
     categoryIds: "2097",
@@ -806,8 +632,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "biscuits-cookies",
-      l3Category: "other-biscuits",
-    },
+      l3Category: "other-biscuits"
+    }
   },
   "Cream Biscuits & Wafers": {
     categoryIds: "2080",
@@ -818,8 +644,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "biscuits-cookies",
-      l3Category: "cream-biscuits-wafers",
-    },
+      l3Category: "cream-biscuits-wafers"
+    }
   },
   "Gums & Mints": {
     categoryIds: "2125",
@@ -830,8 +656,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "chocolates-candies",
-      l3Category: "gums-mints",
-    },
+      l3Category: "gums-mints"
+    }
   },
   Chocolates: {
     categoryIds: "12285",
@@ -842,8 +668,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "chocolates-candies",
-      l3Category: "chocolates-l3",
-    },
+      l3Category: "chocolates-l3"
+    }
   },
   "Toffees & Candies": {
     categoryIds: "2133",
@@ -854,8 +680,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "chocolates-candies",
-      l3Category: "toffees-candies",
-    },
+      l3Category: "toffees-candies"
+    }
   },
   "Jellys & Fruitbars": {
     categoryIds: "2130",
@@ -866,8 +692,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "chocolates-candies",
-      l3Category: "jellys-fruitbars",
-    },
+      l3Category: "jellys-fruitbars"
+    }
   },
   "Tinned & Packed Sweets": {
     categoryIds: "2074",
@@ -878,8 +704,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "indian-sweets",
-      l3Category: "tinned-packed-sweets",
-    },
+      l3Category: "tinned-packed-sweets"
+    }
   },
   Chikki: {
     categoryIds: "2138",
@@ -890,20 +716,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "indian-sweets",
-      l3Category: "chikki",
-    },
-  },
-  "Sweet Gifts": {
-    categoryIds: "2141",
-    category: "Sweet Gifts",
-    facetFilters: "category_level.level4:Sweet Gifts",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "biscuits-drinks-packaged-foods",
-      l2Category: "indian-sweets",
-      l3Category: "sweet-gifts",
-    },
+      l3Category: "chikki"
+    }
   },
   Juices: {
     categoryIds: "2048",
@@ -914,8 +728,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "drinks-juices",
-      l3Category: "juices",
-    },
+      l3Category: "juices"
+    }
   },
   "Cold Drinks": {
     categoryIds: "2031",
@@ -926,8 +740,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "drinks-juices",
-      l3Category: "cold-drinks",
-    },
+      l3Category: "cold-drinks"
+    }
   },
   "Energy Drinks": {
     categoryIds: "12327",
@@ -938,8 +752,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "drinks-juices",
-      l3Category: "energy-drinks-l3",
-    },
+      l3Category: "energy-drinks-l3"
+    }
   },
   "Nutritional Drinks": {
     categoryIds: "12444",
@@ -950,20 +764,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "drinks-juices",
-      l3Category: "nutritional-drinks-l3",
-    },
-  },
-  "Syrups, Powders & Mixes": {
-    categoryIds: "2043",
-    category: "Syrups, Powders & Mixes",
-    facetFilters: "category_level.level4:Syrups, Powders & Mixes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "biscuits-drinks-packaged-foods",
-      l2Category: "drinks-juices",
-      l3Category: "syrups-powders-mixes",
-    },
+      l3Category: "nutritional-drinks-l3"
+    }
   },
   "Packaged Water": {
     categoryIds: "2059",
@@ -974,20 +776,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "drinks-juices",
-      l3Category: "packaged-water",
-    },
-  },
-  "Flavoured Water": {
-    categoryIds: "2054",
-    category: "Flavoured Water",
-    facetFilters: "category_level.level4:Flavoured Water",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "biscuits-drinks-packaged-foods",
-      l2Category: "drinks-juices",
-      l3Category: "flavoured-water",
-    },
+      l3Category: "packaged-water"
+    }
   },
   "Soda & Tonic Water": {
     categoryIds: "2062",
@@ -998,8 +788,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "drinks-juices",
-      l3Category: "soda-tonic-water",
-    },
+      l3Category: "soda-tonic-water"
+    }
   },
   "Granola & Cereal Bars": {
     categoryIds: "2105",
@@ -1010,8 +800,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "breakfast-cereals",
-      l3Category: "granola-cereal-bars",
-    },
+      l3Category: "granola-cereal-bars"
+    }
   },
   "Pasta & Macaroni": {
     categoryIds: "2146",
@@ -1022,8 +812,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "noodles-pasta-vermicelli",
-      l3Category: "pasta-macaroni",
-    },
+      l3Category: "pasta-macaroni"
+    }
   },
   Vermicelli: {
     categoryIds: "2149",
@@ -1034,8 +824,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "noodles-pasta-vermicelli",
-      l3Category: "vermicelli",
-    },
+      l3Category: "vermicelli"
+    }
   },
   "Instant, Hakka & Cup Noodles": {
     categoryIds: "2151",
@@ -1046,8 +836,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "noodles-pasta-vermicelli",
-      l3Category: "instant-hakka-cup-noodles",
-    },
+      l3Category: "instant-hakka-cup-noodles"
+    }
   },
   "Heat & Eat Ready Meals": {
     categoryIds: "2178",
@@ -1058,8 +848,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "ready-to-cook-eat",
-      l3Category: "heat-eat-ready-meals",
-    },
+      l3Category: "heat-eat-ready-meals"
+    }
   },
   "Dessert Mixes": {
     categoryIds: "2189",
@@ -1070,8 +860,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "ready-to-cook-eat",
-      l3Category: "dessert-mixes",
-    },
+      l3Category: "dessert-mixes"
+    }
   },
   "Papads, Ready To Fry": {
     categoryIds: "2193",
@@ -1082,8 +872,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "ready-to-cook-eat",
-      l3Category: "papads-ready-to-fry",
-    },
+      l3Category: "papads-ready-to-fry"
+    }
   },
   Soups: {
     categoryIds: "2186",
@@ -1094,8 +884,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "ready-to-cook-eat",
-      l3Category: "soups",
-    },
+      l3Category: "soups"
+    }
   },
   "Breakfast & Snack Mixes": {
     categoryIds: "2182",
@@ -1106,8 +896,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "ready-to-cook-eat",
-      l3Category: "breakfast-snack-mixes",
-    },
+      l3Category: "breakfast-snack-mixes"
+    }
   },
   "Home Baking": {
     categoryIds: "2196",
@@ -1118,20 +908,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "ready-to-cook-eat",
-      l3Category: "home-baking",
-    },
-  },
-  "Canned Food": {
-    categoryIds: "2202",
-    category: "Canned Food",
-    facetFilters: "category_level.level4:Canned Food",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "biscuits-drinks-packaged-foods",
-      l2Category: "ready-to-cook-eat",
-      l3Category: "canned-food",
-    },
+      l3Category: "home-baking"
+    }
   },
   "Lime & Mango Pickles": {
     categoryIds: "2162",
@@ -1142,8 +920,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "pickles-chutney-flavouring",
-      l3Category: "lime-mango-pickles",
-    },
+      l3Category: "lime-mango-pickles"
+    }
   },
   "Other Pickles": {
     categoryIds: "2155",
@@ -1154,20 +932,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "pickles-chutney-flavouring",
-      l3Category: "other-pickles",
-    },
-  },
-  "Food Colour & Essence": {
-    categoryIds: "2165",
-    category: "Food Colour & Essence",
-    facetFilters: "category_level.level4:Food Colour & Essence",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "biscuits-drinks-packaged-foods",
-      l2Category: "pickles-chutney-flavouring",
-      l3Category: "food-colour-essence",
-    },
+      l3Category: "other-pickles"
+    }
   },
   Chutney: {
     categoryIds: "2171",
@@ -1178,46 +944,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "biscuits-drinks-packaged-foods",
       l2Category: "pickles-chutney-flavouring",
-      l3Category: "chutney",
-    },
-  },
-  Vinegars: {
-    categoryIds: "2159",
-    category: "Vinegars",
-    facetFilters: "category_level.level4:Vinegars",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "biscuits-drinks-packaged-foods",
-      l2Category: "pickles-chutney-flavouring",
-      l3Category: "vinegars",
-    },
-  },
-  "Apple Cider Vinegar": {
-    categoryIds: "2168",
-    category: "Apple Cider Vinegar",
-    facetFilters: "category_level.level4:Apple Cider Vinegar",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "biscuits-drinks-packaged-foods",
-      l2Category: "pickles-chutney-flavouring",
-      l3Category: "apple-cider-vinegar",
-    },
-  },
-
-  // ===== Cooking Essentials =====
-  "Idli Rava": {
-    categoryIds: "2488",
-    category: "Idli Rava",
-    facetFilters: "category_level.level4:Idli Rava",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "atta-flours-sooji",
-      l3Category: "idli-rava",
-    },
+      l3Category: "chutney"
+    }
   },
   "Rawa/Sooji": {
     categoryIds: "12487",
@@ -1228,8 +956,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "atta-flours-sooji",
-      l3Category: "rawasooji-l3",
-    },
+      l3Category: "rawasooji-l3"
+    }
   },
   "Speciality Flour": {
     categoryIds: "2493",
@@ -1240,20 +968,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "atta-flours-sooji",
-      l3Category: "speciality-flour",
-    },
-  },
-  "Rice Atta": {
-    categoryIds: "7365",
-    category: "Rice Atta",
-    facetFilters: "category_level.level4:Rice Atta",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "atta-flours-sooji",
-      l3Category: "rice-atta",
-    },
+      l3Category: "speciality-flour"
+    }
   },
   Daliya: {
     categoryIds: "2482",
@@ -1264,44 +980,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "atta-flours-sooji",
-      l3Category: "daliya",
-    },
-  },
-  "Ragi Flour": {
-    categoryIds: "2475",
-    category: "Ragi Flour",
-    facetFilters: "category_level.level4:Ragi Flour",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "atta-flours-sooji",
-      l3Category: "ragi-flour",
-    },
-  },
-  "Other Atta": {
-    categoryIds: "2471",
-    category: "Other Atta",
-    facetFilters: "category_level.level4:Other Atta",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "atta-flours-sooji",
-      l3Category: "other-atta",
-    },
-  },
-  "Combo Offer": {
-    categoryIds: "12291",
-    category: "Combo Offer",
-    facetFilters: "category_level.level4:Combo Offer",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "atta-flours-sooji",
-      l3Category: "combo-offer-l3",
-    },
+      l3Category: "daliya"
+    }
   },
   Peanuts: {
     categoryIds: "7051",
@@ -1312,8 +992,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "peanuts-l3",
-    },
+      l3Category: "peanuts-l3"
+    }
   },
   "Matki/ Moth Beans": {
     categoryIds: "2521",
@@ -1324,8 +1004,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "matki-moth-beans",
-    },
+      l3Category: "matki-moth-beans"
+    }
   },
   "Mixed Dal": {
     categoryIds: "2514",
@@ -1336,8 +1016,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "mixed-dal",
-    },
+      l3Category: "mixed-dal"
+    }
   },
   "Matar/ Peas": {
     categoryIds: "2502",
@@ -1348,8 +1028,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "matar-peas",
-    },
+      l3Category: "matar-peas"
+    }
   },
   Rajma: {
     categoryIds: "2508",
@@ -1360,8 +1040,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "rajma",
-    },
+      l3Category: "rajma"
+    }
   },
   Lobia: {
     categoryIds: "2517",
@@ -1372,8 +1052,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "lobia",
-    },
+      l3Category: "lobia"
+    }
   },
   "Other Pulses": {
     categoryIds: "2523",
@@ -1384,32 +1064,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "other-pulses",
-    },
-  },
-  "Val Beans": {
-    categoryIds: "7377",
-    category: "Val Beans",
-    facetFilters: "category_level.level4:Val Beans",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "dals-pulses",
-      l3Category: "val-beans",
-    },
-  },
-  "Horse Gram": {
-    categoryIds: "2499",
-    category: "Horse Gram",
-    facetFilters: "category_level.level4:Horse Gram",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "dals-pulses",
-      l3Category: "horse-gram",
-    },
+      l3Category: "other-pulses"
+    }
   },
   "Kala Chana": {
     categoryIds: "12748",
@@ -1420,8 +1076,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dals-pulses",
-      l3Category: "kala-chana-l3",
-    },
+      l3Category: "kala-chana-l3"
+    }
   },
   "Basmati Rice": {
     categoryIds: "2672",
@@ -1432,8 +1088,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "rice",
-      l3Category: "basmati-rice",
-    },
+      l3Category: "basmati-rice"
+    }
   },
   Rice: {
     categoryIds: "12494",
@@ -1444,20 +1100,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "rice",
-      l3Category: "rice-l3",
-    },
-  },
-  "Raw Rice": {
-    categoryIds: "2665",
-    category: "Raw Rice",
-    facetFilters: "category_level.level4:Raw Rice",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "rice",
-      l3Category: "raw-rice",
-    },
+      l3Category: "rice-l3"
+    }
   },
   "Sona Masoori Rice": {
     categoryIds: "2677",
@@ -1468,68 +1112,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "rice",
-      l3Category: "sona-masoori-rice",
-    },
-  },
-  "Idli & Dosa Rice": {
-    categoryIds: "2662",
-    category: "Idli & Dosa Rice",
-    facetFilters: "category_level.level4:Idli & Dosa Rice",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "rice",
-      l3Category: "idli-dosa-rice",
-    },
-  },
-  "Kolam Rice": {
-    categoryIds: "2674",
-    category: "Kolam Rice",
-    facetFilters: "category_level.level4:Kolam Rice",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "rice",
-      l3Category: "kolam-rice",
-    },
-  },
-  "Boiled Rice": {
-    categoryIds: "2680",
-    category: "Boiled Rice",
-    facetFilters: "category_level.level4:Boiled Rice",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "rice",
-      l3Category: "boiled-rice",
-    },
-  },
-  "Other Rice Varieties": {
-    categoryIds: "2659",
-    category: "Other Rice Varieties",
-    facetFilters: "category_level.level4:Other Rice Varieties",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "rice",
-      l3Category: "other-rice-varieties",
-    },
-  },
-  "Organic Rice": {
-    categoryIds: "2668",
-    category: "Organic Rice",
-    facetFilters: "category_level.level4:Organic Rice",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "rice",
-      l3Category: "organic-rice",
-    },
+      l3Category: "sona-masoori-rice"
+    }
   },
   Poha: {
     categoryIds: "2687",
@@ -1540,8 +1124,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "sabudana-poha-murmura",
-      l3Category: "poha",
-    },
+      l3Category: "poha"
+    }
   },
   Sabudana: {
     categoryIds: "2684",
@@ -1552,8 +1136,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "sabudana-poha-murmura",
-      l3Category: "sabudana",
-    },
+      l3Category: "sabudana"
+    }
   },
   Murmura: {
     categoryIds: "2691",
@@ -1564,8 +1148,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "sabudana-poha-murmura",
-      l3Category: "murmura",
-    },
+      l3Category: "murmura"
+    }
   },
   "Rice Bran Oil": {
     categoryIds: "10403",
@@ -1576,32 +1160,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "edible-oils",
-      l3Category: "rice-bran-oil",
-    },
-  },
-  "Gingelly/Til/Sesame Oil": {
-    categoryIds: "10397",
-    category: "Gingelly/Til/Sesame Oil",
-    facetFilters: "category_level.level4:Gingelly/Til/Sesame Oil",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "edible-oils",
-      l3Category: "gingelly-til-sesame-oil",
-    },
-  },
-  "Coconut Oil": {
-    categoryIds: "2603",
-    category: "Coconut Oil",
-    facetFilters: "category_level.level4:Coconut Oil",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "edible-oils",
-      l3Category: "coconut-oil",
-    },
+      l3Category: "rice-bran-oil"
+    }
   },
   "Blended Oil": {
     categoryIds: "2574",
@@ -1612,8 +1172,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "edible-oils",
-      l3Category: "blended-oil",
-    },
+      l3Category: "blended-oil"
+    }
   },
   "Soyabean Oil": {
     categoryIds: "10400",
@@ -1624,8 +1184,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "edible-oils",
-      l3Category: "soyabean-oil",
-    },
+      l3Category: "soyabean-oil"
+    }
   },
   Vanaspati: {
     categoryIds: "2608",
@@ -1636,80 +1196,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "edible-oils",
-      l3Category: "vanaspati",
-    },
-  },
-  "Corn Oil": {
-    categoryIds: "2577",
-    category: "Corn Oil",
-    facetFilters: "category_level.level4:Corn Oil",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "edible-oils",
-      l3Category: "corn-oil",
-    },
-  },
-  "Cottonseed Oil": {
-    categoryIds: "2591",
-    category: "Cottonseed Oil",
-    facetFilters: "category_level.level4:Cottonseed Oil",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "edible-oils",
-      l3Category: "cottonseed-oil",
-    },
-  },
-  "Palm Oil": {
-    categoryIds: "10401",
-    category: "Palm Oil",
-    facetFilters: "category_level.level4:Palm Oil",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "edible-oils",
-      l3Category: "palm-oil",
-    },
-  },
-  "Canola Oil": {
-    categoryIds: "2584",
-    category: "Canola Oil",
-    facetFilters: "category_level.level4:Canola Oil",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "edible-oils",
-      l3Category: "canola-oil",
-    },
-  },
-  "Other Oils": {
-    categoryIds: "2599",
-    category: "Other Oils",
-    facetFilters: "category_level.level4:Other Oils",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "edible-oils",
-      l3Category: "other-oils",
-    },
-  },
-  "Castor Oil": {
-    categoryIds: "2581",
-    category: "Castor Oil",
-    facetFilters: "category_level.level4:Castor Oil",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "edible-oils",
-      l3Category: "castor-oil",
-    },
+      l3Category: "vanaspati"
+    }
   },
   "Powdered Spices": {
     categoryIds: "2618",
@@ -1720,8 +1208,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "masala-spices-mukhwas",
-      l3Category: "powdered-spices",
-    },
+      l3Category: "powdered-spices"
+    }
   },
   "Blended Masalas": {
     categoryIds: "2611",
@@ -1732,8 +1220,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "masala-spices-mukhwas",
-      l3Category: "blended-masalas",
-    },
+      l3Category: "blended-masalas"
+    }
   },
   "Whole Spices": {
     categoryIds: "2623",
@@ -1744,8 +1232,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "masala-spices-mukhwas",
-      l3Category: "whole-spices",
-    },
+      l3Category: "whole-spices"
+    }
   },
   "Cooking Pastes": {
     categoryIds: "2626",
@@ -1756,8 +1244,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "masala-spices-mukhwas",
-      l3Category: "cooking-pastes",
-    },
+      l3Category: "cooking-pastes"
+    }
   },
   "Speciality Spices": {
     categoryIds: "2630",
@@ -1768,20 +1256,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "masala-spices-mukhwas",
-      l3Category: "speciality-spices",
-    },
-  },
-  "Digestive & Mukhwas": {
-    categoryIds: "2614",
-    category: "Digestive & Mukhwas",
-    facetFilters: "category_level.level4:Digestive & Mukhwas",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "masala-spices-mukhwas",
-      l3Category: "digestive-mukhwas",
-    },
+      l3Category: "speciality-spices"
+    }
   },
   "Herbs & Seasoning": {
     categoryIds: "12108",
@@ -1792,20 +1268,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "masala-spices-mukhwas",
-      l3Category: "herbs-seasoning-l3",
-    },
-  },
-  Hing: {
-    categoryIds: "2633",
-    category: "Hing",
-    facetFilters: "category_level.level4:Hing",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "masala-spices-mukhwas",
-      l3Category: "hing",
-    },
+      l3Category: "herbs-seasoning-l3"
+    }
   },
   Salt: {
     categoryIds: "2695",
@@ -1816,20 +1280,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "salt-sugar-jaggery",
-      l3Category: "salt",
-    },
-  },
-  Jaggery: {
-    categoryIds: "12392",
-    category: "Jaggery",
-    facetFilters: "category_level.level4:Jaggery",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "salt-sugar-jaggery",
-      l3Category: "jaggery-l3",
-    },
+      l3Category: "salt"
+    }
   },
   "Soya Products": {
     categoryIds: "2714",
@@ -1840,8 +1292,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "wheat-soya",
-      l3Category: "soya-products",
-    },
+      l3Category: "soya-products"
+    }
   },
   Soyabean: {
     categoryIds: "2706",
@@ -1852,56 +1304,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "wheat-soya",
-      l3Category: "soyabean",
-    },
-  },
-  "Sharbati Sihore Wheat": {
-    categoryIds: "2710",
-    category: "Sharbati Sihore Wheat",
-    facetFilters: "category_level.level4:Sharbati Sihore Wheat",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "wheat-soya",
-      l3Category: "sharbati-sihore-wheat",
-    },
-  },
-  "Lokwan Wheat": {
-    categoryIds: "2699",
-    category: "Lokwan Wheat",
-    facetFilters: "category_level.level4:Lokwan Wheat",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "wheat-soya",
-      l3Category: "lokwan-wheat",
-    },
-  },
-  "Whole Wheat": {
-    categoryIds: "2702",
-    category: "Whole Wheat",
-    facetFilters: "category_level.level4:Whole Wheat",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "wheat-soya",
-      l3Category: "whole-wheat",
-    },
-  },
-  "Dried Seeds": {
-    categoryIds: "2566",
-    category: "Dried Seeds",
-    facetFilters: "category_level.level4:Dried Seeds",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "dry-fruits-nuts",
-      l3Category: "dried-seeds",
-    },
+      l3Category: "soyabean"
+    }
   },
   "Mixed Dry Fruits": {
     categoryIds: "2563",
@@ -1912,8 +1316,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dry-fruits-nuts",
-      l3Category: "mixed-dry-fruits",
-    },
+      l3Category: "mixed-dry-fruits"
+    }
   },
   "Raisins / Kishmish": {
     categoryIds: "2539",
@@ -1924,8 +1328,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dry-fruits-nuts",
-      l3Category: "raisins-kishmish",
-    },
+      l3Category: "raisins-kishmish"
+    }
   },
   "Cashews / Kaaju": {
     categoryIds: "2533",
@@ -1936,8 +1340,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dry-fruits-nuts",
-      l3Category: "cashews-kaaju",
-    },
+      l3Category: "cashews-kaaju"
+    }
   },
   Dates: {
     categoryIds: "12300",
@@ -1948,8 +1352,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dry-fruits-nuts",
-      l3Category: "dates-l3",
-    },
+      l3Category: "dates-l3"
+    }
   },
   "Walnuts / Akhrot": {
     categoryIds: "2570",
@@ -1960,8 +1364,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dry-fruits-nuts",
-      l3Category: "walnuts-akhrot",
-    },
+      l3Category: "walnuts-akhrot"
+    }
   },
   Pistachios: {
     categoryIds: "2551",
@@ -1972,8 +1376,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dry-fruits-nuts",
-      l3Category: "pistachios",
-    },
+      l3Category: "pistachios"
+    }
   },
   "Almonds / Badam": {
     categoryIds: "2548",
@@ -1984,20 +1388,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dry-fruits-nuts",
-      l3Category: "almonds-badam",
-    },
-  },
-  Apricots: {
-    categoryIds: "2554",
-    category: "Apricots",
-    facetFilters: "category_level.level4:Apricots",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "dry-fruits-nuts",
-      l3Category: "apricots",
-    },
+      l3Category: "almonds-badam"
+    }
   },
   Makhana: {
     categoryIds: "12418",
@@ -2008,68 +1400,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dry-fruits-nuts",
-      l3Category: "makhana-l3",
-    },
-  },
-  "Dry Fruits Gift Pack": {
-    categoryIds: "2535",
-    category: "Dry Fruits Gift Pack",
-    facetFilters: "category_level.level4:Dry Fruits Gift Pack",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "dry-fruits-nuts",
-      l3Category: "dry-fruits-gift-pack",
-    },
-  },
-  Chironji: {
-    categoryIds: "2559",
-    category: "Chironji",
-    facetFilters: "category_level.level4:Chironji",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "dry-fruits-nuts",
-      l3Category: "chironji",
-    },
-  },
-  "Dried Cranberries": {
-    categoryIds: "2542",
-    category: "Dried Cranberries",
-    facetFilters: "category_level.level4:Dried Cranberries",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "dry-fruits-nuts",
-      l3Category: "dried-cranberries",
-    },
-  },
-  "Dry Coconut": {
-    categoryIds: "2526",
-    category: "Dry Coconut",
-    facetFilters: "category_level.level4:Dry Coconut",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "dry-fruits-nuts",
-      l3Category: "dry-coconut",
-    },
-  },
-  "Anjeer / Dried Figs": {
-    categoryIds: "2546",
-    category: "Anjeer / Dried Figs",
-    facetFilters: "category_level.level4:Anjeer / Dried Figs",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "dry-fruits-nuts",
-      l3Category: "anjeer-dried-figs",
-    },
+      l3Category: "makhana-l3"
+    }
   },
   "Dry Dates": {
     categoryIds: "2557",
@@ -2080,8 +1412,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dry-fruits-nuts",
-      l3Category: "dry-dates",
-    },
+      l3Category: "dry-dates"
+    }
   },
   "Other Nuts": {
     categoryIds: "2530",
@@ -2092,20 +1424,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "dry-fruits-nuts",
-      l3Category: "other-nuts",
-    },
-  },
-  Jowar: {
-    categoryIds: "2657",
-    category: "Jowar",
-    facetFilters: "category_level.level4:Jowar",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "millets-organic",
-      l3Category: "jowar",
-    },
+      l3Category: "other-nuts"
+    }
   },
   Cereal: {
     categoryIds: "2654",
@@ -2116,83 +1436,9 @@ const categoryConfig = {
     vertex: {
       l1Category: "cooking-essentials",
       l2Category: "millets-organic",
-      l3Category: "cereal",
-    },
+      l3Category: "cereal"
+    }
   },
-  Millets: {
-    categoryIds: "2640",
-    category: "Millets",
-    facetFilters: "category_level.level4:Millets",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "millets-organic",
-      l3Category: "millets",
-    },
-  },
-  Bajra: {
-    categoryIds: "2637",
-    category: "Bajra",
-    facetFilters: "category_level.level4:Bajra",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "millets-organic",
-      l3Category: "bajra",
-    },
-  },
-  Ragi: {
-    categoryIds: "2644",
-    category: "Ragi",
-    facetFilters: "category_level.level4:Ragi",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "millets-organic",
-      l3Category: "ragi",
-    },
-  },
-  Quinoa: {
-    categoryIds: "2647",
-    category: "Quinoa",
-    facetFilters: "category_level.level4:Quinoa",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "millets-organic",
-      l3Category: "quinoa",
-    },
-  },
-  Barley: {
-    categoryIds: "2651",
-    category: "Barley",
-    facetFilters: "category_level.level4:Barley",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "millets-organic",
-      l3Category: "barley",
-    },
-  },
-  Organic: {
-    categoryIds: "13546",
-    category: "Organic",
-    facetFilters: "category_level.level4:Organic",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "cooking-essentials",
-      l2Category: "millets-organic",
-      l3Category: "organic-l3",
-    },
-  },
-
-  // ===== Personal Care =====
   "Shampoo & Conditioner": {
     categoryIds: "12190",
     category: "Shampoo & Conditioner",
@@ -2202,8 +1448,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "hair-care",
-      l3Category: "shampoo-conditioner-l3",
-    },
+      l3Category: "shampoo-conditioner-l3"
+    }
   },
   "Hair Oil & Serum": {
     categoryIds: "7103",
@@ -2214,20 +1460,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "hair-care",
-      l3Category: "hair-oil-serum",
-    },
-  },
-  "Hair Brush & Accessories": {
-    categoryIds: "7096",
-    category: "Hair Brush & Accessories",
-    facetFilters: "category_level.level4:Hair Brush & Accessories",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-brush-accessories",
-    },
+      l3Category: "hair-oil-serum"
+    }
   },
   "Hair Color": {
     categoryIds: "12368",
@@ -2238,80 +1472,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "hair-care",
-      l3Category: "hair-color-l3",
-    },
-  },
-  "Hair Cream & Gel": {
-    categoryIds: "7102",
-    category: "Hair Cream & Gel",
-    facetFilters: "category_level.level4:Hair Cream & Gel",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-cream-gel",
-    },
-  },
-  "Hair & Scalp Treatment": {
-    categoryIds: "7139",
-    category: "Hair & Scalp Treatment",
-    facetFilters: "category_level.level4:Hair & Scalp Treatment",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-scalp-treatment",
-    },
-  },
-  Conditioner: {
-    categoryIds: "7100",
-    category: "Conditioner",
-    facetFilters: "category_level.level4:Conditioner",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "conditioner",
-    },
-  },
-  "Hair Serum": {
-    categoryIds: "7098",
-    category: "Hair Serum",
-    facetFilters: "category_level.level4:Hair Serum",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-serum",
-    },
-  },
-  Henna: {
-    categoryIds: "11085",
-    category: "Henna",
-    facetFilters: "category_level.level4:Henna",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "henna",
-    },
-  },
-  "Hair Comb": {
-    categoryIds: "7128",
-    category: "Hair Comb",
-    facetFilters: "category_level.level4:Hair Comb",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-comb",
-    },
+      l3Category: "hair-color-l3"
+    }
   },
   "Hair Clips/Bands": {
     categoryIds: "11089",
@@ -2322,236 +1484,32 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "hair-care",
-      l3Category: "hair-clips-bands",
-    },
+      l3Category: "hair-clips-bands"
+    }
   },
-  "Hair Accessories": {
-    categoryIds: "2909",
-    category: "Hair Accessories",
-    facetFilters: "category_level.level4:Hair Accessories",
+  "Hair Brush & Accessories": {
+    categoryIds: "7096",
+    category: "Hair Brush & Accessories",
+    facetFilters: "category_level.level4:Hair Brush & Accessories",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
     vertex: {
       l1Category: "personal-care",
       l2Category: "hair-care",
-      l3Category: "hair-accessories",
-    },
+      l3Category: "hair-brush-accessories"
+    }
   },
-  "Hair Oils": {
-    categoryIds: "7140",
-    category: "Hair Oils",
-    facetFilters: "category_level.level4:Hair Oils",
+  "Hair Cream & Gel": {
+    categoryIds: "7102",
+    category: "Hair Cream & Gel",
+    facetFilters: "category_level.level4:Hair Cream & Gel",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
     vertex: {
       l1Category: "personal-care",
       l2Category: "hair-care",
-      l3Category: "hair-oils",
-    },
-  },
-  Shampoo: {
-    categoryIds: "7093",
-    category: "Shampoo",
-    facetFilters: "category_level.level4:Shampoo",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "shampoo",
-    },
-  },
-  "Hair Brush": {
-    categoryIds: "7127",
-    category: "Hair Brush",
-    facetFilters: "category_level.level4:Hair Brush",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-brush",
-    },
-  },
-  "Hair Oil": {
-    categoryIds: "6479",
-    category: "Hair Oil",
-    facetFilters: "category_level.level4:Hair Oil",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-oil",
-    },
-  },
-  "Hair Masks & Packs": {
-    categoryIds: "7138",
-    category: "Hair Masks & Packs",
-    facetFilters: "category_level.level4:Hair Masks & Packs",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-masks-packs",
-    },
-  },
-  "Hair Gels & Waxes": {
-    categoryIds: "7129",
-    category: "Hair Gels & Waxes",
-    facetFilters: "category_level.level4:Hair Gels & Waxes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-gels-waxes",
-    },
-  },
-  "Hair Spray & Mists": {
-    categoryIds: "7132",
-    category: "Hair Spray & Mists",
-    facetFilters: "category_level.level4:Hair Spray & Mists",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-spray-mists",
-    },
-  },
-  "Hair Cream & Lotion": {
-    categoryIds: "6474",
-    category: "Hair Cream & Lotion",
-    facetFilters: "category_level.level4:Hair Cream & Lotion",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-cream-and-lotion",
-    },
-  },
-  "Hair Combs": {
-    categoryIds: "7136",
-    category: "Hair Combs",
-    facetFilters: "category_level.level4:Hair Combs",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-combs",
-    },
-  },
-  "Hair Treatment": {
-    categoryIds: "10890",
-    category: "Hair Treatment",
-    facetFilters: "category_level.level4:Hair Treatment",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-treatment",
-    },
-  },
-  Powder: {
-    categoryIds: "7143",
-    category: "Powder",
-    facetFilters: "category_level.level4:Powder",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "powder",
-    },
-  },
-  Wigs: {
-    categoryIds: "7134",
-    category: "Wigs",
-    facetFilters: "category_level.level4:Wigs",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "wigs",
-    },
-  },
-  "Hair Extensions": {
-    categoryIds: "10956",
-    category: "Hair Extensions",
-    facetFilters: "category_level.level4:Hair Extensions",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-extensions",
-    },
-  },
-  "Hair Rollers": {
-    categoryIds: "7130",
-    category: "Hair Rollers",
-    facetFilters: "category_level.level4:Hair Rollers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-rollers",
-    },
-  },
-  "Dry Shampoos & Conditioners": {
-    categoryIds: "10603",
-    category: "Dry Shampoos & Conditioners",
-    facetFilters: "category_level.level4:Dry Shampoos & Conditioners",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "dry-shampoos-conditioners",
-    },
-  },
-  "Hair Scissors": {
-    categoryIds: "7131",
-    category: "Hair Scissors",
-    facetFilters: "category_level.level4:Hair Scissors",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-scissors",
-    },
-  },
-  "Hair Sprays & Mists": {
-    categoryIds: "7142",
-    category: "Hair Sprays & Mists",
-    facetFilters: "category_level.level4:Hair Sprays & Mists",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-sprays-mists",
-    },
-  },
-  "Hair Clips": {
-    categoryIds: "10973",
-    category: "Hair Clips",
-    facetFilters: "category_level.level4:Hair Clips",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "hair-care",
-      l3Category: "hair-clips",
-    },
+      l3Category: "hair-cream-gel"
+    }
   },
   "Bathing Bars & Soaps": {
     categoryIds: "2727",
@@ -2562,32 +1520,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "bath-hand-wash",
-      l3Category: "bathing-bars-soaps",
-    },
-  },
-  "Bathing Accessories": {
-    categoryIds: "10928",
-    category: "Bathing Accessories",
-    facetFilters: "category_level.level4:Bathing Accessories",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "bathing-accessories",
-    },
-  },
-  "Shower Gel & Body Wash": {
-    categoryIds: "6136",
-    category: "Shower Gel & Body Wash",
-    facetFilters: "category_level.level4:Shower Gel & Body Wash",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "shower-gel-body-wash",
-    },
+      l3Category: "bathing-bars-soaps"
+    }
   },
   "Hand Wash & Sanitizers": {
     categoryIds: "2732",
@@ -2598,224 +1532,20 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "bath-hand-wash",
-      l3Category: "hand-wash-sanitizers",
-    },
+      l3Category: "hand-wash-sanitizers"
+    }
   },
-  "Bath Oils & Salts": {
-    categoryIds: "6142",
-    category: "Bath Oils & Salts",
-    facetFilters: "category_level.level4:Bath Oils & Salts",
+  "Shower Gel & Body Wash": {
+    categoryIds: "6136",
+    category: "Shower Gel & Body Wash",
+    facetFilters: "category_level.level4:Shower Gel & Body Wash",
     availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
     inventoryStores: "ALL OR inventory_stores:U3HM",
     vertex: {
       l1Category: "personal-care",
       l2Category: "bath-hand-wash",
-      l3Category: "bath-oils-salts",
-    },
-  },
-  "Loofahs & Sponges": {
-    categoryIds: "11123",
-    category: "Loofahs & Sponges",
-    facetFilters: "category_level.level4:Loofahs & Sponges",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "loofahs-sponges",
-    },
-  },
-  "Carrier Oil": {
-    categoryIds: "7115",
-    category: "Carrier Oil",
-    facetFilters: "category_level.level4:Carrier Oil",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "carrier-oil",
-    },
-  },
-  "Shower Gels & Body Wash": {
-    categoryIds: "7113",
-    category: "Shower Gels & Body Wash",
-    facetFilters: "category_level.level4:Shower Gels & Body Wash",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "shower-gels-body-wash",
-    },
-  },
-  "Body Scrubs & Exfoliants": {
-    categoryIds: "7110",
-    category: "Body Scrubs & Exfoliants",
-    facetFilters: "category_level.level4:Body Scrubs & Exfoliants",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "body-scrubs-exfoliants",
-    },
-  },
-  "Hand Wash": {
-    categoryIds: "7104",
-    category: "Hand Wash",
-    facetFilters: "category_level.level4:Hand Wash",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "hand-wash",
-    },
-  },
-  Soaps: {
-    categoryIds: "7106",
-    category: "Soaps",
-    facetFilters: "category_level.level4:Soaps",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "soaps",
-    },
-  },
-  "Foot Scrubs": {
-    categoryIds: "10936",
-    category: "Foot Scrubs",
-    facetFilters: "category_level.level4:Foot Scrubs",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "foot-scrubs",
-    },
-  },
-  Sponges: {
-    categoryIds: "10933",
-    category: "Sponges",
-    facetFilters: "category_level.level4:Sponges",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "sponges",
-    },
-  },
-  "Bath Brushes": {
-    categoryIds: "10931",
-    category: "Bath Brushes",
-    facetFilters: "category_level.level4:Bath Brushes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "bath-brushes",
-    },
-  },
-  "Body Scrubbers & Brushes": {
-    categoryIds: "10233",
-    category: "Body Scrubbers & Brushes",
-    facetFilters: "category_level.level4:Body Scrubbers & Brushes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "body-scrubbers-brushes",
-    },
-  },
-  "Men's Face Wash": {
-    categoryIds: "11911",
-    category: "Men's Face Wash",
-    facetFilters: "category_level.level4:Men's Face Wash",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "men-s-face-wash",
-    },
-  },
-  "Dry Shampoo": {
-    categoryIds: "7117",
-    category: "Dry Shampoo",
-    facetFilters: "category_level.level4:Dry Shampoo",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "dry-shampoo",
-    },
-  },
-  "Bath Bombs, Pearls & Flakes": {
-    categoryIds: "7111",
-    category: "Bath Bombs, Pearls & Flakes",
-    facetFilters: "category_level.level4:Bath Bombs, Pearls & Flakes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "bath-bombs-pearls-flakes",
-    },
-  },
-  "Bubble Bath": {
-    categoryIds: "7114",
-    category: "Bubble Bath",
-    facetFilters: "category_level.level4:Bubble Bath",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "bubble-bath",
-    },
-  },
-  "Shower Caps": {
-    categoryIds: "5756",
-    category: "Shower Caps",
-    facetFilters: "category_level.level4:Shower Caps",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "shower-caps",
-    },
-  },
-  "Callus Shavers & Stones": {
-    categoryIds: "10939",
-    category: "Callus Shavers & Stones",
-    facetFilters: "category_level.level4:Callus Shavers & Stones",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "callus-shavers-stones",
-    },
-  },
-  "Callus Shavers & Pumice Stones": {
-    categoryIds: "7108",
-    category: "Callus Shavers & Pumice Stones",
-    facetFilters: "category_level.level4:Callus Shavers & Pumice Stones",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "bath-hand-wash",
-      l3Category: "callus-shavers-pumice-stones",
-    },
+      l3Category: "shower-gel-body-wash"
+    }
   },
   Toothbrush: {
     categoryIds: "6139",
@@ -2826,8 +1556,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "oral-care",
-      l3Category: "toothbrush",
-    },
+      l3Category: "toothbrush"
+    }
   },
   Toothpaste: {
     categoryIds: "5407",
@@ -2838,8 +1568,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "oral-care",
-      l3Category: "toothpaste",
-    },
+      l3Category: "toothpaste"
+    }
   },
   "Floss & Tongue Cleaner": {
     categoryIds: "6134",
@@ -2850,8 +1580,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "oral-care",
-      l3Category: "floss-tongue-cleaner",
-    },
+      l3Category: "floss-tongue-cleaner"
+    }
   },
   Mouthwash: {
     categoryIds: "6145",
@@ -2862,116 +1592,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "oral-care",
-      l3Category: "mouthwash",
-    },
-  },
-  "Teeth Whitening": {
-    categoryIds: "7147",
-    category: "Teeth Whitening",
-    facetFilters: "category_level.level4:Teeth Whitening",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "oral-care",
-      l3Category: "teeth-whitening",
-    },
-  },
-  "Breath Fresheners": {
-    categoryIds: "7148",
-    category: "Breath Fresheners",
-    facetFilters: "category_level.level4:Breath Fresheners",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "oral-care",
-      l3Category: "breath-fresheners",
-    },
-  },
-  "Mouth Refreshners": {
-    categoryIds: "7151",
-    category: "Mouth Refreshners",
-    facetFilters: "category_level.level4:Mouth Refreshners",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "oral-care",
-      l3Category: "mouth-refreshners",
-    },
-  },
-  "Denture Care": {
-    categoryIds: "7145",
-    category: "Denture Care",
-    facetFilters: "category_level.level4:Denture Care",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "oral-care",
-      l3Category: "denture-care",
-    },
-  },
-  "Tooth Powder": {
-    categoryIds: "7150",
-    category: "Tooth Powder",
-    facetFilters: "category_level.level4:Tooth Powder",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "oral-care",
-      l3Category: "tooth-powder",
-    },
-  },
-  "Oral Care Accessories": {
-    categoryIds: "6131",
-    category: "Oral Care Accessories",
-    facetFilters: "category_level.level4:Oral Care Accessories",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "oral-care",
-      l3Category: "oral-care-accessories",
-    },
-  },
-  "Floss & Tongue Cleaners": {
-    categoryIds: "11966",
-    category: "Floss & Tongue Cleaners",
-    facetFilters: "category_level.level4:Floss & Tongue Cleaners",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "oral-care",
-      l3Category: "floss-tongue-cleaners-l3",
-    },
-  },
-  Toothbrushes: {
-    categoryIds: "7155",
-    category: "Toothbrushes",
-    facetFilters: "category_level.level4:Toothbrushes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "oral-care",
-      l3Category: "toothbrushes",
-    },
-  },
-  "Face Masks, Packs & Peels": {
-    categoryIds: "11859",
-    category: "Face Masks, Packs & Peels",
-    facetFilters: "category_level.level4:Face Masks, Packs & Peels",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "face-masks-packs-peels",
-    },
+      l3Category: "mouthwash"
+    }
   },
   "Face Care": {
     categoryIds: "10980",
@@ -2982,8 +1604,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "skin-care-l2",
-      l3Category: "face-care",
-    },
+      l3Category: "face-care"
+    }
   },
   "Talcum Powder": {
     categoryIds: "10992",
@@ -2994,8 +1616,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "skin-care-l2",
-      l3Category: "talcum-powder",
-    },
+      l3Category: "talcum-powder"
+    }
   },
   "Face Wash & Cleansers": {
     categoryIds: "11130",
@@ -3006,8 +1628,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "skin-care-l2",
-      l3Category: "face-wash-cleansers",
-    },
+      l3Category: "face-wash-cleansers"
+    }
   },
   "Body Care": {
     categoryIds: "12267",
@@ -3018,8 +1640,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "skin-care-l2",
-      l3Category: "body-care-l3",
-    },
+      l3Category: "body-care-l3"
+    }
   },
   "Body Lotion & Cream": {
     categoryIds: "10226",
@@ -3030,20 +1652,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "skin-care-l2",
-      l3Category: "body-lotion-cream",
-    },
-  },
-  "Facial Oil & Serum": {
-    categoryIds: "10713",
-    category: "Facial Oil & Serum",
-    facetFilters: "category_level.level4:Facial Oil & Serum",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "facial-oil-serum",
-    },
+      l3Category: "body-lotion-cream"
+    }
   },
   "Foot Care": {
     categoryIds: "9986",
@@ -3054,20 +1664,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "skin-care-l2",
-      l3Category: "foot-care",
-    },
-  },
-  "Prickly Heat Powder": {
-    categoryIds: "11461",
-    category: "Prickly Heat Powder",
-    facetFilters: "category_level.level4:Prickly Heat Powder",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "prickly-heat-powder",
-    },
+      l3Category: "foot-care"
+    }
   },
   "Face Cream & Moisturizer": {
     categoryIds: "10700",
@@ -3078,8 +1676,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "skin-care-l2",
-      l3Category: "face-cream-moisturizer",
-    },
+      l3Category: "face-cream-moisturizer"
+    }
   },
   "Facial Wipes & Tissues": {
     categoryIds: "11133",
@@ -3090,8 +1688,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "skin-care-l2",
-      l3Category: "facial-wipes-tissues",
-    },
+      l3Category: "facial-wipes-tissues"
+    }
   },
   Sunscreen: {
     categoryIds: "12544",
@@ -3102,20 +1700,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "skin-care-l2",
-      l3Category: "sunscreen-l3",
-    },
-  },
-  "Face Serum": {
-    categoryIds: "9982",
-    category: "Face Serum",
-    facetFilters: "category_level.level4:Face Serum",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "face-serum",
-    },
+      l3Category: "sunscreen-l3"
+    }
   },
   "Face Scrubs": {
     categoryIds: "11153",
@@ -3126,512 +1712,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "skin-care-l2",
-      l3Category: "face-scrubs",
-    },
-  },
-  "Night Cream": {
-    categoryIds: "11185",
-    category: "Night Cream",
-    facetFilters: "category_level.level4:Night Cream",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "night-cream",
-    },
-  },
-  "Face Creams": {
-    categoryIds: "11165",
-    category: "Face Creams",
-    facetFilters: "category_level.level4:Face Creams",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "face-creams",
-    },
-  },
-  "Face Sunscreen": {
-    categoryIds: "9977",
-    category: "Face Sunscreen",
-    facetFilters: "category_level.level4:Face Sunscreen",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "face-sunscreen",
-    },
-  },
-  "Facial Kits": {
-    categoryIds: "11167",
-    category: "Facial Kits",
-    facetFilters: "category_level.level4:Facial Kits",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "facial-kits",
-    },
-  },
-  "Facial Kit": {
-    categoryIds: "10710",
-    category: "Facial Kit",
-    facetFilters: "category_level.level4:Facial Kit",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "facial-kit",
-    },
-  },
-  "Lip Balm": {
-    categoryIds: "11117",
-    category: "Lip Balm",
-    facetFilters: "category_level.level4:Lip Balm",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "lip-balm",
-    },
-  },
-  "Essential Oils": {
-    categoryIds: "11151",
-    category: "Essential Oils",
-    facetFilters: "category_level.level4:Essential Oils",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "essential-oils",
-    },
-  },
-  "Face Scrub & Exfoliants": {
-    categoryIds: "10707",
-    category: "Face Scrub & Exfoliants",
-    facetFilters: "category_level.level4:Face Scrub & Exfoliants",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "face-scrub-exfoliants",
-    },
-  },
-  "Hand Cream": {
-    categoryIds: "10903",
-    category: "Hand Cream",
-    facetFilters: "category_level.level4:Hand Cream",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "hand-cream",
-    },
-  },
-  "Lip Scrub": {
-    categoryIds: "11119",
-    category: "Lip Scrub",
-    facetFilters: "category_level.level4:Lip Scrub",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "lip-scrub",
-    },
-  },
-  "Sheet Masks": {
-    categoryIds: "11176",
-    category: "Sheet Masks",
-    facetFilters: "category_level.level4:Sheet Masks",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "sheet-masks",
-    },
-  },
-  "Under Eye Creams & Serums": {
-    categoryIds: "11161",
-    category: "Under Eye Creams & Serums",
-    facetFilters: "category_level.level4:Under Eye Creams & Serums",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "under-eye-creams-serums",
-    },
-  },
-  "Hand Creams": {
-    categoryIds: "11138",
-    category: "Hand Creams",
-    facetFilters: "category_level.level4:Hand Creams",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "hand-creams",
-    },
-  },
-  "Skin Treatment": {
-    categoryIds: "12510",
-    category: "Skin Treatment",
-    facetFilters: "category_level.level4:Skin Treatment",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "skin-treatments-l3",
-    },
-  },
-  "Masks & Peels": {
-    categoryIds: "11174",
-    category: "Masks & Peels",
-    facetFilters: "category_level.level4:Masks & Peels",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "masks-peels",
-    },
-  },
-  "Face Gels": {
-    categoryIds: "9978",
-    category: "Face Gels",
-    facetFilters: "category_level.level4:Face Gels",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "face-gels",
-    },
-  },
-  "Face Moisturizers": {
-    categoryIds: "11180",
-    category: "Face Moisturizers",
-    facetFilters: "category_level.level4:Face Moisturizers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "face-moisturizers",
-    },
-  },
-  Toners: {
-    categoryIds: "11169",
-    category: "Toners",
-    facetFilters: "category_level.level4:Toners",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "toners",
-    },
-  },
-  "Foot Cream": {
-    categoryIds: "10794",
-    category: "Foot Cream",
-    facetFilters: "category_level.level4:Foot Cream",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "foot-cream",
-    },
-  },
-  "Foot Creams & Lotions": {
-    categoryIds: "11135",
-    category: "Foot Creams & Lotions",
-    facetFilters: "category_level.level4:Foot Creams & Lotions",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "foot-creams-lotions",
-    },
-  },
-  "Body Butter": {
-    categoryIds: "11124",
-    category: "Body Butter",
-    facetFilters: "category_level.level4:Body Butter",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "body-butter",
-    },
-  },
-  "Face Mask": {
-    categoryIds: "11143",
-    category: "Face Mask",
-    facetFilters: "category_level.level4:Face Mask",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "face-mask",
-    },
-  },
-  "Face Packs": {
-    categoryIds: "11172",
-    category: "Face Packs",
-    facetFilters: "category_level.level4:Face Packs",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "face-packs",
-    },
-  },
-  "Massage Oils": {
-    categoryIds: "11127",
-    category: "Massage Oils",
-    facetFilters: "category_level.level4:Massage Oils",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "massage-oils",
-    },
-  },
-  Bleach: {
-    categoryIds: "10205",
-    category: "Bleach",
-    facetFilters: "category_level.level4:Bleach",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "bleach",
-    },
-  },
-  "Scrubs & Exfoliants": {
-    categoryIds: "11122",
-    category: "Scrubs & Exfoliants",
-    facetFilters: "category_level.level4:Scrubs & Exfoliants",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "scrubs-exfoliants",
-    },
-  },
-  "Eye Masks": {
-    categoryIds: "10672",
-    category: "Eye Masks",
-    facetFilters: "category_level.level4:Eye Masks",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "eye-masks",
-    },
-  },
-  "Day Cream": {
-    categoryIds: "11178",
-    category: "Day Cream",
-    facetFilters: "category_level.level4:Day Cream",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "day-cream",
-    },
-  },
-  "Hair Removal Tools": {
-    categoryIds: "10886",
-    category: "Hair Removal Tools",
-    facetFilters: "category_level.level4:Hair Removal Tools",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "hair-removal-tools",
-    },
-  },
-  "Acne Removal": {
-    categoryIds: "9995",
-    category: "Acne Removal",
-    facetFilters: "category_level.level4:Acne Removal",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "acne-removal",
-    },
-  },
-  Gloves: {
-    categoryIds: "11053",
-    category: "Gloves",
-    facetFilters: "category_level.level4:Gloves",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "gloves",
-    },
-  },
-  "Men's Face Cream": {
-    categoryIds: "11909",
-    category: "Men's Face Cream",
-    facetFilters: "category_level.level4:Men's Face Cream",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "men-s-face-cream",
-    },
-  },
-  "Body Sunscreen": {
-    categoryIds: "9975",
-    category: "Body Sunscreen",
-    facetFilters: "category_level.level4:Body Sunscreen",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "body-sunscreen",
-    },
-  },
-  "Carrier Oils": {
-    categoryIds: "10311",
-    category: "Carrier Oils",
-    facetFilters: "category_level.level4:Carrier Oils",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "carrier-oils",
-    },
-  },
-  "Essential Oil": {
-    categoryIds: "10926",
-    category: "Essential Oil",
-    facetFilters: "category_level.level4:Essential Oil",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "essential-oil",
-    },
-  },
-  "Face Oils": {
-    categoryIds: "11183",
-    category: "Face Oils",
-    facetFilters: "category_level.level4:Face Oils",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "face-oils",
-    },
-  },
-  "Blackhead Removers": {
-    categoryIds: "10989",
-    category: "Blackhead Removers",
-    facetFilters: "category_level.level4:Blackhead Removers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "blackhead-removers",
-    },
-  },
-  "Undereye Serum & Cream": {
-    categoryIds: "11736",
-    category: "Undereye Serum & Cream",
-    facetFilters: "category_level.level4:Undereye Serum & Cream",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "undereye-serum-cream",
-    },
-  },
-  "Face Mists": {
-    categoryIds: "9980",
-    category: "Face Mists",
-    facetFilters: "category_level.level4:Face Mists",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "face-mists",
-    },
-  },
-  "Cotton Balls": {
-    categoryIds: "10447",
-    category: "Cotton Balls",
-    facetFilters: "category_level.level4:Cotton Balls",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "cotton-balls",
-    },
-  },
-  "Dark Circle & Wrinkle Busters": {
-    categoryIds: "11156",
-    category: "Dark Circle & Wrinkle Busters",
-    facetFilters: "category_level.level4:Dark Circle & Wrinkle Busters",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "skin-care-l2",
-      l3Category: "dark-circle-wrinkle-busters",
-    },
-  },
-  "Tampons & Menstrual Cups": {
-    categoryIds: "7091",
-    category: "Tampons & Menstrual Cups",
-    facetFilters: "category_level.level4:Tampons & Menstrual Cups",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "feminine-hygiene",
-      l3Category: "tampons-menstrual-cups",
-    },
+      l3Category: "face-scrubs"
+    }
   },
   "Hair Removal": {
     categoryIds: "7125",
@@ -3642,8 +1724,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "feminine-hygiene",
-      l3Category: "hair-removal",
-    },
+      l3Category: "hair-removal"
+    }
   },
   "Sanitary Napkins": {
     categoryIds: "7087",
@@ -3654,80 +1736,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "feminine-hygiene",
-      l3Category: "sanitary-napkins",
-    },
-  },
-  "Panty Liners": {
-    categoryIds: "7085",
-    category: "Panty Liners",
-    facetFilters: "category_level.level4:Panty Liners",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "feminine-hygiene",
-      l3Category: "panty-liners",
-    },
-  },
-  "Intimate Wash & Care": {
-    categoryIds: "7089",
-    category: "Intimate Wash & Care",
-    facetFilters: "category_level.level4:Intimate Wash & Care",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "feminine-hygiene",
-      l3Category: "intimate-wash-care",
-    },
-  },
-  "Intimate Hygiene": {
-    categoryIds: "7126",
-    category: "Intimate Hygiene",
-    facetFilters: "category_level.level4:Intimate Hygiene",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "feminine-hygiene",
-      l3Category: "intimate-hygiene",
-    },
-  },
-  "Female Urinating Device": {
-    categoryIds: "7123",
-    category: "Female Urinating Device",
-    facetFilters: "category_level.level4:Female Urinating Device",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "feminine-hygiene",
-      l3Category: "female-urinating-device",
-    },
-  },
-  "Feminine Safety": {
-    categoryIds: "7124",
-    category: "Feminine Safety",
-    facetFilters: "category_level.level4:Feminine Safety",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "feminine-hygiene",
-      l3Category: "feminine-safety",
-    },
-  },
-  Tampons: {
-    categoryIds: "11669",
-    category: "Tampons",
-    facetFilters: "category_level.level4:Tampons",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "feminine-hygiene",
-      l3Category: "tampons",
-    },
+      l3Category: "sanitary-napkins"
+    }
   },
   "Shaving Care": {
     categoryIds: "11569",
@@ -3738,260 +1748,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "mens-grooming-l2",
-      l3Category: "shaving-care",
-    },
-  },
-  "Moustache & Beard Care": {
-    categoryIds: "11196",
-    category: "Moustache & Beard Care",
-    facetFilters: "category_level.level4:Moustache & Beard Care",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "moustache-beard-care",
-    },
-  },
-  "Hair Care & Styling": {
-    categoryIds: "10879",
-    category: "Hair Care & Styling",
-    facetFilters: "category_level.level4:Hair Care & Styling",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "hair-care-styling",
-    },
-  },
-  Shavers: {
-    categoryIds: "11116",
-    category: "Shavers",
-    facetFilters: "category_level.level4:Shavers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "shavers",
-    },
-  },
-  Trimmers: {
-    categoryIds: "11120",
-    category: "Trimmers",
-    facetFilters: "category_level.level4:Trimmers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "trimmers",
-    },
-  },
-  "Hair Waxes": {
-    categoryIds: "10892",
-    category: "Hair Waxes",
-    facetFilters: "category_level.level4:Hair Waxes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "hair-waxes",
-    },
-  },
-  "Shaving & Hair Removal": {
-    categoryIds: "11563",
-    category: "Shaving & Hair Removal",
-    facetFilters: "category_level.level4:Shaving & Hair Removal",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "shaving-hair-removal",
-    },
-  },
-  "Razors & Cartridges": {
-    categoryIds: "4615",
-    category: "Razors & Cartridges",
-    facetFilters: "category_level.level4:Razors & Cartridges",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "razors-cartridges",
-    },
-  },
-  "After Shave Lotion": {
-    categoryIds: "10004",
-    category: "After Shave Lotion",
-    facetFilters: "category_level.level4:After Shave Lotion",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "after-shave-lotion",
-    },
-  },
-  "Beard Balm": {
-    categoryIds: "10138",
-    category: "Beard Balm",
-    facetFilters: "category_level.level4:Beard Balm",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "beard-balm",
-    },
-  },
-  "Beard Wax": {
-    categoryIds: "11111",
-    category: "Beard Wax",
-    facetFilters: "category_level.level4:Beard Wax",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "beard-wax",
-    },
-  },
-  "Beard Colour": {
-    categoryIds: "10143",
-    category: "Beard Colour",
-    facetFilters: "category_level.level4:Beard Colour",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "beard-colour",
-    },
-  },
-  "Beard Oil": {
-    categoryIds: "11104",
-    category: "Beard Oil",
-    facetFilters: "category_level.level4:Beard Oil",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "beard-oil",
-    },
-  },
-  "Beard Serum": {
-    categoryIds: "12010",
-    category: "Beard Serum",
-    facetFilters: "category_level.level4:Beard Serum",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "beard-serum-l3",
-    },
-  },
-  "Moustache & Beard Wash": {
-    categoryIds: "11200",
-    category: "Moustache & Beard Wash",
-    facetFilters: "category_level.level4:Moustache & Beard Wash",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "moustache-beard-wash",
-    },
-  },
-  "Shaving Cream & Gel": {
-    categoryIds: "11571",
-    category: "Shaving Cream & Gel",
-    facetFilters: "category_level.level4:Shaving Cream & Gel",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "shaving-cream-gel",
-    },
-  },
-  "Clays & Mousses": {
-    categoryIds: "10365",
-    category: "Clays & Mousses",
-    facetFilters: "category_level.level4:Clays & Mousses",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "clays-mousses",
-    },
-  },
-  Pomades: {
-    categoryIds: "11425",
-    category: "Pomades",
-    facetFilters: "category_level.level4:Pomades",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "pomades",
-    },
-  },
-  "Moustache & Beard Cream": {
-    categoryIds: "11198",
-    category: "Moustache & Beard Cream",
-    facetFilters: "category_level.level4:Moustache & Beard Cream",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "moustache-beard-cream",
-    },
-  },
-  "Beard Wash": {
-    categoryIds: "11108",
-    category: "Beard Wash",
-    facetFilters: "category_level.level4:Beard Wash",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "beard-wash",
-    },
-  },
-  "Beard Softener": {
-    categoryIds: "10166",
-    category: "Beard Softener",
-    facetFilters: "category_level.level4:Beard Softener",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "beard-softener",
-    },
-  },
-  "Beard Kits": {
-    categoryIds: "10153",
-    category: "Beard Kits",
-    facetFilters: "category_level.level4:Beard Kits",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "mens-grooming-l2",
-      l3Category: "beard-kits",
-    },
+      l3Category: "shaving-care"
+    }
   },
   Deodorants: {
     categoryIds: "7120",
@@ -4002,8 +1760,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "deo-fragrances",
-      l3Category: "deodorants",
-    },
+      l3Category: "deodorants"
+    }
   },
   Perfumes: {
     categoryIds: "7083",
@@ -4014,8 +1772,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "deo-fragrances",
-      l3Category: "perfumes",
-    },
+      l3Category: "perfumes"
+    }
   },
   "Roll on": {
     categoryIds: "7105",
@@ -4026,8 +1784,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "deo-fragrances",
-      l3Category: "roll-on-l3",
-    },
+      l3Category: "roll-on-l3"
+    }
   },
   "Body Mists": {
     categoryIds: "7081",
@@ -4038,104 +1796,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "deo-fragrances",
-      l3Category: "body-mists",
-    },
-  },
-  "Men Perfumes (EDT/EDP)": {
-    categoryIds: "10946",
-    category: "Men Perfumes (EDT/EDP)",
-    facetFilters: "category_level.level4:Men Perfumes (EDT/EDP)",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "deo-fragrances",
-      l3Category: "men-perfumes-edt-edp",
-    },
-  },
-  "Women Deodorants/Roll-Ons": {
-    categoryIds: "11789",
-    category: "Women Deodorants/Roll-Ons",
-    facetFilters: "category_level.level4:Women Deodorants/Roll-Ons",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "deo-fragrances",
-      l3Category: "women-deodorants-roll-ons",
-    },
-  },
-  "Women Perfumes (EDT/EDP)": {
-    categoryIds: "11347",
-    category: "Women Perfumes (EDT/EDP)",
-    facetFilters: "category_level.level4:Women Perfumes (EDT/EDP)",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "deo-fragrances",
-      l3Category: "women-perfumes-edt-edp",
-    },
-  },
-  "Body Mist/Spray": {
-    categoryIds: "11952",
-    category: "Body Mist/Spray",
-    facetFilters: "category_level.level4:Body Mist/Spray",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "deo-fragrances",
-      l3Category: "body-mistspray-l3",
-    },
-  },
-  "Deodorants/Roll-Ons": {
-    categoryIds: "10949",
-    category: "Deodorants/Roll-Ons",
-    facetFilters: "category_level.level4:Deodorants/Roll-Ons",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "deo-fragrances",
-      l3Category: "deodorants-roll-ons",
-    },
-  },
-  "Perfumes (EDT/EDP)": {
-    categoryIds: "7055",
-    category: "Perfumes (EDT/EDP)",
-    facetFilters: "category_level.level4:Perfumes (EDT/EDP)",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "deo-fragrances",
-      l3Category: "perfumes-edt-edp-l3",
-    },
-  },
-  "Men Deodorants/Roll-Ons": {
-    categoryIds: "7122",
-    category: "Men Deodorants/Roll-Ons",
-    facetFilters: "category_level.level4:Men Deodorants/Roll-Ons",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "deo-fragrances",
-      l3Category: "men-deodorants-roll-ons",
-    },
-  },
-  Colognes: {
-    categoryIds: "10411",
-    category: "Colognes",
-    facetFilters: "category_level.level4:Colognes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "deo-fragrances",
-      l3Category: "colognes",
-    },
+      l3Category: "body-mists"
+    }
   },
   "Herbal & Ayurvedic": {
     categoryIds: "10353",
@@ -4146,20 +1808,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "health-and-wellness-l2",
-      l3Category: "herbal-ayurvedic",
-    },
-  },
-  "Adult Care": {
-    categoryIds: "10001",
-    category: "Adult Care",
-    facetFilters: "category_level.level4:Adult Care",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "adult-care",
-    },
+      l3Category: "herbal-ayurvedic"
+    }
   },
   "Sexual Wellness": {
     categoryIds: "12506",
@@ -4170,8 +1820,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "health-and-wellness-l2",
-      l3Category: "sexual-wellness-l3",
-    },
+      l3Category: "sexual-wellness-l3"
+    }
   },
   "Digestive Care": {
     categoryIds: "11066",
@@ -4182,8 +1832,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "health-and-wellness-l2",
-      l3Category: "digestive-care",
-    },
+      l3Category: "digestive-care"
+    }
   },
   "Pain Reliever": {
     categoryIds: "11367",
@@ -4194,8 +1844,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "health-and-wellness-l2",
-      l3Category: "pain-reliever",
-    },
+      l3Category: "pain-reliever"
+    }
   },
   "Disinfectant/Hand Wipes": {
     categoryIds: "10522",
@@ -4206,20 +1856,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "health-and-wellness-l2",
-      l3Category: "disinfectant-hand-wipes",
-    },
-  },
-  "First Aid": {
-    categoryIds: "12340",
-    category: "First Aid",
-    facetFilters: "category_level.level4:First Aid",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "first-aid-l3",
-    },
+      l3Category: "disinfectant-hand-wipes"
+    }
   },
   "Cold & Cough Remedies": {
     categoryIds: "10405",
@@ -4230,8 +1868,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "health-and-wellness-l2",
-      l3Category: "cold-cough-remedies",
-    },
+      l3Category: "cold-cough-remedies"
+    }
   },
   "Cotton Swabs": {
     categoryIds: "10452",
@@ -4242,8 +1880,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "health-and-wellness-l2",
-      l3Category: "cotton-swabs",
-    },
+      l3Category: "cotton-swabs"
+    }
   },
   "Health Supplements": {
     categoryIds: "12373",
@@ -4254,8 +1892,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "health-and-wellness-l2",
-      l3Category: "health-supplements-l3",
-    },
+      l3Category: "health-supplements-l3"
+    }
   },
   "Antiseptics & Antifungal Remedies": {
     categoryIds: "10027",
@@ -4266,514 +1904,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "personal-care",
       l2Category: "health-and-wellness-l2",
-      l3Category: "antiseptics-antifungal-remedies",
-    },
-  },
-  "Special Care": {
-    categoryIds: "11611",
-    category: "Special Care",
-    facetFilters: "category_level.level4:Special Care",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "special-care",
-    },
-  },
-  "Sports Nutrition": {
-    categoryIds: "11623",
-    category: "Sports Nutrition",
-    facetFilters: "category_level.level4:Sports Nutrition",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "sports-nutrition",
-    },
-  },
-  "Lotions & Creams": {
-    categoryIds: "11126",
-    category: "Lotions & Creams",
-    facetFilters: "category_level.level4:Lotions & Creams",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "lotions-creams",
-    },
-  },
-  Condoms: {
-    categoryIds: "10421",
-    category: "Condoms",
-    facetFilters: "category_level.level4:Condoms",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "condoms",
-    },
-  },
-  "Pepper Spray": {
-    categoryIds: "11388",
-    category: "Pepper Spray",
-    facetFilters: "category_level.level4:Pepper Spray",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "pepper-spray",
-    },
-  },
-  "Body Supports": {
-    categoryIds: "10238",
-    category: "Body Supports",
-    facetFilters: "category_level.level4:Body Supports",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "body-supports",
-    },
-  },
-  "Health & Wellness": {
-    categoryIds: "12107",
-    category: "Health & Wellness",
-    facetFilters: "category_level.level4:Health & Wellness",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "health-wellness-l3",
-    },
-  },
-  "Adult Diapers & Pads": {
-    categoryIds: "11149",
-    category: "Adult Diapers & Pads",
-    facetFilters: "category_level.level4:Adult Diapers & Pads",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "adult-diapers-pads",
-    },
-  },
-  Multivitamins: {
-    categoryIds: "11215",
-    category: "Multivitamins",
-    facetFilters: "category_level.level4:Multivitamins",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "multivitamins",
-    },
-  },
-  "Lubricants & Gels": {
-    categoryIds: "11125",
-    category: "Lubricants & Gels",
-    facetFilters: "category_level.level4:Lubricants & Gels",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "lubricants-gels",
-    },
-  },
-  "Sexual Health Supplements": {
-    categoryIds: "11558",
-    category: "Sexual Health Supplements",
-    facetFilters: "category_level.level4:Sexual Health Supplements",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "sexual-health-supplements",
-    },
-  },
-  "Nutrition Bars": {
-    categoryIds: "11232",
-    category: "Nutrition Bars",
-    facetFilters: "category_level.level4:Nutrition Bars",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "nutrition-bars",
-    },
-  },
-  "Specialised Proteins": {
-    categoryIds: "11615",
-    category: "Specialised Proteins",
-    facetFilters: "category_level.level4:Specialised Proteins",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "specialised-proteins",
-    },
-  },
-  "Pre Workout": {
-    categoryIds: "11444",
-    category: "Pre Workout",
-    facetFilters: "category_level.level4:Pre Workout",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "pre-workout",
-    },
-  },
-  "Weight Loss": {
-    categoryIds: "11077",
-    category: "Weight Loss",
-    facetFilters: "category_level.level4:Weight Loss",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "weight-loss",
-    },
-  },
-  "Tissues & Wipes": {
-    categoryIds: "11145",
-    category: "Tissues & Wipes",
-    facetFilters: "category_level.level4:Tissues & Wipes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "tissues-wipes",
-    },
-  },
-  "Weight Gain": {
-    categoryIds: "11979",
-    category: "Weight Gain",
-    facetFilters: "category_level.level4:Weight Gain",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "weight-gain-l3",
-    },
-  },
-  Minerals: {
-    categoryIds: "12142",
-    category: "Minerals",
-    facetFilters: "category_level.level4:Minerals",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "minerals-l3",
-    },
-  },
-  "Hair Supplements": {
-    categoryIds: "9991",
-    category: "Hair Supplements",
-    facetFilters: "category_level.level4:Hair Supplements",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "hair-supplements",
-    },
-  },
-  "Post Workout": {
-    categoryIds: "11434",
-    category: "Post Workout",
-    facetFilters: "category_level.level4:Post Workout",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "post-workout",
-    },
-  },
-  "Bulk/Gains": {
-    categoryIds: "10294",
-    category: "Bulk/Gains",
-    facetFilters: "category_level.level4:Bulk/Gains",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "bulk-gains",
-    },
-  },
-  Antioxidants: {
-    categoryIds: "9990",
-    category: "Antioxidants",
-    facetFilters: "category_level.level4:Antioxidants",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "antioxidants",
-    },
-  },
-  Enzymes: {
-    categoryIds: "10648",
-    category: "Enzymes",
-    facetFilters: "category_level.level4:Enzymes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "enzymes",
-    },
-  },
-  "Omega Fatty Acids": {
-    categoryIds: "11248",
-    category: "Omega Fatty Acids",
-    facetFilters: "category_level.level4:Omega Fatty Acids",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "omega-fatty-acids",
-    },
-  },
-  "Lean Muscle": {
-    categoryIds: "11094",
-    category: "Lean Muscle",
-    facetFilters: "category_level.level4:Lean Muscle",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "lean-muscle",
-    },
-  },
-  "Bath Salts": {
-    categoryIds: "10943",
-    category: "Bath Salts",
-    facetFilters: "category_level.level4:Bath Salts",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "body-wash-bathing-accessories",
-      l3Category: "bath-salts",
-    },
-  },
-  "Manicure & Pedicure Kits": {
-    categoryIds: "7157",
-    category: "Manicure & Pedicure Kits",
-    facetFilters: "category_level.level4:Manicure & Pedicure Kits",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "personal-care",
-      l2Category: "personal-care-tools",
-      l3Category: "manicure-pedicure-kits",
-    },
-  },
-
-  // ===== Beauty =====
-  "Compact & Powder": {
-    categoryIds: "6159",
-    category: "Compact & Powder",
-    facetFilters: "category_level.level4:Compact & Powder",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "compact-and-powder",
-    },
-  },
-  "Highlighter, Contour & Blush": {
-    categoryIds: "1948",
-    category: "Highlighter, Contour & Blush",
-    facetFilters: "category_level.level4:Highlighter, Contour & Blush",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "highlighter-contour-blush",
-    },
-  },
-  "Cleanser & Make Up Remover": {
-    categoryIds: "1950",
-    category: "Cleanser & Make Up Remover",
-    facetFilters: "category_level.level4:Cleanser & Make Up Remover",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "cleanser-make-up-remover",
-    },
-  },
-  "Primer, Foundation, Concealer": {
-    categoryIds: "10266",
-    category: "Primer, Foundation, Concealer",
-    facetFilters: "category_level.level4:Primer, Foundation, Concealer",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "primer-foundation-concealer",
-    },
-  },
-  "Loose Powder": {
-    categoryIds: "10293",
-    category: "Loose Powder",
-    facetFilters: "category_level.level4:Loose Powder",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "loose-powder",
-    },
-  },
-  "Setting Spray": {
-    categoryIds: "10297",
-    category: "Setting Spray",
-    facetFilters: "category_level.level4:Setting Spray",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "setting-spray",
-    },
-  },
-  Blushes: {
-    categoryIds: "10284",
-    category: "Blushes",
-    facetFilters: "category_level.level4:Blushes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "blushes",
-    },
-  },
-  "Toner & Mist": {
-    categoryIds: "10269",
-    category: "Toner & Mist",
-    facetFilters: "category_level.level4:Toner & Mist",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "toner-mist",
-    },
-  },
-  Foundation: {
-    categoryIds: "10290",
-    category: "Foundation",
-    facetFilters: "category_level.level4:Foundation",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "foundation",
-    },
-  },
-  "BB & CC Creams": {
-    categoryIds: "10287",
-    category: "BB & CC Creams",
-    facetFilters: "category_level.level4:BB & CC Creams",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "bb-cc-creams",
-    },
-  },
-  Concealer: {
-    categoryIds: "10278",
-    category: "Concealer",
-    facetFilters: "category_level.level4:Concealer",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "concealer",
-    },
-  },
-  "Make Up Removers": {
-    categoryIds: "1943",
-    category: "Make Up Removers",
-    facetFilters: "category_level.level4:Make Up Removers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "make-up-removers",
-    },
-  },
-  Sindoor: {
-    categoryIds: "10281",
-    category: "Sindoor",
-    facetFilters: "category_level.level4:Sindoor",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "sindoor",
-    },
-  },
-  "Highlighters & Illuminators": {
-    categoryIds: "10275",
-    category: "Highlighters & Illuminators",
-    facetFilters: "category_level.level4:Highlighters & Illuminators",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "highlighters-illuminators",
-    },
-  },
-  "Compact Powder": {
-    categoryIds: "10300",
-    category: "Compact Powder",
-    facetFilters: "category_level.level4:Compact Powder",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "face",
-      l3Category: "compact-powder",
-    },
+      l3Category: "antiseptics-antifungal-remedies"
+    }
   },
   "Lip Care": {
     categoryIds: "12415",
@@ -4784,8 +1916,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "beauty",
       l2Category: "nails-lips",
-      l3Category: "lip-care-l3",
-    },
+      l3Category: "lip-care-l3"
+    }
   },
   "Nail Care": {
     categoryIds: "10339",
@@ -4796,140 +1928,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "beauty",
       l2Category: "nails-lips",
-      l3Category: "nail-care",
-    },
-  },
-  "Nail Polish": {
-    categoryIds: "10343",
-    category: "Nail Polish",
-    facetFilters: "category_level.level4:Nail Polish",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "nails-lips",
-      l3Category: "nail-polish",
-    },
-  },
-  Lipsticks: {
-    categoryIds: "12557",
-    category: "Lipsticks",
-    facetFilters: "category_level.level4:Lipsticks",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "nails-lips",
-      l3Category: "lipstickss-l3",
-    },
-  },
-  "Liquid Lipsticks": {
-    categoryIds: "10346",
-    category: "Liquid Lipsticks",
-    facetFilters: "category_level.level4:Liquid Lipsticks",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "nails-lips",
-      l3Category: "liquid-lipsticks",
-    },
-  },
-  "Lip Scrubs": {
-    categoryIds: "2012",
-    category: "Lip Scrubs",
-    facetFilters: "category_level.level4:Lip Scrubs",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "nails-lips",
-      l3Category: "lip-scrubs",
-    },
-  },
-  "Nail Polish Remover": {
-    categoryIds: "10349",
-    category: "Nail Polish Remover",
-    facetFilters: "category_level.level4:Nail Polish Remover",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "nails-lips",
-      l3Category: "nail-polish-remover",
-    },
-  },
-  "Lipstick Primers & Plumpers": {
-    categoryIds: "10333",
-    category: "Lipstick Primers & Plumpers",
-    facetFilters: "category_level.level4:Lipstick Primers & Plumpers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "nails-lips",
-      l3Category: "lipstick-primers-plumpers",
-    },
-  },
-  "Lip Liners": {
-    categoryIds: "10326",
-    category: "Lip Liners",
-    facetFilters: "category_level.level4:Lip Liners",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "nails-lips",
-      l3Category: "lip-liners",
-    },
-  },
-  "Lip Glosses": {
-    categoryIds: "10336",
-    category: "Lip Glosses",
-    facetFilters: "category_level.level4:Lip Glosses",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "nails-lips",
-      l3Category: "lip-glosses",
-    },
-  },
-  "Lip Masks": {
-    categoryIds: "10328",
-    category: "Lip Masks",
-    facetFilters: "category_level.level4:Lip Masks",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "nails-lips",
-      l3Category: "lip-masks",
-    },
-  },
-  "Lip Stains & Tints": {
-    categoryIds: "2004",
-    category: "Lip Stains & Tints",
-    facetFilters: "category_level.level4:Lip Stains & Tints",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "nails-lips",
-      l3Category: "lip-stains-tints",
-    },
-  },
-  "Lip Crayons": {
-    categoryIds: "10330",
-    category: "Lip Crayons",
-    facetFilters: "category_level.level4:Lip Crayons",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "nails-lips",
-      l3Category: "lip-crayons",
-    },
+      l3Category: "nail-care"
+    }
   },
   "Eye Care": {
     categoryIds: "12332",
@@ -4940,104 +1940,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "beauty",
       l2Category: "eyes",
-      l3Category: "eye-care-l3",
-    },
-  },
-  "Eyeshadow, Bases & Primers": {
-    categoryIds: "11857",
-    category: "Eyeshadow, Bases & Primers",
-    facetFilters: "category_level.level4:Eyeshadow, Bases & Primers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "eyes",
-      l3Category: "eyeshadow-bases-primers",
-    },
-  },
-  "Kajal & Kohls": {
-    categoryIds: "4602",
-    category: "Kajal & Kohls",
-    facetFilters: "category_level.level4:Kajal & Kohls",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "eyes",
-      l3Category: "kajal-kohls",
-    },
-  },
-  Eyeliners: {
-    categoryIds: "11098",
-    category: "Eyeliners",
-    facetFilters: "category_level.level4:Eyeliners",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "eyes",
-      l3Category: "eyeliners",
-    },
-  },
-  Mascaras: {
-    categoryIds: "12137",
-    category: "Mascaras",
-    facetFilters: "category_level.level4:Mascaras",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "eyes",
-      l3Category: "mascaras-l3",
-    },
-  },
-  Eyelashes: {
-    categoryIds: "10692",
-    category: "Eyelashes",
-    facetFilters: "category_level.level4:Eyelashes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "eyes",
-      l3Category: "eyelashes",
-    },
-  },
-  "Eyebrow Pencils & Enhancers": {
-    categoryIds: "10681",
-    category: "Eyebrow Pencils & Enhancers",
-    facetFilters: "category_level.level4:Eyebrow Pencils & Enhancers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "eyes",
-      l3Category: "eyebrow-pencils-enhancers",
-    },
-  },
-  "Lens Solution & Accessories": {
-    categoryIds: "11106",
-    category: "Lens Solution & Accessories",
-    facetFilters: "category_level.level4:Lens Solution & Accessories",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "eyes",
-      l3Category: "lens-solution-accessories",
-    },
-  },
-  "Eye Shadow Palettes": {
-    categoryIds: "10676",
-    category: "Eye Shadow Palettes",
-    facetFilters: "category_level.level4:Eye Shadow Palettes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "eyes",
-      l3Category: "eye-shadow-palettes",
-    },
+      l3Category: "eye-care-l3"
+    }
   },
   "Make Up Accessories": {
     categoryIds: "3115",
@@ -5048,455 +1952,9 @@ const categoryConfig = {
     vertex: {
       l1Category: "beauty",
       l2Category: "beauty-accessories",
-      l3Category: "make-up-accessories",
-    },
+      l3Category: "make-up-accessories"
+    }
   },
-  "Cotton Balls, Pads & Swabs": {
-    categoryIds: "7158",
-    category: "Cotton Balls, Pads & Swabs",
-    facetFilters: "category_level.level4:Cotton Balls, Pads & Swabs",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "cotton-balls-pads-swabs",
-    },
-  },
-  "Nail Art Design": {
-    categoryIds: "11219",
-    category: "Nail Art Design",
-    facetFilters: "category_level.level4:Nail Art Design",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "nail-art-design",
-    },
-  },
-  Massagers: {
-    categoryIds: "12421",
-    category: "Massagers",
-    facetFilters: "category_level.level4:Massagers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "massagers-l3",
-    },
-  },
-  "Shavers & Trimmers": {
-    categoryIds: "12193",
-    category: "Shavers & Trimmers",
-    facetFilters: "category_level.level4:Shavers & Trimmers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "shavers-trimmers-l3",
-    },
-  },
-  "Cleansing Brushes": {
-    categoryIds: "10236",
-    category: "Cleansing Brushes",
-    facetFilters: "category_level.level4:Cleansing Brushes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "cleansing-brushes",
-    },
-  },
-  "Makeup Bags & Cases": {
-    categoryIds: "10256",
-    category: "Makeup Bags & Cases",
-    facetFilters: "category_level.level4:Makeup Bags & Cases",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "makeup-bags-cases",
-    },
-  },
-  "Artificial Nails & Applications Kits": {
-    categoryIds: "10231",
-    category: "Artificial Nails & Applications Kits",
-    facetFilters: "category_level.level4:Artificial Nails & Applications Kits",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "artificial-nails-applications-kits",
-    },
-  },
-  "Face Palettes": {
-    categoryIds: "10234",
-    category: "Face Palettes",
-    facetFilters: "category_level.level4:Face Palettes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "face-palettes",
-    },
-  },
-  "Brush Sets": {
-    categoryIds: "10239",
-    category: "Brush Sets",
-    facetFilters: "category_level.level4:Brush Sets",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "brush-sets",
-    },
-  },
-  "Facial Rollers and Gua Sha Sets": {
-    categoryIds: "3131",
-    category: "Facial Rollers and Gua Sha Sets",
-    facetFilters: "category_level.level4:Facial Rollers and Gua Sha Sets",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "facial-rollers-and-gua-sha-sets",
-    },
-  },
-  "Derma Rollers": {
-    categoryIds: "10243",
-    category: "Derma Rollers",
-    facetFilters: "category_level.level4:Derma Rollers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "derma-rollers",
-    },
-  },
-  "Sponges & Applicators": {
-    categoryIds: "10260",
-    category: "Sponges & Applicators",
-    facetFilters: "category_level.level4:Sponges & Applicators",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "sponges-applicators",
-    },
-  },
-  "Blush Brush": {
-    categoryIds: "10212",
-    category: "Blush Brush",
-    facetFilters: "category_level.level4:Blush Brush",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "blush-brush",
-    },
-  },
-  Straighteners: {
-    categoryIds: "3128",
-    category: "Straighteners",
-    facetFilters: "category_level.level4:Straighteners",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "straighteners",
-    },
-  },
-  "Face Brush": {
-    categoryIds: "10248",
-    category: "Face Brush",
-    facetFilters: "category_level.level4:Face Brush",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "face-brush",
-    },
-  },
-  Tweezers: {
-    categoryIds: "3123",
-    category: "Tweezers",
-    facetFilters: "category_level.level4:Tweezers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "tweezers",
-    },
-  },
-  Puffiness: {
-    categoryIds: "11467",
-    category: "Puffiness",
-    facetFilters: "category_level.level4:Puffiness",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "puffiness",
-    },
-  },
-  "Face Epilator": {
-    categoryIds: "10704",
-    category: "Face Epilator",
-    facetFilters: "category_level.level4:Face Epilator",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "beauty-accessories",
-      l3Category: "face-epilator",
-    },
-  },
-  "Face Bleach": {
-    categoryIds: "11163",
-    category: "Face Bleach",
-    facetFilters: "category_level.level4:Face Bleach",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "skin-care-l2",
-      l3Category: "face-bleach",
-    },
-  },
-  "Shaving Foams": {
-    categoryIds: "4622",
-    category: "Shaving Foams",
-    facetFilters: "category_level.level4:Shaving Foams",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "mens-grooming-l2",
-      l3Category: "shaving-foams",
-    },
-  },
-  "Shaving Gels": {
-    categoryIds: "11118",
-    category: "Shaving Gels",
-    facetFilters: "category_level.level4:Shaving Gels",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "mens-grooming-l2",
-      l3Category: "shaving-gels",
-    },
-  },
-  "Beard Cream": {
-    categoryIds: "11101",
-    category: "Beard Cream",
-    facetFilters: "category_level.level4:Beard Cream",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "mens-grooming-l2",
-      l3Category: "beard-cream",
-    },
-  },
-  "Shaving Creams": {
-    categoryIds: "4619",
-    category: "Shaving Creams",
-    facetFilters: "category_level.level4:Shaving Creams",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "mens-grooming-l2",
-      l3Category: "shaving-creams",
-    },
-  },
-  "Baby Powder": {
-    categoryIds: "1963",
-    category: "Baby Powder",
-    facetFilters: "category_level.level4:Baby Powder",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "mom-kids",
-      l3Category: "baby-powder",
-    },
-  },
-  "Face & Body Care": {
-    categoryIds: "1979",
-    category: "Face & Body Care",
-    facetFilters: "category_level.level4:Face & Body Care",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "mom-kids",
-      l3Category: "face-body-care",
-    },
-  },
-  "Baby Shampoo": {
-    categoryIds: "1967",
-    category: "Baby Shampoo",
-    facetFilters: "category_level.level4:Baby Shampoo",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "mom-kids",
-      l3Category: "baby-shampoo",
-    },
-  },
-  "Baby Soap": {
-    categoryIds: "1970",
-    category: "Baby Soap",
-    facetFilters: "category_level.level4:Baby Soap",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "mom-kids",
-      l3Category: "baby-soap",
-    },
-  },
-  "Maternity Pillows": {
-    categoryIds: "1989",
-    category: "Maternity Pillows",
-    facetFilters: "category_level.level4:Maternity Pillows",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "mom-kids",
-      l3Category: "maternity-pillows",
-    },
-  },
-  "Baby Nutritional Supplements": {
-    categoryIds: "1960",
-    category: "Baby Nutritional Supplements",
-    facetFilters: "category_level.level4:Baby Nutritional Supplements",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "mom-kids",
-      l3Category: "baby-nutritional-supplements",
-    },
-  },
-  Shampoos: {
-    categoryIds: "11561",
-    category: "Shampoos",
-    facetFilters: "category_level.level4:Shampoos",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "hair-l2",
-      l3Category: "shampoos",
-    },
-  },
-  "Hair Lotions & Tonics": {
-    categoryIds: "11095",
-    category: "Hair Lotions & Tonics",
-    facetFilters: "category_level.level4:Hair Lotions & Tonics",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "hair-l2",
-      l3Category: "hair-lotions-tonics",
-    },
-  },
-  Conditioners: {
-    categoryIds: "10414",
-    category: "Conditioners",
-    facetFilters: "category_level.level4:Conditioners",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "hair-l2",
-      l3Category: "conditioners",
-    },
-  },
-  "Hair Creams": {
-    categoryIds: "11092",
-    category: "Hair Creams",
-    facetFilters: "category_level.level4:Hair Creams",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "hair-l2",
-      l3Category: "hair-creams",
-    },
-  },
-  Primer: {
-    categoryIds: "8087",
-    category: "Primer",
-    facetFilters: "category_level.level4:Primer",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "make-up-l2",
-      l3Category: "primer",
-    },
-  },
-  "Lip Balms": {
-    categoryIds: "11147",
-    category: "Lip Balms",
-    facetFilters: "category_level.level4:Lip Balms",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "personal-care-l2",
-      l3Category: "lip-balms",
-    },
-  },
-  "Hand Wash & Soaps": {
-    categoryIds: "11140",
-    category: "Hand Wash & Soaps",
-    facetFilters: "category_level.level4:Hand Wash & Soaps",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "personal-care-l2",
-      l3Category: "hand-wash-soaps",
-    },
-  },
-  "Insect Repellents": {
-    categoryIds: "5988",
-    category: "Insect Repellents",
-    facetFilters: "category_level.level4:Insect Repellents",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "beauty",
-      l2Category: "personal-care-l2",
-      l3Category: "insect-repellents",
-    },
-  },
-
-  // ===== Mom & Baby Care =====
   Diapers: {
     categoryIds: "10225",
     category: "Diapers",
@@ -5506,8 +1964,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "mom-baby-care",
       l2Category: "diapers-wipes",
-      l3Category: "diapers",
-    },
+      l3Category: "diapers"
+    }
   },
   Wipes: {
     categoryIds: "3103",
@@ -5518,80 +1976,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "mom-baby-care",
       l2Category: "diapers-wipes",
-      l3Category: "wipes",
-    },
-  },
-  "Diapers & Wipes": {
-    categoryIds: "12054",
-    category: "Diapers & Wipes",
-    facetFilters: "category_level.level4:Diapers & Wipes",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "diapers-wipes",
-      l3Category: "diapers-wipes-l3",
-    },
-  },
-  "Cloth Diapers": {
-    categoryIds: "2309",
-    category: "Cloth Diapers",
-    facetFilters: "category_level.level4:Cloth Diapers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "diapers-wipes",
-      l3Category: "cloth-diapers",
-    },
-  },
-  "Bibs & Napkins": {
-    categoryIds: "2169",
-    category: "Bibs & Napkins",
-    facetFilters: "category_level.level4:Bibs & Napkins",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "diapers-wipes",
-      l3Category: "bibs-napkins",
-    },
-  },
-  "Diaper Changing Tables & Mats": {
-    categoryIds: "6113",
-    category: "Diaper Changing Tables & Mats",
-    facetFilters: "category_level.level4:Diaper Changing Tables & Mats",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "diapers-wipes",
-      l3Category: "diaper-changing-tables-mats",
-    },
-  },
-  "Diaper Stackers": {
-    categoryIds: "6112",
-    category: "Diaper Stackers",
-    facetFilters: "category_level.level4:Diaper Stackers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "diapers-wipes",
-      l3Category: "diaper-stackers",
-    },
-  },
-  "Diaper Bins & Disposable Bags": {
-    categoryIds: "10499",
-    category: "Diaper Bins & Disposable Bags",
-    facetFilters: "category_level.level4:Diaper Bins & Disposable Bags",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "diapers-wipes",
-      l3Category: "diaper-bins-disposable-bags",
-    },
+      l3Category: "wipes"
+    }
   },
   "Baby Powder, Oil & Lotions": {
     categoryIds: "3098",
@@ -5602,8 +1988,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "mom-baby-care",
       l2Category: "bath-hygiene-grooming",
-      l3Category: "baby-powder-oil-lotions",
-    },
+      l3Category: "baby-powder-oil-lotions"
+    }
   },
   "Baby Soaps & Shampoo": {
     categoryIds: "3078",
@@ -5614,8 +2000,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "mom-baby-care",
       l2Category: "bath-hygiene-grooming",
-      l3Category: "baby-soaps-shampoo",
-    },
+      l3Category: "baby-soaps-shampoo"
+    }
   },
   "Oral Care": {
     categoryIds: "12449",
@@ -5626,8 +2012,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "mom-baby-care",
       l2Category: "bath-hygiene-grooming",
-      l3Category: "oral-care-l3",
-    },
+      l3Category: "oral-care-l3"
+    }
   },
   "Baby Health & Wellness": {
     categoryIds: "10915",
@@ -5638,284 +2024,8 @@ const categoryConfig = {
     vertex: {
       l1Category: "mom-baby-care",
       l2Category: "bath-hygiene-grooming",
-      l3Category: "baby-health-wellness",
-    },
-  },
-  "Baby Gift Set": {
-    categoryIds: "3074",
-    category: "Baby Gift Set",
-    facetFilters: "category_level.level4:Baby Gift Set",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "baby-gift-set",
-    },
-  },
-  "Creams, Lotions & Oils": {
-    categoryIds: "10318",
-    category: "Creams, Lotions & Oils",
-    facetFilters: "category_level.level4:Creams, Lotions & Oils",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "creams-lotions-oils",
-    },
-  },
-  "Bed Protector": {
-    categoryIds: "3081",
-    category: "Bed Protector",
-    facetFilters: "category_level.level4:Bed Protector",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "bed-protector",
-    },
-  },
-  "Baby Body Wash": {
-    categoryIds: "1957",
-    category: "Baby Body Wash",
-    facetFilters: "category_level.level4:Baby Body Wash",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "baby-body-wash",
-    },
-  },
-  "Detergent Powder & Liquid": {
-    categoryIds: "3086",
-    category: "Detergent Powder & Liquid",
-    facetFilters: "category_level.level4:Detergent Powder & Liquid",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "detergent-powder-liquid",
-    },
-  },
-  "Rash Creams": {
-    categoryIds: "1997",
-    category: "Rash Creams",
-    facetFilters: "category_level.level4:Rash Creams",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "rash-creams",
-    },
-  },
-  "Personal Care & Hygiene": {
-    categoryIds: "6124",
-    category: "Personal Care & Hygiene",
-    facetFilters: "category_level.level4:Personal Care & Hygiene",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "personal-care-hygiene",
-    },
-  },
-  "Potty Training": {
-    categoryIds: "6078",
-    category: "Potty Training",
-    facetFilters: "category_level.level4:Potty Training",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "potty-training",
-    },
-  },
-  "Cream & Ointments": {
-    categoryIds: "6057",
-    category: "Cream & Ointments",
-    facetFilters: "category_level.level4:Cream & Ointments",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "cream-ointments",
-    },
-  },
-  "Grooming Kits": {
-    categoryIds: "6062",
-    category: "Grooming Kits",
-    facetFilters: "category_level.level4:Grooming Kits",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "grooming-kits",
-    },
-  },
-  "Cleaning & Sterilization": {
-    categoryIds: "6115",
-    category: "Cleaning & Sterilization",
-    facetFilters: "category_level.level4:Cleaning & Sterilization",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "cleaning-sterilization",
-    },
-  },
-  "Nasal Care": {
-    categoryIds: "10918",
-    category: "Nasal Care",
-    facetFilters: "category_level.level4:Nasal Care",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "nasal-care",
-    },
-  },
-  "Stretch Mark Cream": {
-    categoryIds: "1999",
-    category: "Stretch Mark Cream",
-    facetFilters: "category_level.level4:Stretch Mark Cream",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "stretch-mark-cream",
-    },
-  },
-  "Nail Clippers & Scissors": {
-    categoryIds: "6064",
-    category: "Nail Clippers & Scissors",
-    facetFilters: "category_level.level4:Nail Clippers & Scissors",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "nail-clippers-scissors",
-    },
-  },
-  "Maternity Pads": {
-    categoryIds: "1986",
-    category: "Maternity Pads",
-    facetFilters: "category_level.level4:Maternity Pads",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "maternity-pads",
-    },
-  },
-  "Cotton Buds & Balls": {
-    categoryIds: "10314",
-    category: "Cotton Buds & Balls",
-    facetFilters: "category_level.level4:Cotton Buds & Balls",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "cotton-buds-balls",
-    },
-  },
-  "Diaper Rash Cream": {
-    categoryIds: "6060",
-    category: "Diaper Rash Cream",
-    facetFilters: "category_level.level4:Diaper Rash Cream",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "diaper-rash-cream",
-    },
-  },
-  "Brushes & Combs": {
-    categoryIds: "6055",
-    category: "Brushes & Combs",
-    facetFilters: "category_level.level4:Brushes & Combs",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "brushes-combs",
-    },
-  },
-  "Intimate Care": {
-    categoryIds: "1982",
-    category: "Intimate Care",
-    facetFilters: "category_level.level4:Intimate Care",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "intimate-care",
-    },
-  },
-  "Baby Kajal": {
-    categoryIds: "6051",
-    category: "Baby Kajal",
-    facetFilters: "category_level.level4:Baby Kajal",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "baby-kajal",
-    },
-  },
-  "Breast Firming Gel": {
-    categoryIds: "10312",
-    category: "Breast Firming Gel",
-    facetFilters: "category_level.level4:Breast Firming Gel",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "breast-firming-gel",
-    },
-  },
-  "Baby Detergents": {
-    categoryIds: "10306",
-    category: "Baby Detergents",
-    facetFilters: "category_level.level4:Baby Detergents",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "baby-detergents",
-    },
-  },
-  "Baby Perfumes & Cologne": {
-    categoryIds: "6053",
-    category: "Baby Perfumes & Cologne",
-    facetFilters: "category_level.level4:Baby Perfumes & Cologne",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bath-hygiene-grooming",
-      l3Category: "baby-perfumes-cologne",
-    },
+      l3Category: "baby-health-wellness"
+    }
   },
   "Infant Formula": {
     categoryIds: "3095",
@@ -5926,585 +2036,9 @@ const categoryConfig = {
     vertex: {
       l1Category: "mom-baby-care",
       l2Category: "food-feeding",
-      l3Category: "infant-formula",
-    },
-  },
-  "Baby Cereal": {
-    categoryIds: "3090",
-    category: "Baby Cereal",
-    facetFilters: "category_level.level4:Baby Cereal",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "food-feeding",
-      l3Category: "baby-cereal",
-    },
-  },
-  "Feeding Aids": {
-    categoryIds: "3107",
-    category: "Feeding Aids",
-    facetFilters: "category_level.level4:Feeding Aids",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "food-feeding",
-      l3Category: "feeding-aids",
-    },
-  },
-  "Bottle Accessories": {
-    categoryIds: "6020",
-    category: "Bottle Accessories",
-    facetFilters: "category_level.level4:Bottle Accessories",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "food-feeding",
-      l3Category: "bottle-accessories",
-    },
-  },
-  "Sippers & Cups": {
-    categoryIds: "6022",
-    category: "Sippers & Cups",
-    facetFilters: "category_level.level4:Sippers & Cups",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "food-feeding",
-      l3Category: "sippers-cups",
-    },
-  },
-  "Porridge, Cereals & Grains": {
-    categoryIds: "6024",
-    category: "Porridge, Cereals & Grains",
-    facetFilters: "category_level.level4:Porridge, Cereals & Grains",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "food-feeding",
-      l3Category: "porridge-cereals-grains",
-    },
-  },
-  "Breastfeeding Accessories": {
-    categoryIds: "6018",
-    category: "Breastfeeding Accessories",
-    facetFilters: "category_level.level4:Breastfeeding Accessories",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "food-feeding",
-      l3Category: "breastfeeding-accessories",
-    },
-  },
-  "Puree - Fruits and Vegetables": {
-    categoryIds: "6119",
-    category: "Puree - Fruits and Vegetables",
-    facetFilters: "category_level.level4:Puree - Fruits and Vegetables",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "food-feeding",
-      l3Category: "puree-fruits-and-vegetables",
-    },
-  },
-  "Finger Food and Snacks": {
-    categoryIds: "6026",
-    category: "Finger Food and Snacks",
-    facetFilters: "category_level.level4:Finger Food and Snacks",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "food-feeding",
-      l3Category: "finger-food-and-snacks",
-    },
-  },
-  "Breast Feeding Tools": {
-    categoryIds: "1973",
-    category: "Breast Feeding Tools",
-    facetFilters: "category_level.level4:Breast Feeding Tools",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "food-feeding",
-      l3Category: "breast-feeding-tools",
-    },
-  },
-  "Baby & Toddler Toys": {
-    categoryIds: "11993",
-    category: "Baby & Toddler Toys",
-    facetFilters: "category_level.level4:Baby & Toddler Toys",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "baby-toddler-toys-l3",
-    },
-  },
-  "Wrappers & Swaddles": {
-    categoryIds: "8144",
-    category: "Wrappers & Swaddles",
-    facetFilters: "category_level.level4:Wrappers & Swaddles",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "wrappers-and-swaddles",
-    },
-  },
-  "Mustard Seed Infant Pillows": {
-    categoryIds: "6015",
-    category: "Mustard Seed Infant Pillows",
-    facetFilters: "category_level.level4:Mustard Seed Infant Pillows",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "mustard-seed-infant-pillows",
-    },
-  },
-  "Baby Utility Bags": {
-    categoryIds: "6087",
-    category: "Baby Utility Bags",
-    facetFilters: "category_level.level4:Baby Utility Bags",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "baby-utility-bags",
-    },
-  },
-  "Baby Pillows & Bolster Set": {
-    categoryIds: "6013",
-    category: "Baby Pillows & Bolster Set",
-    facetFilters: "category_level.level4:Baby Pillows & Bolster Set",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "baby-pillows-bolster-set",
-    },
-  },
-  "Walkers, Rockers, Bouncers & Swings": {
-    categoryIds: "6048",
-    category: "Walkers, Rockers, Bouncers & Swings",
-    facetFilters: "category_level.level4:Walkers, Rockers, Bouncers & Swings",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "walkers-rockers-bouncers-swings",
-    },
-  },
-  "Baby Gadda Set": {
-    categoryIds: "8181",
-    category: "Baby Gadda Set",
-    facetFilters: "category_level.level4:Baby Gadda Set",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "baby-gadda-set-l3",
-    },
-  },
-  "Playpen & Play Yard": {
-    categoryIds: "6039",
-    category: "Playpen & Play Yard",
-    facetFilters: "category_level.level4:Playpen & Play Yard",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "playpen-play-yard",
-    },
-  },
-  "Learning & Activity Bath Toys": {
-    categoryIds: "6069",
-    category: "Learning & Activity Bath Toys",
-    facetFilters: "category_level.level4:Learning & Activity Bath Toys",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "learning-activity-bath-toys",
-    },
-  },
-  "Pacifiers & Teethers": {
-    categoryIds: "6117",
-    category: "Pacifiers & Teethers",
-    facetFilters: "category_level.level4:Pacifiers & Teethers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "pacifiers-teethers",
-    },
-  },
-  "Blankets, Quilts & Wraps": {
-    categoryIds: "6007",
-    category: "Blankets, Quilts & Wraps",
-    facetFilters: "category_level.level4:Blankets, Quilts & Wraps",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "blankets-quilts-wraps",
-    },
-  },
-  "Dishes & Utensils": {
-    categoryIds: "6084",
-    category: "Dishes & Utensils",
-    facetFilters: "category_level.level4:Dishes & Utensils",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "dishes-utensils",
-    },
-  },
-  Nibblers: {
-    categoryIds: "6106",
-    category: "Nibblers",
-    facetFilters: "category_level.level4:Nibblers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "nibblers",
-    },
-  },
-  "Crib Mattress": {
-    categoryIds: "6037",
-    category: "Crib Mattress",
-    facetFilters: "category_level.level4:Crib Mattress",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "crib-mattress",
-    },
-  },
-  "High Chairs & Booster Seats": {
-    categoryIds: "6043",
-    category: "High Chairs & Booster Seats",
-    facetFilters: "category_level.level4:High Chairs & Booster Seats",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "high-chairs-booster-seats",
-    },
-  },
-  "Strollers, Prams & Carriers": {
-    categoryIds: "7156",
-    category: "Strollers, Prams & Carriers",
-    facetFilters: "category_level.level4:Strollers, Prams & Carriers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "strollers-prams-and-carriers-l3",
-    },
-  },
-  "Maternity Shaping Belts": {
-    categoryIds: "6103",
-    category: "Maternity Shaping Belts",
-    facetFilters: "category_level.level4:Maternity Shaping Belts",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "maternity-shaping-belts",
-    },
-  },
-  "Infant Carriers": {
-    categoryIds: "6046",
-    category: "Infant Carriers",
-    facetFilters: "category_level.level4:Infant Carriers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "infant-carriers",
-    },
-  },
-  "Squeeze Toys": {
-    categoryIds: "6071",
-    category: "Squeeze Toys",
-    facetFilters: "category_level.level4:Squeeze Toys",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "squeeze-toys",
-    },
-  },
-  "Baby Helmets": {
-    categoryIds: "6091",
-    category: "Baby Helmets",
-    facetFilters: "category_level.level4:Baby Helmets",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "baby-helmets",
-    },
-  },
-  "Baby Sleeping Bag": {
-    categoryIds: "6028",
-    category: "Baby Sleeping Bag",
-    facetFilters: "category_level.level4:Baby Sleeping Bag",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "baby-sleeping-bag",
-    },
-  },
-  "Bed Guards & Rails": {
-    categoryIds: "6082",
-    category: "Bed Guards & Rails",
-    facetFilters: "category_level.level4:Bed Guards & Rails",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "bed-guards-rails",
-    },
-  },
-  "Corner & Edge Guards": {
-    categoryIds: "6165",
-    category: "Corner & Edge Guards",
-    facetFilters: "category_level.level4:Corner & Edge Guards",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "corner-and-edge-guards",
-    },
-  },
-  "Cradles & Bassinets": {
-    categoryIds: "6033",
-    category: "Cradles & Bassinets",
-    facetFilters: "category_level.level4:Cradles & Bassinets",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "cradles-bassinets",
-    },
-  },
-  "Crib Bedding Set": {
-    categoryIds: "6034",
-    category: "Crib Bedding Set",
-    facetFilters: "category_level.level4:Crib Bedding Set",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "crib-bedding-set",
-    },
-  },
-  "Mosquito Net": {
-    categoryIds: "6029",
-    category: "Mosquito Net",
-    facetFilters: "category_level.level4:Mosquito Net",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "mosquito-net",
-    },
-  },
-  "Cots & Cribs": {
-    categoryIds: "6031",
-    category: "Cots & Cribs",
-    facetFilters: "category_level.level4:Cots & Cribs",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "cots-cribs",
-    },
-  },
-  "Baby Head Supporters": {
-    categoryIds: "6098",
-    category: "Baby Head Supporters",
-    facetFilters: "category_level.level4:Baby Head Supporters",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "baby-head-supporters",
-    },
-  },
-  "Child Safety Locks": {
-    categoryIds: "6094",
-    category: "Child Safety Locks",
-    facetFilters: "category_level.level4:Child Safety Locks",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "child-safety-locks",
-    },
-  },
-  "Car Seats & Accessories": {
-    categoryIds: "6089",
-    category: "Car Seats & Accessories",
-    facetFilters: "category_level.level4:Car Seats & Accessories",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "car-seats-accessories",
-    },
-  },
-  "Baby Neck Support": {
-    categoryIds: "8182",
-    category: "Baby Neck Support",
-    facetFilters: "category_level.level4:Baby Neck Support",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "baby-neck-support-l3",
-    },
-  },
-  "Bath Books": {
-    categoryIds: "6066",
-    category: "Bath Books",
-    facetFilters: "category_level.level4:Bath Books",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "bath-books",
-    },
-  },
-  "Elbow & Knee-Pads": {
-    categoryIds: "6101",
-    category: "Elbow & Knee-Pads",
-    facetFilters: "category_level.level4:Elbow & Knee-Pads",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "elbow-knee-pads",
-    },
-  },
-  "Electric Socket Covers": {
-    categoryIds: "6110",
-    category: "Electric Socket Covers",
-    facetFilters: "category_level.level4:Electric Socket Covers",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "electric-socket-covers",
-    },
-  },
-  "Maternity Belly Support": {
-    categoryIds: "6128",
-    category: "Maternity Belly Support",
-    facetFilters: "category_level.level4:Maternity Belly Support",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "maternity-belly-support",
-    },
-  },
-  "Safety Gates": {
-    categoryIds: "6096",
-    category: "Safety Gates",
-    facetFilters: "category_level.level4:Safety Gates",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "bedding-toys-accessories",
-      l3Category: "safety-gates",
-    },
-  },
-  "Mosquito Repellents & Care": {
-    categoryIds: "11184",
-    category: "Mosquito Repellents & Care",
-    facetFilters: "category_level.level4:Mosquito Repellents & Care",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "health-and-wellness-l2",
-      l3Category: "mosquito-repellents-care",
-    },
-  },
-  "Pregnancy Pillows": {
-    categoryIds: "5780",
-    category: "Pregnancy Pillows",
-    facetFilters: "category_level.level4:Pregnancy Pillows",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "mom-maternity",
-      l3Category: "pregnancy-pillows",
-    },
-  },
-  "Supplements & Nutrition": {
-    categoryIds: "6126",
-    category: "Supplements & Nutrition",
-    facetFilters: "category_level.level4:Supplements & Nutrition",
-    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
-    inventoryStores: "ALL OR inventory_stores:U3HM",
-    vertex: {
-      l1Category: "mom-baby-care",
-      l2Category: "mom-maternity",
-      l3Category: "supplements-nutrition",
-    },
-  },
+      l3Category: "infant-formula"
+    }
+  }
 };
 
 export default categoryConfig;
