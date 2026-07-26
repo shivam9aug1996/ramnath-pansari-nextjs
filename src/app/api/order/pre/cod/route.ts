@@ -10,6 +10,7 @@ import {
   getDeliveryFee,
   getPayableAmountFromCart,
 } from "@/app/api/utils/orderAmount";
+import { applyOffersToCart } from "@/app/api/offers/applyOffers";
 import { getDeliverySettings } from "@/app/api/delivery/deliverySettingsUtils";
 import { getStoreConfig, validateOrderPlacement } from "@/app/api/store/storeConfigUtils";
 import {
@@ -79,8 +80,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Invalid input" }, { status: 400 });
     }
 
-    const cartItems = cartData?.cart?.items ?? [];
-    const subtotal = calculateCartSubtotal(cartItems);
+    const incomingItems = cartData?.cart?.items ?? [];
     const db = await connectDB(req);
     const deliverySettings = await getDeliverySettings(db);
     const storeConfig = await getStoreConfig(db);
@@ -93,8 +93,24 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Recompute offers server-side so percent/flat order discounts match cart GET.
+    const { items: cartItems, orderDiscount } = await applyOffersToCart(
+      db,
+      incomingItems,
+    );
+    const subtotal = calculateCartSubtotal(cartItems);
     const deliveryFee = getDeliveryFee(subtotal, deliverySettings);
-    const expectedAmount = getPayableAmountFromCart(cartItems, deliverySettings);
+    const expectedAmount = getPayableAmountFromCart(
+      cartItems,
+      deliverySettings,
+      orderDiscount,
+    );
+
+    cartData.cart = {
+      ...(cartData.cart ?? {}),
+      items: cartItems,
+    };
+    cartData.orderDiscount = orderDiscount;
 
     if (Math.abs(Number(amount) - expectedAmount) > 0.01) {
       return NextResponse.json(
@@ -102,6 +118,7 @@ export async function POST(req: NextRequest) {
           message: "Invalid order amount",
           expectedAmount,
           receivedAmount: amount,
+          orderDiscount,
         },
         { status: 400 },
       );
@@ -173,6 +190,7 @@ export async function POST(req: NextRequest) {
         amountPaid,
         subtotal,
         deliveryFee,
+        orderDiscount,
       });
     } catch (error) {
       await releaseProductLocksAfterFailedInsert(id, productIds);

@@ -30,13 +30,18 @@ export function getDeliveryFee(
 export function getPayableAmount(
   subtotal: number,
   settings: DeliverySettings = DEFAULT_DELIVERY_SETTINGS,
+  orderDiscount = 0,
 ): number {
-  return parseFloat((subtotal + getDeliveryFee(subtotal, settings)).toFixed(2));
+  const discount = Math.max(0, Number(orderDiscount) || 0);
+  return parseFloat(
+    Math.max(0, subtotal + getDeliveryFee(subtotal, settings) - discount).toFixed(2),
+  );
 }
 
 export function getPayableAmountFromCart(
   items: CartItem[] = [],
   settings: DeliverySettings = DEFAULT_DELIVERY_SETTINGS,
+  orderDiscount = 0,
 ): number {
-  return getPayableAmount(calculateCartSubtotal(items), settings);
+  return getPayableAmount(calculateCartSubtotal(items), settings, orderDiscount);
 }

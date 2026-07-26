@@ -71,6 +71,7 @@ function isBrowserClientRequest(req: Request): boolean {
     "10.150.236.125:3000",
     "10.150.236.125:8081",
     "10.150.236.125:19006",
+    "ramnathpansari.com",
   ];
 
   if (browserOrigins.some((host) => combined.includes(host))) {

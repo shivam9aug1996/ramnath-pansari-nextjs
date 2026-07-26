@@ -9,17 +9,20 @@ import type { CartItem } from "@/types/api";
 export function computeOrderTotalsFromCart(
   cartData: {
     cart?: { items?: CartItem[] };
+    orderDiscount?: number;
   },
   deliverySettings: DeliverySettings,
 ) {
   const items = cartData?.cart?.items ?? [];
+  const orderDiscount = Number(cartData?.orderDiscount) || 0;
   const subtotal = calculateCartSubtotal(items);
   const deliveryFee = getDeliveryFee(subtotal, deliverySettings);
-  const amountPaid = getPayableAmount(subtotal, deliverySettings);
+  const amountPaid = getPayableAmount(subtotal, deliverySettings, orderDiscount);
 
   return {
     subtotal,
     deliveryFee,
+    orderDiscount,
     amountPaid: amountPaid.toFixed(2),
     productCount: items.length,
     totalProductCount: items.reduce(

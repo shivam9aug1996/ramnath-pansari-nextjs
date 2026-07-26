@@ -14,6 +14,7 @@ const ALLOWED_ORIGINS = new Set([
   "http://10.150.236.125:3000",
   "http://10.150.236.125:8081",
   "http://10.150.236.125:19006",
+  "https://ramnathpansari.com"
   // add your LAN Expo web origin if you open the app by IP, e.g.:
   // "http://10.150.228.133:8081",
 ]);
