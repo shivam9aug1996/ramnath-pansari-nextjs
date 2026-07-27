@@ -310,7 +310,7 @@ const AddressMapClient: React.FC<AddressMapClientProps> = ({
                 padding: "0 35px 0 12px",
                 borderRadius: "4px",
                 border: "1px solid #ccc",
-                fontSize: "14px",
+                fontSize: "16px",
                 transition: "all 0.3s ease",
               }}
             />
