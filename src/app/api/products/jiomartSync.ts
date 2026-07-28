@@ -97,32 +97,45 @@ export function resolveSyncCategories(input: {
   return { valid: true, categories: requested };
 }
 
+/**
+ * Resolve a category name to its full id path from the root.
+ * When the same name appears at multiple levels (e.g. Ghee → Ghee, Rice → Rice),
+ * prefer the deepest match so synced products land on the leaf subcategory.
+ */
 export async function getCategoryPath(
   db: Db,
   categoryName: string,
 ): Promise<string[]> {
-  const findPath = async (
+  const findDeepestPath = (
     categories: CategoryDoc[],
     targetName: string,
     currentPath: string[] = [],
-  ): Promise<string[] | null> => {
+  ): string[] | null => {
+    let best: string[] | null = null;
+
     for (const category of categories) {
-      if (category.name === targetName) {
-        const idStr = category._id?.toString();
-        return idStr ? [...currentPath, idStr] : null;
+      const idStr = category._id?.toString();
+      const pathHere = idStr ? [...currentPath, idStr] : currentPath;
+
+      if (category.name === targetName && idStr) {
+        if (!best || pathHere.length > best.length) {
+          best = pathHere;
+        }
       }
 
       if (category.children && category.children.length > 0) {
-        const idStr = category._id?.toString();
-        const path = await findPath(
+        const childBest = findDeepestPath(
           category.children,
           targetName,
-          idStr ? [...currentPath, idStr] : currentPath,
+          pathHere,
         );
-        if (path) return path;
+        if (childBest && (!best || childBest.length > best.length)) {
+          best = childBest;
+        }
       }
     }
-    return null;
+
+    return best;
   };
 
   const categories = (await db
@@ -130,7 +143,7 @@ export async function getCategoryPath(
     .find({})
     .toArray()) as unknown as CategoryDoc[];
 
-  const path = await findPath(categories, categoryName);
+  const path = findDeepestPath(categories, categoryName);
   if (!path) {
     throw new Error(`Category path not found for: ${categoryName}`);
   }
