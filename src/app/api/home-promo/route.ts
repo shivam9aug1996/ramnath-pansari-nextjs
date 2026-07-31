@@ -5,9 +5,15 @@ import {
   getHomeProductPromo,
   toPublicHomePromo,
 } from "@/app/api/home-promo/homePromoUtils";
+import { isTokenVerified } from "@/json";
 
 export async function GET(req: NextRequest) {
   try {
+    const tokenVerificationResponse = await isTokenVerified(req);
+    if (tokenVerificationResponse) {
+      return tokenVerificationResponse;
+    }
+
     const db = await connectDB(req);
     const promo = await getHomeProductPromo(db);
     return NextResponse.json(

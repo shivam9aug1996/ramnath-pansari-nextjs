@@ -11,9 +11,6 @@ const ALLOWED_ORIGINS = new Set([
   "http://127.0.0.1:19006",
   "https://ramnath-pansari.vercel.app",
   "http://localhost:3000",
-  "http://10.150.236.125:3000",
-  "http://10.150.236.125:8081",
-  "http://10.150.236.125:19006",
   "https://ramnathpansari.com",
   "https://www.ramnathpansari.com",
   // add your LAN Expo web origin if you open the app by IP, e.g.:
@@ -25,15 +22,9 @@ const PUBLIC_API_PREFIXES = [
   "/api/task",
 ];
 
-// Public GET routes (no token required in middleware)
-const PUBLIC_GET_PATHS = new Set([
-  "/api/category",
-  "/api/carousel",
-  "/api/offers",
-  "/api/store-config",
-  "/api/delivery-settings",
-  "/api/home-promo",
-]);
+// Public GET routes (no token required in middleware).
+// Empty: listed catalog/store GETs still call isTokenVerified in the route.
+const PUBLIC_GET_PATHS = new Set<string>([]);
 
 function isAllowedOrigin(origin: string | null): origin is string {
   return Boolean(origin && ALLOWED_ORIGINS.has(origin));
