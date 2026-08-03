@@ -46,7 +46,7 @@ export const GROCERY_SYNONYM_GROUPS: readonly (readonly string[])[] = [
 
   // ——— Oils / fats ———
   ["oil", "tel", "तेल"],
-  ["mustard oil", "sarson", "sarson oil", "sarson ka tel", "सरसों का तेल", "सरसों"],
+  ["mustard oil", "sarson", "sarso", "sarson oil", "sarso oil", "sarson ka tel", "sarso ka tel", "सरसों का तेल", "सरसों", "सरसो"],
   ["groundnut oil", "peanut oil", "moongphali oil", "मूंगफली तेल"],
   ["sunflower oil", "surajmukhi oil", "सूरजमुखी तेल"],
   ["olive oil", "जैतून का तेल"],
