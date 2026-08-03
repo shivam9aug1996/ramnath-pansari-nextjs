@@ -2,22 +2,55 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../lib/dbconnection";
 import { log, logError } from "../lib/logger";
 import { isTokenVerified } from "@/json";
+import { expandSearchQueries } from "./grocerySynonyms";
 
 const AUTOCOMPLETE_SEARCH_INDEX = "autocomplete-index";
 
-function buildAutocompleteSearch(query: string) {
+const AUTOCOMPLETE_FUZZY = {
+  maxEdits: 1,
+  prefixLength: 2,
+  maxExpansions: 50,
+} as const;
+
+function buildAutocompleteClause(query: string) {
   return {
-    index: AUTOCOMPLETE_SEARCH_INDEX,
     autocomplete: {
       query,
       path: "name",
-      fuzzy: {
-        maxEdits: 1,
-        prefixLength: 2,
-        maxExpansions: 50,
-      },
+      fuzzy: AUTOCOMPLETE_FUZZY,
     },
   };
+}
+
+/**
+ * Single-term autocomplete, or compound.should across synonym variants.
+ * Atlas autocomplete does not apply synonym mappings, so we expand in app code.
+ */
+function buildAutocompleteSearch(queries: string[]) {
+  const unique = Array.from(
+    new Set(queries.map((q) => q.trim()).filter(Boolean)),
+  );
+  if (unique.length <= 1) {
+    return {
+      index: AUTOCOMPLETE_SEARCH_INDEX,
+      ...buildAutocompleteClause(unique[0] || ""),
+    };
+  }
+
+  return {
+    index: AUTOCOMPLETE_SEARCH_INDEX,
+    compound: {
+      should: unique.map(buildAutocompleteClause),
+      minimumShouldMatch: 1,
+    },
+  };
+}
+
+function expandTextSearchQuery(query: string): string {
+  // Mongo $text OR semantics via space-separated terms works poorly for phrases;
+  // use preferred expansions joined so any matching term can hit.
+  const variants = expandSearchQueries(query);
+  return variants.join(" ");
 }
 
 export async function GET(req: NextRequest) {
@@ -34,7 +67,15 @@ export async function GET(req: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "10", 10);
 
-    log("[search] request", { query, searchType, page, limit });
+    const queryVariants = expandSearchQueries(query);
+
+    log("[search] request", {
+      query,
+      queryVariants,
+      searchType,
+      page,
+      limit,
+    });
 
     if (!query) {
       return NextResponse.json(
@@ -42,8 +83,6 @@ export async function GET(req: NextRequest) {
         { status: 400 },
       );
     }
-
-   
 
     const db = await connectDB(req);
 
@@ -57,7 +96,7 @@ export async function GET(req: NextRequest) {
 
     if (searchType === "autocomplete") {
       const skip = (page - 1) * limit;
-      const autocompleteSearch = buildAutocompleteSearch(query);
+      const autocompleteSearch = buildAutocompleteSearch(queryVariants);
 
       const totalAgg = [
         {
@@ -95,48 +134,61 @@ export async function GET(req: NextRequest) {
 
       log("[search] autocomplete results", {
         query,
+        queryVariants,
         totalResults,
         returnedCount: results.length,
         durationMs: Date.now() - startedAt,
       });
 
       return NextResponse.json(
-        { results, totalResults, totalPages, currentPage: page },
+        {
+          results,
+          totalResults,
+          totalPages,
+          currentPage: page,
+          queryVariants,
+        },
         { status: 200 },
       );
     }
 
     if (searchType === "search") {
       const skip = (page - 1) * limit;
+      const textQuery = expandTextSearchQuery(query);
 
       const results = await db
         .collection("products")
         .find({
-          $text: { $search: query },
+          $text: { $search: textQuery },
           promoOnly: { $ne: true },
         })
         .limit(limit)
         .skip(skip)
         .toArray();
 
-      const totalResults = await db
-        .collection("products")
-        .countDocuments({
-          $text: { $search: query },
-          promoOnly: { $ne: true },
-        });
+      const totalResults = await db.collection("products").countDocuments({
+        $text: { $search: textQuery },
+        promoOnly: { $ne: true },
+      });
 
       const totalPages = Math.ceil(totalResults / limit);
 
       log("[search] full-text results", {
         query,
+        textQuery,
         totalResults,
         returnedCount: results.length,
         durationMs: Date.now() - startedAt,
       });
 
       return NextResponse.json(
-        { results, totalResults, totalPages, currentPage: page },
+        {
+          results,
+          totalResults,
+          totalPages,
+          currentPage: page,
+          queryVariants,
+        },
         { status: 200 },
       );
     }
