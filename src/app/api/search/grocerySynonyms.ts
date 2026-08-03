@@ -46,7 +46,7 @@ export const GROCERY_SYNONYM_GROUPS: readonly (readonly string[])[] = [
 
   // ——— Oils / fats ———
   ["oil", "tel", "तेल"],
-  ["mustard oil", "sarson", "sarso", "sarson oil", "sarso oil", "sarson ka tel", "sarso ka tel", "सरसों का तेल", "सरसों", "सरसो"],
+  ["mustard oil", "sarson", "sarso", "sarson oil", "sarso oil", "sarson ka tel", "sarso ka tel", "sarso tel", "sarson tel", "सरसों का तेल", "सरसों", "सरसो"],
   ["groundnut oil", "peanut oil", "moongphali oil", "मूंगफली तेल"],
   ["sunflower oil", "surajmukhi oil", "सूरजमुखी तेल"],
   ["olive oil", "जैतून का तेल"],
@@ -213,14 +213,12 @@ function normalizeQuery(query: string): string {
 function buildLookup(): Map<string, readonly string[]> {
   const map = new Map<string, readonly string[]>();
   for (const group of GROCERY_SYNONYM_GROUPS) {
-    const normalizedGroup = group.map(normalizeToken).filter(Boolean);
-    // Prefer longer multi-word originals for phrase replacement via token path;
-    // lookup is still per normalized single/multi token key from each synonym string.
-    for (const term of normalizedGroup) {
-      const existing = map.get(term);
-      // Keep first group that claimed this term (more specific groups listed first).
-      if (!existing) {
-        map.set(term, normalizedGroup);
+    for (const term of group) {
+      const key = normalizeToken(term);
+      if (!key) continue;
+      // Keep original group strings (with spaces) so preferred term stays "mustard oil"
+      if (!map.has(key)) {
+        map.set(key, group);
       }
     }
   }
@@ -228,6 +226,83 @@ function buildLookup(): Map<string, readonly string[]> {
 }
 
 const LOOKUP = buildLookup();
+
+const QUERY_STOPWORDS = new Set([
+  "ka",
+  "ki",
+  "ke",
+  "ko",
+  "se",
+  "of",
+  "the",
+  "a",
+  "an",
+  "and",
+  "aur",
+]);
+
+/** Common Hinglish typos before synonym expansion. */
+const QUERY_TYPOS: Record<string, string> = {
+  tek: "tel",
+  teel: "tel",
+  cheeni: "chini",
+  chinee: "chini",
+  chaawal: "chawal",
+  sarsonn: "sarson",
+};
+
+function applyTypos(query: string): string {
+  return query
+    .split(/\s+/)
+    .map((t) => QUERY_TYPOS[t.toLowerCase()] ?? t)
+    .join(" ");
+}
+
+/**
+ * Rebuild query using each token's preferred catalog term, collapsing
+ * redundant generics (e.g. sarso+tel → "mustard oil", not "mustard oil oil").
+ */
+function preferredCatalogQuery(tokens: string[]): string | null {
+  const meaningful = tokens.filter(
+    (t) => !QUERY_STOPWORDS.has(normalizeToken(t)),
+  );
+  const parts: string[] = [];
+  let changed = false;
+
+  for (const token of meaningful) {
+    const norm = normalizeToken(token);
+    const preferred = LOOKUP.get(norm)?.[0];
+    if (preferred && normalizeToken(preferred) !== norm) {
+      changed = true;
+      for (const p of preferred.split(/\s+/)) {
+        const pl = p.toLowerCase();
+        if (parts.includes(pl)) continue;
+        if (
+          (pl === "oil" || pl === "tel") &&
+          parts.some((x) => x === "oil" || x.endsWith("oil"))
+        ) {
+          continue;
+        }
+        parts.push(pl);
+      }
+    } else if (norm) {
+      const pl = norm.toLowerCase();
+      if (
+        (pl === "oil" || pl === "tel") &&
+        parts.some((x) => x.includes("oil") || x === "mustard")
+      ) {
+        if (!parts.includes("oil") && parts.includes("mustard")) {
+          parts.push("oil");
+        }
+        continue;
+      }
+      if (!parts.includes(pl)) parts.push(pl);
+    }
+  }
+
+  if (!changed || parts.length === 0) return null;
+  return parts.join(" ");
+}
 
 /**
  * Also try multi-word synonym keys inside the full query
@@ -242,20 +317,22 @@ function expandPhraseMatches(original: string, variants: Set<string>) {
       if (!lower.includes(t)) continue;
       for (const syn of group) {
         if (syn.toLowerCase() === t) continue;
-        variants.add(
-          normalizeQuery(lower.split(t).join(syn.toLowerCase())),
-        );
+        variants.add(normalizeQuery(lower.split(t).join(syn.toLowerCase())));
       }
+      // Always include the preferred catalog term for this group
+      if (group[0]) variants.add(group[0]);
     }
   }
 }
 
 /**
  * Expand a user search query into Atlas autocomplete query variants.
- * Always includes the original query; adds synonym substitutions.
+ * Prefers English catalog terms so vernacular queries like "sarso tel"
+ * rank mustard oil instead of random "oil" products.
  */
 export function expandSearchQueries(rawQuery: string): string[] {
-  const original = normalizeQuery(rawQuery);
+  const corrected = applyTypos(normalizeQuery(rawQuery));
+  const original = normalizeQuery(corrected);
   if (!original) return [];
 
   const variants = new Set<string>();
@@ -269,19 +346,31 @@ export function expandSearchQueries(rawQuery: string): string[] {
   const tokens = original.split(" ").filter(Boolean);
   const normalizedTokens = tokens.map(normalizeToken);
 
+  const preferred = preferredCatalogQuery(tokens);
+  if (preferred) {
+    // Strong vernacular hit — search catalog English first so "sarso tel"
+    // doesn't rank random tea-tree / hair oils from the word "tel".
+    const strong = [preferred, original].filter(
+      (v, i, arr) => v && arr.findIndex((x) => x.toLowerCase() === v.toLowerCase()) === i,
+    );
+    return strong.slice(0, MAX_QUERY_VARIANTS);
+  }
+
   if (tokens.length === 1) {
     const group = LOOKUP.get(normalizedTokens[0]);
     if (group) {
-      for (const syn of group) {
-        variants.add(syn);
-      }
+      for (const syn of group) variants.add(syn);
     }
   } else {
     for (let i = 0; i < normalizedTokens.length; i++) {
       const group = LOOKUP.get(normalizedTokens[i]);
       if (!group) continue;
+      // Prefer adding the group's primary catalog term alone
+      if (group[0]) variants.add(group[0]);
       for (const syn of group) {
         if (syn === normalizedTokens[i]) continue;
+        // Skip injecting multi-word synonyms mid-phrase ("mustard oil tel")
+        if (syn.includes(" ")) continue;
         const next = [...tokens];
         next[i] = syn;
         variants.add(next.join(" "));
@@ -293,14 +382,20 @@ export function expandSearchQueries(rawQuery: string): string[] {
     .map(normalizeQuery)
     .filter(Boolean)
     .sort((a, b) => {
-      if (a === original) return -1;
-      if (b === original) return 1;
+      // Prefer English catalog-looking queries over raw vernacular
+      const aPref = preferred && a === preferred ? -2 : 0;
+      const bPref = preferred && b === preferred ? -2 : 0;
+      if (aPref !== bPref) return aPref - bPref;
+      if (a === "mustard oil" && b !== "mustard oil") return -1;
+      if (b === "mustard oil" && a !== "mustard oil") return 1;
       const aAscii = /^[\x00-\x7F]+$/.test(a) ? 0 : 1;
       const bAscii = /^[\x00-\x7F]+$/.test(b) ? 0 : 1;
-      return aAscii - bAscii || a.length - b.length;
+      if (aAscii !== bAscii) return aAscii - bAscii;
+      if (a === original) return 1;
+      if (b === original) return -1;
+      return a.length - b.length;
     });
 
-  // Dedupe case-insensitively while preserving order
   const seen = new Set<string>();
   const deduped: string[] = [];
   for (const v of ordered) {
