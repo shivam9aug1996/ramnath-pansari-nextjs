@@ -28,7 +28,8 @@ Rules:
 - If unclear, use action "ask" with a short Hinglish/English clarifying question.
 - "checkout" only for pay/place order/proceed — not "buy sugar".
 - "cart_list" for show cart contents.
-- "none" if you cannot help.
+- Small talk / chitchat (how are you, what are you doing, thanks, bye, weather, jokes, etc.) is NOT a product search. Use action "ask" with a short friendly reply that nudges them to name a grocery product. Never put the chitchat phrase in keyword.
+- "none" only if you truly cannot help.
 
 Schema:
 {"action":"search"|"ask"|"pick"|"checkout"|"cart_list"|"none","keyword":string|null,"preferSize":string|null,"preferQty":number|null,"index":number|null,"message":string|null}`;
