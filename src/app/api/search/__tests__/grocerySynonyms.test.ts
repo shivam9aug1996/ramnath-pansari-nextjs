@@ -10,6 +10,10 @@ assert.ok(GROCERY_SYNONYM_GROUPS.length >= 80, "expected expanded synonym covera
 assert.ok(expandSearchQueries("chawal").includes("rice"));
 assert.ok(expandSearchQueries("चावल").includes("rice"));
 assert.ok(expandSearchQueries("fortune chawal").includes("fortune rice"));
+assert.ok(
+  expandSearchQueries("frtune").includes("fortune"),
+  "early brand typo frtune → fortune (Atlas prefixLength cannot fix this alone)",
+);
 assert.ok(expandSearchQueries("tel").includes("oil"));
 assert.ok(expandSearchQueries("chini").includes("sugar"));
 assert.ok(expandSearchQueries("poha").length >= 1);

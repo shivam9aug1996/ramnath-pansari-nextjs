@@ -11,9 +11,11 @@ import {
 
 const AUTOCOMPLETE_SEARCH_INDEX = "autocomplete-index";
 
+// prefixLength 1 (not 2): first char exact, so typos like "frtune"→"fortune"
+// can still fuzzy-match; prefixLength 2 would require "fr" === "fo" and fail.
 const AUTOCOMPLETE_FUZZY = {
   maxEdits: 1,
-  prefixLength: 2,
+  prefixLength: 1,
   maxExpansions: 50,
 } as const;
 

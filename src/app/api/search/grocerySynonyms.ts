@@ -241,7 +241,7 @@ const QUERY_STOPWORDS = new Set([
   "aur",
 ]);
 
-/** Common Hinglish typos before synonym expansion. */
+/** Common Hinglish / brand typos before synonym expansion. */
 const QUERY_TYPOS: Record<string, string> = {
   tek: "tel",
   teel: "tel",
@@ -249,6 +249,11 @@ const QUERY_TYPOS: Record<string, string> = {
   chinee: "chini",
   chaawal: "chawal",
   sarsonn: "sarson",
+  // Atlas fuzzy uses prefixLength: 2, so early typos like fr→fo never fuzzy-match
+  frtune: "fortune",
+  fotune: "fortune",
+  fortne: "fortune",
+  fortuen: "fortune",
 };
 
 function applyTypos(query: string): string {
