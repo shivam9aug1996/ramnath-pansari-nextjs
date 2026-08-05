@@ -3,6 +3,11 @@ import { connectDB } from "../lib/dbconnection";
 import { log, logError } from "../lib/logger";
 import { isTokenVerified } from "@/json";
 import { expandSearchQueries } from "./grocerySynonyms";
+import {
+  buildProductFilterMatch,
+  buildProductSort,
+  parseProductFilterParams,
+} from "../products/productListFilters";
 
 const AUTOCOMPLETE_SEARCH_INDEX = "autocomplete-index";
 
@@ -47,10 +52,26 @@ function buildAutocompleteSearch(queries: string[]) {
 }
 
 function expandTextSearchQuery(query: string): string {
-  // Mongo $text OR semantics via space-separated terms works poorly for phrases;
-  // use preferred expansions joined so any matching term can hit.
   const variants = expandSearchQueries(query);
   return variants.join(" ");
+}
+
+function buildSearchMatchStage(filters: ReturnType<typeof parseProductFilterParams>) {
+  const filterMatch = buildProductFilterMatch(filters);
+  const priceClause: Record<string, unknown> = { $gt: 0 };
+  if (filters.priceMin != null) priceClause.$gte = filters.priceMin;
+  if (filters.priceMax != null) priceClause.$lte = filters.priceMax;
+
+  const match: Record<string, unknown> = {
+    discountedPrice: priceClause,
+    promoOnly: { $ne: true },
+  };
+
+  if (filterMatch.brand) match.brand = filterMatch.brand;
+  if (filterMatch.$or) match.$or = filterMatch.$or;
+  if (filterMatch.isOutOfStock) match.isOutOfStock = filterMatch.isOutOfStock;
+
+  return match;
 }
 
 export async function GET(req: NextRequest) {
@@ -66,6 +87,7 @@ export async function GET(req: NextRequest) {
     const searchType = searchParams.get("type") || "autocomplete";
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "10", 10);
+    const filters = parseProductFilterParams(searchParams);
 
     const queryVariants = expandSearchQueries(query);
 
@@ -75,6 +97,7 @@ export async function GET(req: NextRequest) {
       searchType,
       page,
       limit,
+      filters,
     });
 
     if (!query) {
@@ -94,20 +117,17 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    const matchStage = buildSearchMatchStage(filters);
+    const sort = buildProductSort(filters.sort);
+
     if (searchType === "autocomplete") {
       const skip = (page - 1) * limit;
       const autocompleteSearch = buildAutocompleteSearch(queryVariants);
 
       const totalAgg = [
-        {
-          $search: autocompleteSearch,
-        },
-        {
-          $match: { discountedPrice: { $gt: 0 }, promoOnly: { $ne: true } },
-        },
-        {
-          $count: "totalResults",
-        },
+        { $search: autocompleteSearch },
+        { $match: matchStage },
+        { $count: "totalResults" },
       ];
 
       const totalResultsObj = await db
@@ -119,16 +139,14 @@ export async function GET(req: NextRequest) {
         totalResultsObj.length > 0 ? totalResultsObj[0].totalResults : 0;
       const totalPages = Math.ceil(totalResults / limit);
 
-      const agg = [
-        {
-          $search: autocompleteSearch,
-        },
-        {
-          $match: { discountedPrice: { $gt: 0 }, promoOnly: { $ne: true } },
-        },
-        { $skip: skip },
-        { $limit: limit },
+      const agg: Record<string, unknown>[] = [
+        { $search: autocompleteSearch },
+        { $match: matchStage },
       ];
+      if (sort) {
+        agg.push({ $sort: sort });
+      }
+      agg.push({ $skip: skip }, { $limit: limit });
 
       const results = await db.collection("products").aggregate(agg).toArray();
 
@@ -156,20 +174,21 @@ export async function GET(req: NextRequest) {
       const skip = (page - 1) * limit;
       const textQuery = expandTextSearchQuery(query);
 
-      const results = await db
-        .collection("products")
-        .find({
-          $text: { $search: textQuery },
-          promoOnly: { $ne: true },
-        })
-        .limit(limit)
-        .skip(skip)
-        .toArray();
-
-      const totalResults = await db.collection("products").countDocuments({
+      const findQuery = {
         $text: { $search: textQuery },
-        promoOnly: { $ne: true },
-      });
+        ...matchStage,
+      };
+
+      let cursor = db.collection("products").find(findQuery);
+      if (sort) {
+        cursor = cursor.sort(sort);
+      }
+
+      const results = await cursor.limit(limit).skip(skip).toArray();
+
+      const totalResults = await db
+        .collection("products")
+        .countDocuments(findQuery);
 
       const totalPages = Math.ceil(totalResults / limit);
 

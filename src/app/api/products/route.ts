@@ -5,8 +5,12 @@ import { connectDB } from "../lib/dbconnection";
 
 import categoryConfig from "./categoryConfig";
 import { syncJiomartCategories } from "./jiomartSync";
-import RedisClient from "../lib/redisClient";
-import { log, logError } from "../lib/logger";
+import { logError } from "../lib/logger";
+import {
+  buildProductFilterMatch,
+  buildProductSort,
+  parseProductFilterParams,
+} from "./productListFilters";
 
 export async function POST(req: NextRequest) {
   if (req.method !== "POST") {
@@ -83,6 +87,7 @@ export async function GET(req: NextRequest) {
     const categoryId = searchParams.get("categoryId");
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "10", 10);
+    const filters = parseProductFilterParams(searchParams);
 
     if (!categoryId) {
       return NextResponse.json(
@@ -96,64 +101,45 @@ export async function GET(req: NextRequest) {
       return tokenVerificationResponse;
     }
 
-    // const cacheKey = `products:${categoryId}:page:${page}:limit:${limit}`;
-    // log("products cache key", cacheKey);
-
-    // let redis = null;
-    // try {
-    //   redis = await RedisClient.getInstance();
-    // } catch (error) {
-    //   logError("redis get error", error);
-    // }
-
-    // const cachedData = await redis?.get(cacheKey);
-
-    // if (cachedData) {
-    //   let data = JSON.parse(cachedData);
-
-    //   return NextResponse.json({ ...data }, { status: 200 });
-    // }
-
     const db = await connectDB(req);
 
     const skip = (page - 1) * limit;
+    const filterMatch = buildProductFilterMatch(filters);
 
-    const products = await db
-      .collection("products")
-      .find({
-        categoryPath: new ObjectId(categoryId),
-        discountedPrice: { $ne: 0 },
-        promoOnly: { $ne: true },
-      })
-      .skip(skip)
-      .limit(limit)
-      .toArray();
+    const priceClause: Record<string, unknown> = { $ne: 0 };
+    if (filters.priceMin != null) priceClause.$gte = filters.priceMin;
+    if (filters.priceMax != null) priceClause.$lte = filters.priceMax;
 
-    const totalProducts = await db.collection("products").countDocuments({
+    const query: Record<string, unknown> = {
       categoryPath: new ObjectId(categoryId),
-      discountedPrice: { $ne: 0 },
       promoOnly: { $ne: true },
-    });
+      discountedPrice: priceClause,
+    };
+
+    if (filterMatch.brand) query.brand = filterMatch.brand;
+    if (filterMatch.$or) query.$or = filterMatch.$or;
+    if (filterMatch.isOutOfStock) query.isOutOfStock = filterMatch.isOutOfStock;
+
+    const sort = buildProductSort(filters.sort);
+    let cursor = db.collection("products").find(query);
+    if (sort) {
+      cursor = cursor.sort(sort);
+    }
+
+    const products = await cursor.skip(skip).limit(limit).toArray();
+
+    const totalProducts = await db.collection("products").countDocuments(query);
 
     const totalPages = Math.ceil(totalProducts / limit);
 
     const responseData = {
-      products: products,
+      products,
       totalProducts,
+      totalResults: totalProducts,
       totalPages,
       currentPage: page,
       categoryId,
     };
-
-    // if (redis) {
-    //   try {
-    //     await redis.set(cacheKey, JSON.stringify(responseData), {
-    //       EX: 3600,
-    //     });
-    //   } catch (error) {
-    //     logError("redis get error", error);
-    //   }
-    // }
 
     return NextResponse.json(responseData, { status: 200 });
   } catch (error) {
