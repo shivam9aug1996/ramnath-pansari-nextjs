@@ -51,6 +51,7 @@ const GUEST_ALLOWED = [
   { method: "GET", path: "/api/category" },
   { method: "GET", path: "/api/products" },
   { method: "GET", path: "/api/products/detail" },
+  { method: "GET", path: "/api/products/brands" },
   { method: "GET", path: "/api/search" },
   { method: "GET", path: "/api/home-promo" },
   { method: "POST", path: "/api/save-push-token" },
