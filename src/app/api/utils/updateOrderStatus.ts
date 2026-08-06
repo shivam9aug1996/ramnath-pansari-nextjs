@@ -3,6 +3,7 @@ import {
   releaseProductLocksForOrder,
   shouldReleaseProductLocks,
 } from "./productPendingLock";
+import { OrderStatus } from "../order/orderStatus";
 
 export async function updateOrderStatus(
   db: any,
@@ -41,6 +42,13 @@ export async function updateOrderStatus(
     throw new Error("Failed to update order status");
   }
 
+  const normalized = String(newStatus ?? "").toLowerCase();
+  const otp =
+    normalized === OrderStatus.DELIVERED ||
+    normalized === OrderStatus.CANCELED
+      ? null
+      : (order.deliveryOtp as string | undefined) ?? null;
+
   await syncActiveOrderToFirebase({
     userId,
     mongoOrderId: order._id.toString(),
@@ -49,6 +57,7 @@ export async function updateOrderStatus(
     imgArr: order.imgArr,
     amountPaid: order.amountPaid,
     totalProductCount: order.totalProductCount,
+    deliveryOtp: otp,
   });
 
   if (shouldReleaseProductLocks(prevStatus, newStatus)) {

@@ -18,8 +18,9 @@ export type SyncActiveOrderPayload = {
   orderId: string;
   status: string;
   imgArr?: string[];
-  amountPaid?: number;
+  amountPaid?: number | string;
   totalProductCount?: number;
+  deliveryOtp?: string | null;
 };
 
 export async function syncActiveOrderToFirebase(
@@ -33,6 +34,7 @@ export async function syncActiveOrderToFirebase(
     imgArr,
     amountPaid,
     totalProductCount,
+    deliveryOtp,
   } = payload;
 
   const normalizedStatus = status.toLowerCase();
@@ -50,6 +52,9 @@ export async function syncActiveOrderToFirebase(
   if (imgArr?.length) data.imgArr = imgArr;
   if (amountPaid != null) data.amountPaid = amountPaid;
   if (totalProductCount != null) data.totalProductCount = totalProductCount;
+  if (ACTIVE_STATUSES.has(normalizedStatus) && deliveryOtp) {
+    data.deliveryOtp = deliveryOtp;
+  }
 
   try {
     if (ACTIVE_STATUSES.has(normalizedStatus)) {

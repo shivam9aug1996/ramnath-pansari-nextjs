@@ -4,6 +4,10 @@ import { findDriverOrder } from "@/app/api/driver/driverOrderUtils";
 import { updateOrderStatus } from "@/app/api/utils/updateOrderStatus";
 import { OrderStatus } from "@/app/api/order/orderStatus";
 import { asMongoUpdate } from "@/types/api";
+import {
+  generateDeliveryOtp,
+  sendDeliveryOtpPush,
+} from "@/app/api/utils/deliveryOtp";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -74,13 +78,22 @@ export async function POST(req: Request, context: RouteContext) {
     }
 
     const now = new Date();
+    let deliveryOtp = String(order.deliveryOtp ?? "");
+    const otpSet: Record<string, unknown> = {
+      driverTrackingStatus: "out_for_delivery",
+      updatedAt: now,
+    };
+
+    if (!/^\d{4}$/.test(deliveryOtp)) {
+      deliveryOtp = generateDeliveryOtp();
+      otpSet.deliveryOtp = deliveryOtp;
+      otpSet.deliveryOtpAttempts = 0;
+    }
+
     await db.collection("orders").updateOne(
       { _id: order._id },
       asMongoUpdate({
-        $set: {
-          driverTrackingStatus: "out_for_delivery",
-          updatedAt: now,
-        },
+        $set: otpSet,
         $push: {
           driverTrackingHistory: {
             status: "out_for_delivery",
@@ -96,6 +109,14 @@ export async function POST(req: Request, context: RouteContext) {
       OrderStatus.OUT_FOR_DELIVERY,
       String(order.userId),
     );
+
+    await sendDeliveryOtpPush({
+      db,
+      userId: String(order.userId),
+      mongoOrderId: String(order._id),
+      humanOrderId: String(order.orderId),
+      deliveryOtp,
+    });
 
     return NextResponse.json(
       {

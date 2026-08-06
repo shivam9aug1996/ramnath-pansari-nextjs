@@ -2,9 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../../lib/dbconnection";
 import { asMongoUpdate } from "@/types/api";
 import { syncActiveOrderToFirebase } from "../../utils/syncActiveOrderToFirebase";
+import {
+  MAX_DELIVERY_OTP_ATTEMPTS,
+  otpMatches,
+} from "@/app/api/utils/deliveryOtp";
+
 export async function POST(req: NextRequest) {
   try {
-    const { orderId, driverId } = await req.json();
+    const { orderId, driverId, otp } = await req.json();
     if (!orderId || !driverId) {
       return NextResponse.json(
         { message: "Missing required fields" },
@@ -29,6 +34,53 @@ export async function POST(req: NextRequest) {
         { status: 403 },
       );
     }
+
+    const providedOtp = String(otp ?? "").trim();
+    if (!/^\d{4}$/.test(providedOtp)) {
+      return NextResponse.json(
+        { error: { code: "INVALID_OTP", message: "Enter the 4-digit delivery OTP" } },
+        { status: 400 },
+      );
+    }
+
+    const attempts = Number(order.deliveryOtpAttempts ?? 0);
+    if (attempts >= MAX_DELIVERY_OTP_ATTEMPTS) {
+      return NextResponse.json(
+        {
+          error: {
+            code: "OTP_LOCKED",
+            message: "Too many incorrect OTP attempts. Contact support.",
+          },
+        },
+        { status: 429 },
+      );
+    }
+
+    if (!otpMatches(order.deliveryOtp, providedOtp)) {
+      const nextAttempts = attempts + 1;
+      await orders.updateOne(
+        { orderId },
+        asMongoUpdate({
+          $set: { deliveryOtpAttempts: nextAttempts, updatedAt: new Date() },
+        }),
+      );
+      return NextResponse.json(
+        {
+          error: {
+            code:
+              nextAttempts >= MAX_DELIVERY_OTP_ATTEMPTS
+                ? "OTP_LOCKED"
+                : "INVALID_OTP",
+            message:
+              nextAttempts >= MAX_DELIVERY_OTP_ATTEMPTS
+                ? "Too many incorrect OTP attempts. Contact support."
+                : `Incorrect OTP. ${MAX_DELIVERY_OTP_ATTEMPTS - nextAttempts} attempt(s) left.`,
+          },
+        },
+        { status: nextAttempts >= MAX_DELIVERY_OTP_ATTEMPTS ? 429 : 400 },
+      );
+    }
+
     const now = new Date();
     await orders.updateOne(
       { orderId },
@@ -37,6 +89,8 @@ export async function POST(req: NextRequest) {
           orderStatus: "delivered",
           driverTrackingStatus: "driver_delivered",
           updatedAt: now,
+          deliveryOtp: null,
+          deliveryOtpAttempts: 0,
         },
         $push: {
           driverTrackingHistory: {
@@ -59,6 +113,7 @@ export async function POST(req: NextRequest) {
       imgArr: order.imgArr,
       amountPaid: order.amountPaid,
       totalProductCount: order.totalProductCount,
+      deliveryOtp: null,
     });
 
     return NextResponse.json(

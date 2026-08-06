@@ -237,6 +237,10 @@ export async function PUT(
               imgArr: (updated as AnyObject)?.imgArr,
               amountPaid: (updated as AnyObject)?.amountPaid,
               totalProductCount: (updated as AnyObject)?.totalProductCount,
+              deliveryOtp:
+                nextStatus === "delivered" || nextStatus === "canceled"
+                  ? null
+                  : ((updated as AnyObject)?.deliveryOtp as string) ?? null,
             });
           }
           if (userId) {

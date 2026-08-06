@@ -8,6 +8,10 @@ import { CartItem } from "@/types/api";
 import { OrderStatus } from "../../orderStatus";
 import { syncActiveOrderToFirebase } from "@/app/api/utils/syncActiveOrderToFirebase";
 import {
+  generateDeliveryOtp,
+  sendDeliveryOtpPush,
+} from "@/app/api/utils/deliveryOtp";
+import {
   calculateCartSubtotal,
   getDeliveryFee,
 } from "@/app/api/utils/orderAmount";
@@ -184,6 +188,7 @@ export async function POST(req: NextRequest) {
       }
 
       let imgArr = storeImages(cartData.cart);
+      const deliveryOtp = generateDeliveryOtp();
 
       const totalProductCount = getTotalProductCount(cartData?.cart);
       const cartItems = cartData?.cart?.items ?? [];
@@ -212,6 +217,8 @@ export async function POST(req: NextRequest) {
           amountPaid,
           subtotal,
           deliveryFee,
+          deliveryOtp,
+          deliveryOtpAttempts: 0,
         });
       } catch (error) {
         await releaseProductLocksAfterFailedInsert(id, productIds);
@@ -225,14 +232,25 @@ export async function POST(req: NextRequest) {
         mongoOrderId: result.insertedId.toString(),
       });
 
+      const mongoOrderId = result.insertedId.toString();
+
       await syncActiveOrderToFirebase({
         userId,
-        mongoOrderId: result.insertedId.toString(),
+        mongoOrderId,
         orderId: id,
         status: OrderStatus.CONFIRMED,
         imgArr,
         amountPaid,
         totalProductCount,
+        deliveryOtp,
+      });
+
+      await sendDeliveryOtpPush({
+        db,
+        userId,
+        mongoOrderId,
+        humanOrderId: id,
+        deliveryOtp,
       });
 
       const admin = await db.collection("pushTokens").findOne({
@@ -242,7 +260,7 @@ export async function POST(req: NextRequest) {
         admin?.tokens?.forEach(async (token: { toString(): string }) => {
           await sendPushNotification({
             deviceToken: token?.toString(),
-            orderId: result?.insertedId?.toString(),
+            orderId: mongoOrderId,
             userId: admin?.userId,
           });
         });
