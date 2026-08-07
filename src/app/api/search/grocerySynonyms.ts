@@ -190,9 +190,15 @@ export const GROCERY_SYNONYM_GROUPS: readonly (readonly string[])[] = [
   ["baby soap", "baby shampoo", "baby oil", "baby lotion"],
   ["infant formula", "baby formula", "baby milk", "फॉर्मूला"],
 
-  // ——— Household cleaning ———
+  // ——— Household cleaning / home care ———
   ["detergent", "washing powder", "surf", "ariel", "detergents", "डिटर्जेंट"],
   ["disinfectant", "floor cleaner", "phenyl", "lizol", "फिनाइल"],
+  ["dishwash", "dish wash", "vim", "dishwashing", "dish soap", "बर्तन धोने का साबुन"],
+  ["toilet cleaner", "harpic", "toilet cleaners", "हार्पिक"],
+  ["air freshener", "odonil", "room freshener", "फ्रेशनर"],
+  ["mosquito repellent", "all out", "goodknight", "good knight", "मच्छरदानी", "मच्छर"],
+  ["agarbatti", "incense", "dhoop", "incense sticks", "अगरबत्ती", "धूप"],
+  ["pooja", "puja", "pooja needs", "puja samagri", "पूजा"],
 ];
 
 const MAX_QUERY_VARIANTS = 5;

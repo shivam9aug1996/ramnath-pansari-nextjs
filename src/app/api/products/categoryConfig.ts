@@ -2038,6 +2038,176 @@ const categoryConfig = {
       l2Category: "food-feeding",
       l3Category: "infant-formula"
     }
+  },
+
+  // ——— Home / Home Care (JioMart Quick Grocery) ———
+  "Dishwash Liquids & Pastes": {
+    categoryIds: "4239",
+    category: "Dishwash Liquids & Pastes",
+    facetFilters: "category_level.level4:Dishwash Liquids & Pastes",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "dishwash",
+      l3Category: "dishwash-liquids-pastes"
+    }
+  },
+  "Dishwash Bars & Powders": {
+    categoryIds: "148",
+    category: "Dishwash Bars & Powders",
+    facetFilters: "category_level.level4:Dishwash Bars & Powders",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "dishwash",
+      l3Category: "dishwash-bars-powders"
+    }
+  },
+  "Detergent Powder & Liquid": {
+    categoryIds: "1253",
+    category: "Detergent Powder & Liquid",
+    facetFilters: "category_level.level4:Detergent Powder & Liquid",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "detergents-cleaners",
+      l3Category: "detergent-powder-liquid"
+    }
+  },
+  "Detergent Bars": {
+    categoryIds: "37",
+    category: "Detergent Bars",
+    facetFilters: "category_level.level4:Detergent Bars",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "detergents-cleaners",
+      l3Category: "detergent-bars"
+    }
+  },
+  "Floor & Other Cleaners": {
+    categoryIds: "178",
+    category: "Floor & Other Cleaners",
+    facetFilters: "category_level.level4:Floor & Other Cleaners",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "detergents-cleaners",
+      l3Category: "floor-other-cleaners"
+    }
+  },
+  "Toilet Cleaners": {
+    categoryIds: "152",
+    category: "Toilet Cleaners",
+    facetFilters: "category_level.level4:Toilet Cleaners",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "detergents-cleaners",
+      l3Category: "toilet-cleaners"
+    }
+  },
+  "Fabric Pre, Post Wash": {
+    categoryIds: "1254",
+    category: "Fabric Pre, Post Wash",
+    facetFilters: "category_level.level4:Fabric Pre, Post Wash",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "detergents-cleaners",
+      l3Category: "fabric-pre-post-wash"
+    }
+  },
+  "Combo Cleaning Set": {
+    categoryIds: "1255",
+    category: "Combo Cleaning Set",
+    facetFilters: "category_level.level4:Combo Cleaning Set",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "detergents-cleaners",
+      l3Category: "combo-cleaning-set"
+    }
+  },
+  "Mosquito Repellent": {
+    categoryIds: "65",
+    category: "Mosquito Repellent",
+    facetFilters: "category_level.level4:Mosquito Repellent",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "fresheners-repellents",
+      l3Category: "mosquito-repellent"
+    }
+  },
+  "Insect Repellant": {
+    categoryIds: "67",
+    category: "Insect Repellant",
+    facetFilters: "category_level.level4:Insect Repellant",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "fresheners-repellents",
+      l3Category: "insect-repellant"
+    }
+  },
+  "Air Freshener": {
+    categoryIds: "66",
+    category: "Air Freshener",
+    facetFilters: "category_level.level4:Air Freshener",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "fresheners-repellents",
+      l3Category: "air-freshener-l3"
+    }
+  },
+  "Car Freshener": {
+    categoryIds: "68",
+    category: "Car Freshener",
+    facetFilters: "category_level.level4:Car Freshener",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "fresheners-repellents",
+      l3Category: "car-freshener"
+    }
+  },
+  "Agarbatti/Dhoop Stick": {
+    categoryIds: "8747",
+    category: "Agarbatti/Dhoop Stick",
+    facetFilters: "category_level.level4:Agarbatti/Dhoop Stick",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "pooja-needs",
+      l3Category: "agarbatti-dhoop-stick"
+    }
+  },
+  "Pooja Accessories": {
+    categoryIds: "8816",
+    category: "Pooja Accessories",
+    facetFilters: "category_level.level4:Pooja Accessories",
+    availableStores: "FRGW OR available_stores:PANINDIAGROCERIES",
+    inventoryStores: "ALL OR inventory_stores:U3HM",
+    vertex: {
+      l1Category: "home",
+      l2Category: "pooja-needs",
+      l3Category: "pooja-accessories"
+    }
   }
 };
 
