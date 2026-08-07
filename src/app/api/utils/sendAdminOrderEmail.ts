@@ -77,6 +77,9 @@ export async function sendAdminOrderPlacedEmail(
     cartItems,
   } = payload;
 
+  const isCod = paymentMethod.toUpperCase() === "COD";
+  const amountLabel = isCod ? "Amount to be paid" : "Amount paid";
+
   const itemLines = (cartItems ?? []).map(productLine);
   const addressBlock = [
     addressData?.name,
@@ -90,7 +93,7 @@ export async function sendAdminOrderPlacedEmail(
     `New order placed — ${humanOrderId}`,
     "",
     `Payment: ${paymentMethod}`,
-    `Amount paid: ${formatInr(amountPaid)}`,
+    `${amountLabel}: ${formatInr(amountPaid)}`,
     subtotal != null ? `Subtotal: ${formatInr(subtotal)}` : null,
     deliveryFee != null ? `Delivery fee: ${formatInr(deliveryFee)}` : null,
     userId ? `Customer userId: ${userId}` : null,
@@ -113,7 +116,7 @@ export async function sendAdminOrderPlacedEmail(
     <h2>New order placed</h2>
     <p><strong>Order ID:</strong> ${escapeHtml(humanOrderId)}</p>
     <p><strong>Payment:</strong> ${escapeHtml(paymentMethod)}</p>
-    <p><strong>Amount paid:</strong> ${escapeHtml(formatInr(amountPaid))}</p>
+    <p><strong>${escapeHtml(amountLabel)}:</strong> ${escapeHtml(formatInr(amountPaid))}</p>
     ${subtotal != null ? `<p><strong>Subtotal:</strong> ${escapeHtml(formatInr(subtotal))}</p>` : ""}
     ${deliveryFee != null ? `<p><strong>Delivery fee:</strong> ${escapeHtml(formatInr(deliveryFee))}</p>` : ""}
     ${userId ? `<p><strong>Customer userId:</strong> ${escapeHtml(userId)}</p>` : ""}
