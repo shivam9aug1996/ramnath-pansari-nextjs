@@ -3,6 +3,7 @@ import { connectDB } from "../lib/dbconnection";
 import { log, logError } from "../lib/logger";
 import { isTokenVerified } from "@/json";
 import { expandSearchQueries } from "./grocerySynonyms";
+import { buildRelevanceSortStages } from "./searchRelevance";
 import {
   buildProductFilterMatch,
   buildProductSort,
@@ -147,6 +148,13 @@ export async function GET(req: NextRequest) {
       ];
       if (sort) {
         agg.push({ $sort: sort });
+      } else {
+        agg.push(
+          ...buildRelevanceSortStages({
+            queryVariants,
+            scoreMeta: "searchScore",
+          }),
+        );
       }
       agg.push({ $skip: skip }, { $limit: limit });
 
@@ -181,18 +189,29 @@ export async function GET(req: NextRequest) {
         ...matchStage,
       };
 
-      let cursor = db.collection("products").find(findQuery);
-      if (sort) {
-        cursor = cursor.sort(sort);
-      }
-
-      const results = await cursor.limit(limit).skip(skip).toArray();
-
       const totalResults = await db
         .collection("products")
         .countDocuments(findQuery);
 
       const totalPages = Math.ceil(totalResults / limit);
+
+      const textAgg: Record<string, unknown>[] = [{ $match: findQuery }];
+      if (sort) {
+        textAgg.push({ $sort: sort });
+      } else {
+        textAgg.push(
+          ...buildRelevanceSortStages({
+            queryVariants,
+            scoreMeta: "textScore",
+          }),
+        );
+      }
+      textAgg.push({ $skip: skip }, { $limit: limit });
+
+      const results = await db
+        .collection("products")
+        .aggregate(textAgg)
+        .toArray();
 
       log("[search] full-text results", {
         query,
