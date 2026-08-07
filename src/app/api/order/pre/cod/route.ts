@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { isTokenVerified } from "@/json";
 import { sendPushNotification } from "@/app/api/utils/sendPush";
+import { sendAdminOrderPlacedEmail } from "@/app/api/utils/sendAdminOrderEmail";
 import { CartItem } from "@/types/api";
 import { OrderStatus } from "../../orderStatus";
 import { syncActiveOrderToFirebase } from "@/app/api/utils/syncActiveOrderToFirebase";
@@ -230,6 +231,18 @@ export async function POST(req: NextRequest) {
       mongoOrderId,
       humanOrderId: id,
       deliveryOtp,
+    });
+
+    await sendAdminOrderPlacedEmail({
+      humanOrderId: id,
+      mongoOrderId,
+      paymentMethod: "COD",
+      amountPaid,
+      subtotal,
+      deliveryFee,
+      userId: userId?.toString?.() ?? String(userId),
+      addressData,
+      cartItems: cartData?.cart?.items ?? [],
     });
 
     const admin = await db.collection("pushTokens").findOne({

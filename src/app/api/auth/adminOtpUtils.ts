@@ -56,7 +56,7 @@ function generateOtp() {
   return String(Math.floor(100000 + Math.random() * 900000));
 }
 
-function getSmtpConfig() {
+export function getSmtpConfig() {
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
   if (!user || !pass) return null;
