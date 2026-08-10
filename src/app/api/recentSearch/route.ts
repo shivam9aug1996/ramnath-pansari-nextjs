@@ -1,8 +1,8 @@
-import { isTokenVerified } from "@/json";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../lib/dbconnection";
 import { asMongoUpdate } from "@/types/api";
+import { requireSameUser } from "@/app/api/lib/requireAuth";
 export async function POST(req: NextRequest) {
   if (req.method !== "POST") {
     return NextResponse.json(
@@ -18,11 +18,10 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     }
-    query = query?.toLowerCase();
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
+    query = String(query).toLowerCase().slice(0, 100);
+    const auth = await requireSameUser(req, userId);
+    if (auth instanceof NextResponse) return auth;
+    userId = auth.userId;
     const db = await connectDB(req);
     const searchHistoryCollection = db.collection("searchHistory");
     const existingUserHistory = await searchHistoryCollection.findOne({
@@ -78,17 +77,16 @@ export async function GET(req: NextRequest) {
   }
   try {
     const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
+    let userId = searchParams.get("userId");
     if (!userId) {
       return NextResponse.json(
         { message: "Missing userId param" },
         { status: 400 },
       );
     }
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
+    const auth = await requireSameUser(req, userId);
+    if (auth instanceof NextResponse) return auth;
+    userId = auth.userId;
     const db = await connectDB(req);
     const searchHistoryCollection = db.collection("searchHistory");
     const userHistory = await searchHistoryCollection.findOne({ userId });
@@ -113,7 +111,7 @@ export async function DELETE(req: NextRequest) {
   }
   try {
     const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
+    let userId = searchParams.get("userId");
     const id = searchParams.get("id");
     if (!userId || !id) {
       return NextResponse.json(
@@ -121,10 +119,9 @@ export async function DELETE(req: NextRequest) {
         { status: 400 },
       );
     }
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
+    const auth = await requireSameUser(req, userId);
+    if (auth instanceof NextResponse) return auth;
+    userId = auth.userId;
     const db = await connectDB(req);
     const searchHistoryCollection = db.collection("searchHistory");
     await searchHistoryCollection.updateOne(

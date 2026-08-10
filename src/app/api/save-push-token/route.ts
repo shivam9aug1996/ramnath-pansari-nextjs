@@ -4,6 +4,7 @@ import { ObjectId } from "mongodb";
 import { isTokenVerified } from "@/json";
 import { getTokenCandidatesFromRequest } from "@/app/api/lib/authToken";
 import { requireSameUser } from "@/app/api/lib/requireAuth";
+import { GUEST_MOBILE } from "@/app/api/admin/users/userUtils";
 
 export async function POST(req: NextRequest) {
   const { token, userId: requestedUserId } = await req.json();
@@ -25,13 +26,28 @@ export async function POST(req: NextRequest) {
 
   let userId = String(requestedUserId);
   let isGuestUser = false;
+  // Never trust client for admin elevation — always read from DB below.
   let isAdminUser = false;
 
   if (isGuestToken) {
+    const dbUsers = await connectDB();
+    const guestUser = await dbUsers.collection("users").findOne({
+      mobileNumber: GUEST_MOBILE,
+    });
+    if (!guestUser?._id) {
+      return NextResponse.json(
+        { error: "Guest user not found" },
+        { status: 404 },
+      );
+    }
+    userId = guestUser._id.toString();
     isGuestUser = true;
     isAdminUser = false;
   } else {
-    const auth = await requireSameUser(req, requestedUserId);
+    const auth = await requireSameUser(req, requestedUserId, {
+      allowAdmin: true,
+      allowDriver: true,
+    });
     if (auth instanceof NextResponse) return auth;
     userId = auth.userId;
 
@@ -61,5 +77,9 @@ export async function POST(req: NextRequest) {
     { upsert: true },
   );
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({
+    success: true,
+    userId,
+    isAdminUser,
+  });
 }

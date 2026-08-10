@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "../../lib/dbconnection";
-import { isTokenVerified } from "@/json";
+import { requireDriver } from "@/app/api/driver/requireDriver";
 
 export async function GET(req: NextRequest) {
   try {
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
+    const auth = await requireDriver(req);
+    if ("error" in auth) return auth.error;
+    const { db, driverId } = auth;
+
     const { searchParams } = new URL(req.url);
     const orderId = searchParams.get("orderId");
 
@@ -18,14 +17,19 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const db = await connectDB(req);
-
     const orderData = await db.collection("orders").findOne({
       orderId: orderId,
     });
 
     if (!orderData) {
       return NextResponse.json({ message: "Order not found" }, { status: 404 });
+    }
+
+    if (orderData.assignedDriver?.driverId !== driverId) {
+      return NextResponse.json(
+        { message: "Driver not assigned to this order" },
+        { status: 403 },
+      );
     }
 
     return NextResponse.json(orderData, { status: 200 });

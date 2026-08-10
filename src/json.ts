@@ -70,7 +70,8 @@ const ADMIN_ALLOWED = [
   { method: "POST", path: "/api/logout" },
   { method: "POST", path: "/api/private" },
   { method: "POST", path: "/api/save-push-token" },
-  // add anything else the admin UI truly needs outside /api/admin
+  // Legacy status updater (also gated by requireAdmin in the route)
+  { method: "PUT", path: "/api/order/post/detail/status" },
 ] as const;
 function isAdminAllowed(req: NextRequest) {
   const path = req.nextUrl.pathname;

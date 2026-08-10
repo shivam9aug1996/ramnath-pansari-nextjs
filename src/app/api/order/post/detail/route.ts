@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isTokenVerified } from "@/json";
 import { connectDB } from "../../../lib/dbconnection";
 import { ObjectId } from "mongodb";
 import { logError } from "../../../lib/logger";
+import { requireSameUser } from "@/app/api/lib/requireAuth";
 
 export async function GET(req: NextRequest) {
   try {
@@ -20,15 +20,13 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
+    const auth = await requireSameUser(req, userId);
+    if (auth instanceof NextResponse) return auth;
 
     const db = await connectDB(req);
 
     const orderData = await db.collection("orders").findOne({
-      userId: userId,
+      userId: auth.userId,
       _id: new ObjectId(orderId),
     });
 

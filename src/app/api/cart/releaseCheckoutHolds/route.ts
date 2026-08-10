@@ -1,7 +1,7 @@
-import { isTokenVerified } from "@/json";
 import { NextRequest, NextResponse } from "next/server";
 import { logError } from "../../lib/logger";
 import { releaseCheckoutHolds } from "../../utils/productPendingLock";
+import { requireSameUser } from "@/app/api/lib/requireAuth";
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,11 +13,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Invalid input" }, { status: 400 });
     }
 
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) return tokenVerificationResponse;
+    const auth = await requireSameUser(req, userId);
+    if (auth instanceof NextResponse) return auth;
 
     const ids = productIds.map((id) => String(id)).filter(Boolean);
-    await releaseCheckoutHolds(userId, ids, "checkout-aborted");
+    await releaseCheckoutHolds(auth.userId, ids, "checkout-aborted");
 
     return NextResponse.json(
       { message: "Checkout holds released", releasedCount: ids.length },

@@ -1,12 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isTokenVerified } from "@/json";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { Expo, ExpoPushMessage } from "expo-server-sdk";
 import { updateOrderStatus } from "@/app/api/utils/updateOrderStatus";
+import { requireAdmin } from "@/app/api/admin/requireAdmin";
+import { OrderStatus } from "@/app/api/order/orderStatus";
+
 const expo = new Expo({});
+
+const ALLOWED_STATUSES = new Set<string>(Object.values(OrderStatus));
 
 export async function PUT(req: NextRequest) {
   try {
+    const adminError = await requireAdmin(req);
+    if (adminError) return adminError;
+
     const { newStatus, userId, orderId, _id } = await req.json();
 
     if (!userId) {
@@ -18,21 +25,16 @@ export async function PUT(req: NextRequest) {
         { status: 400 },
       );
     }
-    if (!newStatus) {
+    if (!newStatus || !ALLOWED_STATUSES.has(String(newStatus))) {
       return NextResponse.json(
-        { message: "Missing new order status" },
+        { message: "Invalid or missing order status" },
         { status: 400 },
       );
     }
 
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
-
     const db = await connectDB(req);
 
-    await updateOrderStatus(db, orderId, newStatus, userId);
+    await updateOrderStatus(db, orderId, String(newStatus), String(userId));
 
     const pushArr: ExpoPushMessage[] = [
       {

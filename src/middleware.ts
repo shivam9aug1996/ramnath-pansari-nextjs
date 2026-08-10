@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import { getTokenFromAuthorizationHeader } from "./app/api/lib/authToken";
 import { listMiddlewarePolicies } from "./app/api/lib/rateLimitPolicies";
 import { consumeMemoryRateLimit } from "./app/api/lib/rateLimitMemory";
+import { verifyJwt } from "./app/api/lib/jwt";
 
 const ALLOWED_ORIGINS = new Set([
   "http://localhost:8081",
@@ -216,7 +217,26 @@ export async function middleware(request: NextRequest) {
     );
   }
 
-  logAppCheckPresence(request, "auth_present");
+  // Guest browse token — route handlers enforce allowlists.
+  if (userToken === "guest_token") {
+    logAppCheckPresence(request, "guest_token");
+    return applyCorsHeaders(NextResponse.next(), origin);
+  }
+
+  // Reject forged / expired JWTs at the edge (not just token presence).
+  const payload = await verifyJwt(userToken);
+  if (!payload || typeof payload.id !== "string" || !payload.id) {
+    logAppCheckPresence(request, "401_invalid_jwt");
+    return applyCorsHeaders(
+      new NextResponse(
+        JSON.stringify({ success: false, message: "Invalid or expired token" }),
+        { status: 401, headers: { "Content-Type": "application/json" } },
+      ),
+      origin,
+    );
+  }
+
+  logAppCheckPresence(request, "auth_verified");
   return applyCorsHeaders(NextResponse.next(), origin);
 }
 

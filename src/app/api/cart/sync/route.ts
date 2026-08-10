@@ -3,21 +3,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../../lib/dbconnection";
 import { logError } from "../../lib/logger";
 import { CartItem } from "@/types/api";
-import { isTokenVerified } from "@/json";
+import { requireSameUser } from "@/app/api/lib/requireAuth";
 
 export async function PATCH(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
+    let userId = searchParams.get("userId");
 
     if (!userId || !ObjectId.isValid(userId)) {
       return NextResponse.json({ message: "Invalid user ID" }, { status: 400 });
     }
 
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
+    const auth = await requireSameUser(req, userId);
+    if (auth instanceof NextResponse) return auth;
+    userId = auth.userId;
 
     const db = await connectDB(req);
 

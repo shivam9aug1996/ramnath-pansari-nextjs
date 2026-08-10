@@ -7,8 +7,15 @@ export const APP_CHECK_HEADER = "x-firebase-appcheck";
 export type AppCheckMode = "off" | "monitor" | "enforce";
 
 export function getAppCheckMode(): AppCheckMode {
-  const raw = (process.env.APP_CHECK_MODE || "monitor").trim().toLowerCase();
-  if (raw === "off" || raw === "enforce" || raw === "monitor") return raw;
+  const configured = (process.env.APP_CHECK_MODE || "").trim().toLowerCase();
+  if (configured === "off" || configured === "enforce" || configured === "monitor") {
+    return configured;
+  }
+  // Production defaults to enforce for native clients; browsers still skip via
+  // isBrowserClientRequest. Set APP_CHECK_MODE=monitor to soft-fail if needed.
+  if (process.env.VERCEL_ENV === "production" || process.env.NODE_ENV === "production") {
+    return "enforce";
+  }
   return "monitor";
 }
 

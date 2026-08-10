@@ -1,4 +1,3 @@
-import { isTokenVerified } from "@/json";
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../../lib/dbconnection";
 import { syncProductPrices } from "../../products/syncProductPrices";
@@ -8,6 +7,7 @@ import {
   releaseCheckoutHolds,
 } from "../../utils/productPendingLock";
 import AsyncLock from "async-lock";
+import { requireSameUser } from "@/app/api/lib/requireAuth";
 
 const lock = new AsyncLock({ timeout: 20_000 });
 
@@ -15,16 +15,17 @@ export async function PUT(req: NextRequest) {
   try {
     const { items } = await req.json();
     const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
+    const requestedUserId = searchParams.get("userId");
 
-    if (!userId || !Array.isArray(items)) {
+    if (!requestedUserId || !Array.isArray(items)) {
       return NextResponse.json({ message: "Invalid input" }, { status: 400 });
     }
 
-    return await lock.acquire(userId, async () => {
-      const tokenVerificationResponse = await isTokenVerified(req);
-      if (tokenVerificationResponse) return tokenVerificationResponse;
+    const auth = await requireSameUser(req, requestedUserId);
+    if (auth instanceof NextResponse) return auth;
+    const userId = auth.userId;
 
+    return await lock.acquire(userId, async () => {
       const db = await connectDB(req);
       const productIds = items.map((item) => item?.productId).filter(Boolean);
       console.log("[product-lock] updateProductsAsPerCart:start", {

@@ -11,6 +11,13 @@ export type AuthUser = {
   isAdminUser?: boolean;
 };
 
+export type RequireAuthOptions = {
+  /** Allow admin JWTs (default: false — customer APIs). */
+  allowAdmin?: boolean;
+  /** Allow driver JWTs (default: false — customer APIs). */
+  allowDriver?: boolean;
+};
+
 async function getVerifiedUser(token: string): Promise<AuthUser | null> {
   const payload = await verifyJwt(token);
   if (!payload || typeof payload.id !== "string" || !payload.id) {
@@ -28,12 +35,45 @@ async function getVerifiedUser(token: string): Promise<AuthUser | null> {
   };
 }
 
+function roleForbidden(
+  user: AuthUser,
+  options: RequireAuthOptions,
+): NextResponse | null {
+  if (user.isDriverUser && !options.allowDriver) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: {
+          code: "FORBIDDEN",
+          message: "Driver accounts cannot access customer APIs",
+        },
+      },
+      { status: 403 },
+    );
+  }
+  if (user.isAdminUser && !options.allowAdmin) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: {
+          code: "FORBIDDEN",
+          message: "Admin accounts cannot access customer or driver APIs",
+        },
+      },
+      { status: 403 },
+    );
+  }
+  return null;
+}
+
 /**
  * Verifies JWT and returns the authenticated user.
  * Prefer this over isTokenVerified when the handler needs identity binding.
+ * By default rejects admin/driver tokens (customer-only APIs).
  */
 export async function requireAuthUser(
   req: Request,
+  options: RequireAuthOptions = {},
 ): Promise<{ user: AuthUser } | NextResponse> {
   const appCheckResponse = await requireAppCheck(req);
   if (appCheckResponse) {
@@ -50,6 +90,8 @@ export async function requireAuthUser(
     }
     const user = await getVerifiedUser(token);
     if (user) {
+      const forbidden = roleForbidden(user, options);
+      if (forbidden) return forbidden;
       return { user };
     }
   }
@@ -78,8 +120,9 @@ export function assertSameUser(
 export async function requireSameUser(
   req: Request,
   requestedUserId: string | null | undefined,
+  options: RequireAuthOptions = {},
 ): Promise<{ userId: string } | NextResponse> {
-  const auth = await requireAuthUser(req);
+  const auth = await requireAuthUser(req, options);
   if (auth instanceof NextResponse) return auth;
   const mismatch = assertSameUser(auth.user.id, requestedUserId);
   if (mismatch) return mismatch;

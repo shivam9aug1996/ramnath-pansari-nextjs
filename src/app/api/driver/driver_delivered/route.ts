@@ -1,22 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "../../lib/dbconnection";
 import { asMongoUpdate } from "@/types/api";
 import { syncActiveOrderToFirebase } from "../../utils/syncActiveOrderToFirebase";
 import {
   MAX_DELIVERY_OTP_ATTEMPTS,
   otpMatches,
 } from "@/app/api/utils/deliveryOtp";
+import { requireDriver } from "@/app/api/driver/requireDriver";
 
 export async function POST(req: NextRequest) {
   try {
-    const { orderId, driverId, otp } = await req.json();
-    if (!orderId || !driverId) {
+    const auth = await requireDriver(req);
+    if ("error" in auth) return auth.error;
+    const { db, driverId: authDriverId } = auth;
+
+    const { orderId, otp } = await req.json();
+    if (!orderId) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 },
       );
     }
-    const db = await connectDB();
     const orders = db.collection("orders");
     const order = await orders.findOne({ orderId });
     if (!order) {
@@ -28,7 +31,10 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     }
-    if (!order.assignedDriver || order.assignedDriver.driverId !== driverId) {
+    if (
+      !order.assignedDriver ||
+      order.assignedDriver.driverId !== authDriverId
+    ) {
       return NextResponse.json(
         { message: "Driver not assigned to this order" },
         { status: 403 },
@@ -38,7 +44,12 @@ export async function POST(req: NextRequest) {
     const providedOtp = String(otp ?? "").trim();
     if (!/^\d{4}$/.test(providedOtp)) {
       return NextResponse.json(
-        { error: { code: "INVALID_OTP", message: "Enter the 4-digit delivery OTP" } },
+        {
+          error: {
+            code: "INVALID_OTP",
+            message: "Enter the 4-digit delivery OTP",
+          },
+        },
         { status: 400 },
       );
     }

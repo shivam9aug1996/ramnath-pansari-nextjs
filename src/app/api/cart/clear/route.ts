@@ -1,7 +1,7 @@
-import { isTokenVerified } from "@/json";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../../lib/dbconnection";
+import { requireSameUser } from "@/app/api/lib/requireAuth";
 export async function PUT(req: NextRequest) {
   let session;
   try {
@@ -10,12 +10,10 @@ export async function PUT(req: NextRequest) {
     if (!userId) {
       return NextResponse.json({ message: "Invalid input" }, { status: 400 });
     }
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
+    const auth = await requireSameUser(req, userId);
+    if (auth instanceof NextResponse) return auth;
     const db = await connectDB(req);
-    const userObjectId = new ObjectId(userId);
+    const userObjectId = new ObjectId(auth.userId);
     const cart = await db
       .collection("carts")
       .findOne({ userId: userObjectId }, { session });

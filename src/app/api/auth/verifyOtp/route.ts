@@ -23,12 +23,14 @@ const generateToken = async (
   user: any,
   isGuestUser: boolean = false,
   isDriverUser: boolean = false,
+  isAdminUser: boolean = false,
 ) => {
   const payload = {
     id: user?._id?.toString(),
     mobileNumber: user?.mobileNumber,
     isGuestUser: isGuestUser,
     isDriverUser,
+    isAdminUser,
   };
   const options = { expiresIn: "30d" };
   return signJwt(payload, options);
@@ -107,7 +109,7 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      const token = await generateToken(user, false);
+      const token = await generateToken(user, false, false, true);
 
       const existingCart = await db
         .collection("carts")
@@ -243,6 +245,7 @@ export async function POST(req: NextRequest) {
       }
 
       const isDriverUser = resolveIsDriver(user);
+      const isAdminUser = Boolean(user?.isAdminUser);
       const driverId =
         user.driverId != null && String(user.driverId).trim()
           ? String(user.driverId)
@@ -250,7 +253,12 @@ export async function POST(req: NextRequest) {
             ? user._id?.toString()
             : undefined;
 
-      const token = await generateToken(user, isGuestUser, isDriverUser);
+      const token = await generateToken(
+        user,
+        isGuestUser,
+        isDriverUser,
+        isAdminUser,
+      );
 
       const existingCart = await db
         .collection("carts")
