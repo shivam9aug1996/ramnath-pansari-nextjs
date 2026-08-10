@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { ObjectId } from "mongodb";
 import { connectDB } from "@/app/api/lib/dbconnection";
-import { isTokenVerified } from "@/json";
 import { sendPushNotification } from "@/app/api/utils/sendPush";
 import { sendAdminOrderPlacedEmail } from "@/app/api/utils/sendAdminOrderEmail";
 import { CartItem } from "@/types/api";
@@ -17,13 +17,21 @@ import {
 } from "@/app/api/utils/orderAmount";
 import { applyOffersToCart } from "@/app/api/offers/applyOffers";
 import { getDeliverySettings } from "@/app/api/delivery/deliverySettingsUtils";
-import { getStoreConfig, validateOrderPlacement } from "@/app/api/store/storeConfigUtils";
+import {
+  getStoreConfig,
+  validateOrderPlacement,
+} from "@/app/api/store/storeConfigUtils";
 import {
   commitOrderProductLocks,
   extractProductIdsFromCart,
   releaseProductLocksAfterFailedInsert,
 } from "@/app/api/utils/productPendingLock";
 import { logError } from "@/app/api/lib/logger";
+import { requireSameUser } from "@/app/api/lib/requireAuth";
+import {
+  rehydrateCartItemsFromDb,
+  sanitizeAddressData,
+} from "@/app/api/utils/secureCart";
 const orderid = require("order-id")("key");
 
 function storeImages(cart: { items?: CartItem[] }) {
@@ -44,16 +52,11 @@ function storeImages(cart: { items?: CartItem[] }) {
 }
 
 function getTotalProductCount(cart: { items?: CartItem[] }) {
-  console.log("ytrdfghjk", cart);
-
   let total = 0;
   cart?.items?.forEach((item: CartItem) => {
     const { quantity = 0 } = item;
-    console.log("ytredfghjkl", quantity, total, typeof quantity, typeof total);
-
     total = total + quantity;
   });
-  console.log("uytrdfghjk", total);
   return total;
 }
 
@@ -66,23 +69,25 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
-
     const {
       cartData,
       addressData,
-      userId,
+      userId: requestedUserId,
       isLive = false,
       amount,
     } = await req.json();
 
-    console.log(cartData, addressData, userId, isLive);
-
-    if (!cartData || !addressData || !userId || amount == null) {
+    if (!cartData || !addressData || !requestedUserId || amount == null) {
       return NextResponse.json({ message: "Invalid input" }, { status: 400 });
+    }
+
+    const auth = await requireSameUser(req, requestedUserId);
+    if (auth instanceof NextResponse) return auth;
+    const userId = auth.userId;
+
+    const sanitizedAddress = sanitizeAddressData(addressData);
+    if (!sanitizedAddress) {
+      return NextResponse.json({ message: "Invalid address" }, { status: 400 });
     }
 
     const incomingItems = cartData?.cart?.items ?? [];
@@ -90,7 +95,10 @@ export async function POST(req: NextRequest) {
     const deliverySettings = await getDeliverySettings(db);
     const storeConfig = await getStoreConfig(db);
 
-    const placementCheck = validateOrderPlacement(addressData, storeConfig);
+    const placementCheck = validateOrderPlacement(
+      sanitizedAddress,
+      storeConfig,
+    );
     if (!placementCheck.ok) {
       return NextResponse.json(
         { message: placementCheck.message, code: placementCheck.code },
@@ -98,10 +106,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Recompute offers server-side so percent/flat order discounts match cart GET.
+    const rehydrated = await rehydrateCartItemsFromDb(db, incomingItems);
+    if (!rehydrated.ok) {
+      return NextResponse.json(
+        { message: rehydrated.message, code: rehydrated.code },
+        { status: 400 },
+      );
+    }
+
     const { items: cartItems, orderDiscount } = await applyOffersToCart(
       db,
-      incomingItems,
+      rehydrated.items,
     );
     const subtotal = calculateCartSubtotal(cartItems);
     const deliveryFee = getDeliveryFee(subtotal, deliverySettings);
@@ -114,6 +129,7 @@ export async function POST(req: NextRequest) {
     cartData.cart = {
       ...(cartData.cart ?? {}),
       items: cartItems,
+      userId: new ObjectId(userId),
     };
     cartData.orderDiscount = orderDiscount;
 
@@ -183,7 +199,7 @@ export async function POST(req: NextRequest) {
       result = await db.collection("orders").insertOne({
         transactionData,
         cartData,
-        addressData,
+        addressData: sanitizedAddress,
         orderStatus: OrderStatus.CONFIRMED,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -192,7 +208,9 @@ export async function POST(req: NextRequest) {
         imgArr,
         productCount: cartData?.cart?.items?.length || 0,
         totalProductCount,
-        orderHistory: [{ status: OrderStatus.CONFIRMED, timestamp: new Date() }],
+        orderHistory: [
+          { status: OrderStatus.CONFIRMED, timestamp: new Date() },
+        ],
         amountPaid,
         subtotal,
         deliveryFee,
@@ -241,14 +259,13 @@ export async function POST(req: NextRequest) {
       subtotal,
       deliveryFee,
       userId: userId?.toString?.() ?? String(userId),
-      addressData,
+      addressData: sanitizedAddress,
       cartItems: cartData?.cart?.items ?? [],
     });
 
     const admin = await db.collection("pushTokens").findOne({
       isAdminUser: true,
     });
-    console.log("admin34567890", admin);
     if (admin) {
       admin?.tokens?.forEach(async (token: { toString(): string }) => {
         await sendPushNotification({

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../../lib/dbconnection";
 import { syncProductPrices } from "../syncProductPrices";
+import { requireAdmin } from "@/app/api/admin/requireAdmin";
 
 export async function PATCH(req: NextRequest) {
   if (req.method !== "PATCH") {
@@ -11,6 +12,9 @@ export async function PATCH(req: NextRequest) {
   }
 
   try {
+    const authError = await requireAdmin(req);
+    if (authError) return authError;
+
     const { products } = await req.json();
 
     if (!products || !Array.isArray(products) || products.length === 0) {
@@ -41,10 +45,7 @@ export async function PATCH(req: NextRequest) {
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(
-      {
-        error: "Something went wrong",
-        details: error instanceof Error ? error.message : String(error),
-      },
+      { error: "Something went wrong" },
       { status: 500 },
     );
   }

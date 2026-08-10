@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isTokenVerified } from "@/json";
 import { connectDB } from "../../lib/dbconnection";
+import { requireSameUser } from "@/app/api/lib/requireAuth";
 
 const DATE_ONLY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -33,10 +33,8 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: "Missing user ID" }, { status: 400 });
     }
 
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
+    const auth = await requireSameUser(req, userId);
+    if (auth instanceof NextResponse) return auth;
 
     const db = await connectDB(req);
 

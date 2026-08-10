@@ -32,6 +32,9 @@ export async function PUT(req: NextRequest) {
     if (!_id || typeof _id !== "string") {
       return NextResponse.json({ message: "Invalid user ID" }, { status: 400 });
     }
+    const { requireSameUser } = await import("@/app/api/lib/requireAuth");
+    const auth = await requireSameUser(req, _id);
+    if (auth instanceof NextResponse) return auth;
     const db = await connectDB(req);
     const user = await db
       .collection("users")
@@ -98,6 +101,9 @@ export async function GET(req: NextRequest) {
     if (response) {
       return response;
     }
+    const { requireSameUser } = await import("@/app/api/lib/requireAuth");
+    const auth = await requireSameUser(req, _id);
+    if (auth instanceof NextResponse) return auth;
     const db = await connectDB(req);
     const user = await db
       .collection("users")
@@ -133,6 +139,9 @@ export async function DELETE(req: NextRequest) {
     if (tokenVerificationResponse) {
       return tokenVerificationResponse;
     }
+    const { requireSameUser } = await import("@/app/api/lib/requireAuth");
+    const auth = await requireSameUser(req, userId);
+    if (auth instanceof NextResponse) return auth;
     const client = await getClient();
     session = await startTransaction(client);
     const db = await connectDB(req);

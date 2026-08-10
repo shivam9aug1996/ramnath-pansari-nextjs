@@ -1,9 +1,10 @@
-import { isTokenVerified } from "@/json";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../lib/dbconnection";
 import { deleteImage, uploadImage1 } from "../lib/global";
 import { asMongoUpdate } from "@/types/api";
+import { requireSameUser } from "@/app/api/lib/requireAuth";
+import { sanitizeAddressData } from "@/app/api/utils/secureCart";
 
 const getGoogleImage = (address: {
   latitude?: number;
@@ -20,6 +21,7 @@ const getGoogleImage = (address: {
   const mapImage = `https://maps.googleapis.com/maps/api/staticmap?center=${address?.colonyArea}+${address?.city}+${address?.state}${str}&zoom=13&size=300x150&key=${apiKey}`;
   return mapImage;
 };
+
 export async function POST(req: NextRequest) {
   if (req.method !== "POST") {
     return NextResponse.json(
@@ -29,38 +31,44 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { address, userId } = await req.json();
-    console.log("8765ehjk", userId, address);
+    const { address, userId: requestedUserId } = await req.json();
 
-    if (!address || !userId) {
+    if (!address || !requestedUserId) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 },
       );
     }
 
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
+    const auth = await requireSameUser(req, requestedUserId);
+    if (auth instanceof NextResponse) return auth;
+    const userId = auth.userId;
+
+    const sanitized = sanitizeAddressData(address);
+    if (!sanitized) {
+      return NextResponse.json(
+        { message: "Invalid address" },
+        { status: 400 },
+      );
     }
 
     const db = await connectDB(req);
     const addressCollection = db.collection("userAddresses");
 
-    const data = await uploadImage1(getGoogleImage(address));
+    const data = await uploadImage1(getGoogleImage(sanitized as never));
 
     await addressCollection.updateOne(
       { userId },
-      {
+      asMongoUpdate({
         $push: {
           addresses: {
             _id: new ObjectId(),
-            ...address,
+            ...sanitized,
             timestamp: new Date(),
             mapImage: data,
           },
         },
-      },
+      }),
       { upsert: true },
     );
 
@@ -84,19 +92,18 @@ export async function GET(req: NextRequest) {
 
   try {
     const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
+    const requestedUserId = searchParams.get("userId");
 
-    if (!userId) {
+    if (!requestedUserId) {
       return NextResponse.json(
         { message: "Missing userId param" },
         { status: 400 },
       );
     }
 
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
+    const auth = await requireSameUser(req, requestedUserId);
+    if (auth instanceof NextResponse) return auth;
+    const userId = auth.userId;
 
     const db = await connectDB(req);
     const addressCollection = db.collection("userAddresses");
@@ -125,18 +132,25 @@ export async function PUT(req: NextRequest) {
   }
 
   try {
-    const { address, userId, addressId } = await req.json();
+    const { address, userId: requestedUserId, addressId } = await req.json();
 
-    if (!address || !userId || !addressId) {
+    if (!address || !requestedUserId || !addressId) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 },
       );
     }
 
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
+    const auth = await requireSameUser(req, requestedUserId);
+    if (auth instanceof NextResponse) return auth;
+    const userId = auth.userId;
+
+    const sanitized = sanitizeAddressData(address);
+    if (!sanitized) {
+      return NextResponse.json(
+        { message: "Invalid address" },
+        { status: 400 },
+      );
     }
 
     const db = await connectDB(req);
@@ -151,16 +165,14 @@ export async function PUT(req: NextRequest) {
     if (existingMapImage) {
       await deleteImage(existingMapImage);
     }
-    console.log("76rdfghjkjgf", getGoogleImage(address));
-    const data = await uploadImage1(getGoogleImage(address));
-    console.log("iuytfghj", data);
+    const data = await uploadImage1(getGoogleImage(sanitized as never));
 
     await addressCollection.updateOne(
       { userId, "addresses._id": new ObjectId(addressId) },
       {
         $set: {
           "addresses.$": {
-            ...address,
+            ...sanitized,
             _id: new ObjectId(addressId),
             timestamp: new Date(),
             mapImage: data,
@@ -189,20 +201,19 @@ export async function DELETE(req: NextRequest) {
 
   try {
     const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
+    const requestedUserId = searchParams.get("userId");
     const addressId = searchParams.get("addressId");
 
-    if (!userId || !addressId) {
+    if (!requestedUserId || !addressId) {
       return NextResponse.json(
         { message: "Missing userId or addressId param" },
         { status: 400 },
       );
     }
 
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
+    const auth = await requireSameUser(req, requestedUserId);
+    if (auth instanceof NextResponse) return auth;
+    const userId = auth.userId;
 
     const db = await connectDB(req);
     const addressCollection = db.collection("userAddresses");

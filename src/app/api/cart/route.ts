@@ -1,4 +1,3 @@
-import { isTokenVerified } from "@/json";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import type { ClientSession } from "mongodb";
@@ -16,6 +15,8 @@ import {
   movePromoItemsToTop,
 } from "../offers/applyOffers";
 import { log, logError } from "../lib/logger";
+import { requireSameUser } from "@/app/api/lib/requireAuth";
+import { clampCartQuantity } from "@/app/api/utils/secureCart";
 
 const lock = new AsyncLock({ timeout: 20000 });
 
@@ -24,24 +25,23 @@ export async function PUT(req: NextRequest) {
   try {
     const { productId, productDetails, quantity } = await req.json();
     const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
+    const requestedUserId = searchParams.get("userId");
 
     if (
       !productId ||
       !ObjectId.isValid(productId) ||
       !productDetails ||
       quantity < 0 ||
-      !userId
+      !requestedUserId
     ) {
       return NextResponse.json({ message: "Invalid input" }, { status: 400 });
     }
 
-    await lock.acquire(userId, async () => {
-      const tokenVerificationResponse = await isTokenVerified(req);
-      if (tokenVerificationResponse) {
-        return tokenVerificationResponse;
-      }
+    const auth = await requireSameUser(req, requestedUserId);
+    if (auth instanceof NextResponse) return auth;
+    const userId = auth.userId;
 
+    await lock.acquire(userId, async () => {
       const db = await connectDB(req);
       const client = await getClient();
       session = await startTransaction(client);
@@ -66,11 +66,16 @@ export async function PUT(req: NextRequest) {
         throw error;
       }
 
+      const safeQuantity = clampCartQuantity(
+        quantity,
+        product1?.maxQuantity as number | undefined,
+      );
+
       const cart = await db
         .collection("carts")
         .findOne({ userId: userObjectId }, { session });
 
-      if (!cart && quantity > 0) {
+      if (!cart && safeQuantity > 0) {
         const product = await db
           .collection("products")
           .findOne({ _id: productObjectId }, { session });
@@ -84,7 +89,7 @@ export async function PUT(req: NextRequest) {
               {
                 productId: productObjectId,
                 productDetails: product,
-                quantity,
+                quantity: safeQuantity,
               },
             ],
           },
@@ -114,27 +119,27 @@ export async function PUT(req: NextRequest) {
         let amountToBeAdd = 0;
         let amountToBeRemove = 0;
         let quantityDiff = itemQuan?.quantity
-          ? quantity - itemQuan?.quantity
-          : quantity;
+          ? safeQuantity - itemQuan?.quantity
+          : safeQuantity;
         log("cart quantity diff", { quantityDiff, productId });
-        if (itemIndex === -1 && quantity > 0) {
+        if (itemIndex === -1 && safeQuantity > 0) {
           updateAction = {
             $push: {
               items: {
                 productId: productObjectId,
                 productDetails: product,
-                quantity,
+                quantity: safeQuantity,
               },
             },
           };
-        } else if (itemIndex !== -1 && quantity > 0) {
+        } else if (itemIndex !== -1 && safeQuantity > 0) {
           updateAction = {
             $set: {
-              [`items.${itemIndex}.quantity`]: quantity,
+              [`items.${itemIndex}.quantity`]: safeQuantity,
               [`items.${itemIndex}.productDetails`]: product,
             },
           };
-        } else if (itemIndex !== -1 && quantity === 0) {
+        } else if (itemIndex !== -1 && safeQuantity === 0) {
           updateAction = { $pull: { items: { productId: productObjectId } } };
         } else {
           await commitTransaction(session);
@@ -219,16 +224,15 @@ export async function PUT(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
+    const requestedUserId = searchParams.get("userId");
 
-    if (!userId || !ObjectId.isValid(userId)) {
+    if (!requestedUserId || !ObjectId.isValid(requestedUserId)) {
       return NextResponse.json({ message: "Invalid user ID" }, { status: 400 });
     }
 
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
+    const auth = await requireSameUser(req, requestedUserId);
+    if (auth instanceof NextResponse) return auth;
+    const userId = auth.userId;
 
     const db = await connectDB(req);
 

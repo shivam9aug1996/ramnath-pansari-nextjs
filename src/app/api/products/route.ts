@@ -2,6 +2,7 @@ import { isTokenVerified } from "@/json";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../lib/dbconnection";
+import { requireAdmin } from "@/app/api/admin/requireAdmin";
 
 import categoryConfig from "./categoryConfig";
 import { syncJiomartCategories } from "./jiomartSync";
@@ -21,6 +22,9 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    const authError = await requireAdmin(req);
+    if (authError) return authError;
+
     const { name, categoryPath, image, discountedPrice, price, size } =
       await req.json();
 
@@ -37,11 +41,6 @@ export async function POST(req: NextRequest) {
         { message: "Missing required fields" },
         { status: 400 },
       );
-    }
-
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
     }
 
     const db = await connectDB(req);
@@ -164,10 +163,8 @@ export async function PUT(req: NextRequest) {
   }
 
   try {
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
+    const authError = await requireAdmin(req);
+    if (authError) return authError;
 
     const db = await connectDB(req);
 
@@ -221,6 +218,9 @@ export async function PATCH(req: NextRequest) {
   }
 
   try {
+    const authError = await requireAdmin(req);
+    if (authError) return authError;
+
     const { categories, wipeAll = false, syncAll = false } = await req.json();
     const db = await connectDB(req);
 

@@ -30,7 +30,7 @@ const generateToken = async (
     isGuestUser: isGuestUser,
     isDriverUser,
   };
-  const options = {};
+  const options = { expiresIn: "30d" };
   return signJwt(payload, options);
 };
 

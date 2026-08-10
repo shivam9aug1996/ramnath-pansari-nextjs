@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../lib/dbconnection";
 import { asMongoUpdate } from "@/types/api";
 import type { UpdateResult, InsertOneResult, Document } from "mongodb";
+import { requireAdmin } from "@/app/api/admin/requireAdmin";
 
 export async function POST(req: NextRequest) {
   if (req.method !== "POST") {
@@ -14,6 +15,9 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    const authError = await requireAdmin(req);
+    if (authError) return authError;
+
     const { parentCategoryId, name, image } = await req.json();
 
     if (!name) {
@@ -21,11 +25,6 @@ export async function POST(req: NextRequest) {
         { message: "Missing category name" },
         { status: 400 },
       );
-    }
-
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
     }
 
     const db = await connectDB(req);

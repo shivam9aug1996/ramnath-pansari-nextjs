@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "../../lib/dbconnection";
 import { asMongoUpdate } from "@/types/api";
+import { requireAdmin } from "@/app/api/admin/requireAdmin";
+
 export async function POST(req: NextRequest) {
   try {
+    const authError = await requireAdmin(req);
+    if (authError) return authError;
+
     const { orderId, driver } = await req.json();
     if (!orderId || !driver?.driverId) {
       return NextResponse.json(

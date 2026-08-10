@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { ObjectId } from "mongodb";
 
-import { isTokenVerified } from "@/json";
 import { encode } from "js-base64";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { sendPushNotification } from "@/app/api/utils/sendPush";
@@ -15,7 +15,9 @@ import {
 import {
   calculateCartSubtotal,
   getDeliveryFee,
+  getPayableAmountFromCart,
 } from "@/app/api/utils/orderAmount";
+import { applyOffersToCart } from "@/app/api/offers/applyOffers";
 import { getDeliverySettings } from "@/app/api/delivery/deliverySettingsUtils";
 import { getStoreConfig, validateOrderPlacement } from "@/app/api/store/storeConfigUtils";
 import {
@@ -24,6 +26,11 @@ import {
   releaseProductLocksAfterFailedInsert,
 } from "@/app/api/utils/productPendingLock";
 import { logError } from "@/app/api/lib/logger";
+import { requireSameUser } from "@/app/api/lib/requireAuth";
+import {
+  rehydrateCartItemsFromDb,
+  sanitizeAddressData,
+} from "@/app/api/utils/secureCart";
 const orderid = require("order-id")("key");
 
 function storeImages(cart: { items?: CartItem[] }) {
@@ -66,11 +73,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const tokenVerificationResponse = await isTokenVerified(req);
-    if (tokenVerificationResponse) {
-      return tokenVerificationResponse;
-    }
-
     const {
       razorpay_payment_id,
       razorpay_signature,
@@ -78,8 +80,20 @@ export async function POST(req: NextRequest) {
       order_id,
       cartData,
       addressData,
-      userId,
+      userId: requestedUserId,
     } = await req.json();
+
+    const auth = await requireSameUser(req, requestedUserId);
+    if (auth instanceof NextResponse) return auth;
+    const userId = auth.userId;
+
+    const sanitizedAddress = sanitizeAddressData(addressData);
+    if (!sanitizedAddress) {
+      return NextResponse.json(
+        { message: "Invalid address", verified: false },
+        { status: 400 },
+      );
+    }
 
     const secretKey = isLive
       ? process.env.RAZORPAY_SECRET_LIVE
@@ -136,7 +150,10 @@ export async function POST(req: NextRequest) {
       }
       const db = await connectDB(req);
       const storeConfig = await getStoreConfig(db);
-      const placementCheck = validateOrderPlacement(addressData, storeConfig);
+      const placementCheck = validateOrderPlacement(
+        sanitizedAddress,
+        storeConfig,
+      );
       if (!placementCheck.ok) {
         return NextResponse.json(
           {
@@ -147,6 +164,54 @@ export async function POST(req: NextRequest) {
           { status: 400 },
         );
       }
+
+      const rehydrated = await rehydrateCartItemsFromDb(
+        db,
+        cartData?.cart?.items ?? [],
+      );
+      if (!rehydrated.ok) {
+        return NextResponse.json(
+          {
+            message: rehydrated.message,
+            code: rehydrated.code,
+            verified: false,
+          },
+          { status: 400 },
+        );
+      }
+
+      const deliverySettings = await getDeliverySettings(db);
+      const { items: cartItems, orderDiscount } = await applyOffersToCart(
+        db,
+        rehydrated.items,
+      );
+      const subtotal = calculateCartSubtotal(cartItems);
+      const deliveryFee = getDeliveryFee(subtotal, deliverySettings);
+      const expectedAmount = getPayableAmountFromCart(
+        cartItems,
+        deliverySettings,
+        orderDiscount,
+      );
+      const amountPaid = (transactionData?.amount as number) || 0;
+
+      if (Math.abs(amountPaid - expectedAmount) > 0.01) {
+        return NextResponse.json(
+          {
+            message: "Paid amount does not match cart total",
+            expectedAmount,
+            amountPaid,
+            verified: false,
+          },
+          { status: 400 },
+        );
+      }
+
+      cartData.cart = {
+        ...(cartData?.cart ?? {}),
+        items: cartItems,
+        userId: new ObjectId(userId),
+      };
+      cartData.orderDiscount = orderDiscount;
 
       const id = orderid.generate();
       const productIds = extractProductIdsFromCart(cartData);
@@ -192,18 +257,13 @@ export async function POST(req: NextRequest) {
       const deliveryOtp = generateDeliveryOtp();
 
       const totalProductCount = getTotalProductCount(cartData?.cart);
-      const cartItems = cartData?.cart?.items ?? [];
-      const subtotal = calculateCartSubtotal(cartItems);
-      const deliverySettings = await getDeliverySettings(db);
-      const deliveryFee = getDeliveryFee(subtotal, deliverySettings);
-      const amountPaid = (transactionData?.amount as number) || 0;
 
       let result;
       try {
         result = await db.collection("orders").insertOne({
           transactionData,
           cartData,
-          addressData,
+          addressData: sanitizedAddress,
           orderStatus: OrderStatus.CONFIRMED,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -218,6 +278,7 @@ export async function POST(req: NextRequest) {
           amountPaid,
           subtotal,
           deliveryFee,
+          orderDiscount,
           deliveryOtp,
           deliveryOtpAttempts: 0,
         });
@@ -262,7 +323,7 @@ export async function POST(req: NextRequest) {
         subtotal,
         deliveryFee,
         userId: userId?.toString?.() ?? String(userId),
-        addressData,
+        addressData: sanitizedAddress,
         cartItems,
       });
 

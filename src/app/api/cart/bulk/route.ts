@@ -1,4 +1,3 @@
-import { isTokenVerified } from "@/json";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import type { ClientSession } from "mongodb";
@@ -13,6 +12,8 @@ import {
 import { applyOffersToCart } from "../../offers/applyOffers";
 import { logError } from "../../lib/logger";
 import AsyncLock from "async-lock";
+import { requireSameUser } from "@/app/api/lib/requireAuth";
+import { clampCartQuantity } from "@/app/api/utils/secureCart";
 
 const lock = new AsyncLock({ timeout: 20000 });
 
@@ -21,18 +22,19 @@ export async function PUT(req: NextRequest) {
   try {
     const { items } = await req.json();
     const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
+    const requestedUserId = searchParams.get("userId");
 
-    if (!userId || !Array.isArray(items)) {
+    if (!requestedUserId || !Array.isArray(items)) {
       return NextResponse.json({ message: "Invalid input" }, { status: 400 });
     }
+
+    const auth = await requireSameUser(req, requestedUserId);
+    if (auth instanceof NextResponse) return auth;
+    const userId = auth.userId;
 
     const failedItems: { productId: string; reason: string }[] = [];
 
     return await lock.acquire(userId, async () => {
-      const tokenVerificationResponse = await isTokenVerified(req);
-      if (tokenVerificationResponse) return tokenVerificationResponse;
-
       const db = await connectDB(req);
       const client = await getClient();
       session = await startTransaction(client);
@@ -86,23 +88,27 @@ export async function PUT(req: NextRequest) {
           continue;
         }
 
+        const safeQuantity = clampCartQuantity(
+          quantity,
+          product.maxQuantity as number | undefined,
+        );
+
+        if (safeQuantity === 0) {
+          continue;
+        }
+
         const itemIndex = updatedItems.findIndex((i) =>
           i.productId.equals(productObjectId),
         );
-        const adjustedQuantity = product.maxQuantity
-          ? Math.min(quantity, product.maxQuantity)
-          : quantity;
-        if (itemIndex === -1 && adjustedQuantity > 0) {
+        if (itemIndex === -1) {
           updatedItems.push({
             productId: productObjectId,
-            quantity: adjustedQuantity,
+            quantity: safeQuantity,
             productDetails: product,
-          });
-        } else if (itemIndex !== -1 && adjustedQuantity > 0) {
-          updatedItems[itemIndex].quantity = adjustedQuantity;
+          } as CartItem);
+        } else {
+          updatedItems[itemIndex].quantity = safeQuantity;
           updatedItems[itemIndex].productDetails = product;
-        } else if (itemIndex !== -1 && adjustedQuantity === 0) {
-          updatedItems.splice(itemIndex, 1);
         }
       }
 
@@ -144,17 +150,3 @@ export async function PUT(req: NextRequest) {
     );
   }
 }
-
-const calculateTotalAmount = (products: CartItem[] = []): number => {
-  return products?.reduce((total: number, product: CartItem) => {
-    const details = product?.productDetails as
-      | { discountedPrice?: number }
-      | null
-      | undefined;
-    const productTotal = details?.discountedPrice
-      ? parseFloat((details.discountedPrice * product?.quantity)?.toFixed(2))
-      : 0;
-
-    return parseFloat(total?.toFixed(2)) + productTotal;
-  }, 0);
-};
