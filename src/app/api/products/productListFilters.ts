@@ -88,13 +88,14 @@ export function buildProductFilterMatch(
 }
 
 export function buildProductSort(sort: ProductListSort): Sort | null {
+  // Always include `_id` so skip/limit pages don't overlap on ties.
   switch (sort) {
     case "price_asc":
-      return { discountedPrice: 1, name: 1 };
+      return { discountedPrice: 1, name: 1, _id: 1 };
     case "price_desc":
-      return { discountedPrice: -1, name: 1 };
+      return { discountedPrice: -1, name: 1, _id: 1 };
     case "name_asc":
-      return { name: 1 };
+      return { name: 1, _id: 1 };
     default:
       return null;
   }

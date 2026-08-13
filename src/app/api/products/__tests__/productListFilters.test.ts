@@ -110,12 +110,14 @@ import {
   assert.deepEqual(buildProductSort("price_asc"), {
     discountedPrice: 1,
     name: 1,
+    _id: 1,
   });
   assert.deepEqual(buildProductSort("price_desc"), {
     discountedPrice: -1,
     name: 1,
+    _id: 1,
   });
-  assert.deepEqual(buildProductSort("name_asc"), { name: 1 });
+  assert.deepEqual(buildProductSort("name_asc"), { name: 1, _id: 1 });
 }
 
 console.log("productListFilters tests passed");

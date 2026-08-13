@@ -116,6 +116,10 @@ assert.equal(containsWholeWord("riced", "rice"), false);
   assert.ok(stages.length >= 4);
   assert.ok(stages.some((s) => "$sort" in s));
   assert.ok(stages.some((s) => "$unset" in s));
+  const sortStage = stages.find((s) => "$sort" in s) as {
+    $sort: Record<string, number>;
+  };
+  assert.deepEqual(sortStage.$sort, { _finalScore: -1, _id: 1 });
   const addFields = stages.filter((s) => "$addFields" in s);
   assert.ok(addFields.length >= 2);
   const first = addFields[0] as { $addFields: { _searchScore: unknown } };

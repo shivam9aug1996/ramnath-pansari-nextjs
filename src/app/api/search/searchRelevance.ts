@@ -232,7 +232,9 @@ export function buildRelevanceSortStages(opts: {
         },
       },
     },
-    { $sort: { _finalScore: -1 } },
+    // `_id` tie-breaker keeps skip/limit pagination stable when scores tie
+    // (common for short/fuzzy queries like "for").
+    { $sort: { _finalScore: -1, _id: 1 } },
     {
       $unset: [
         "_searchScore",
