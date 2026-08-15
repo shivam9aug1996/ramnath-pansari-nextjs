@@ -93,6 +93,7 @@ export async function GET(req: NextRequest) {
     const filters = parseProductFilterParams(searchParams);
 
     const queryVariants = expandSearchQueries(query);
+    const isBrandOnlyBrowse = !query.trim() && filters.brands.length > 0;
 
     log("[search] request", {
       query,
@@ -101,9 +102,10 @@ export async function GET(req: NextRequest) {
       page,
       limit,
       filters,
+      isBrandOnlyBrowse,
     });
 
-    if (!query) {
+    if (!query.trim() && !isBrandOnlyBrowse) {
       return NextResponse.json(
         { message: "Missing search query" },
         { status: 400 },
@@ -122,9 +124,44 @@ export async function GET(req: NextRequest) {
 
     const matchStage = buildSearchMatchStage(filters);
     const sort = buildProductSort(filters.sort);
+    const skip = (page - 1) * limit;
+
+    // Brand landing: empty query + brand filter → list all products for brand(s).
+    if (isBrandOnlyBrowse) {
+      const totalResults = await db
+        .collection("products")
+        .countDocuments(matchStage);
+      const totalPages = Math.ceil(totalResults / limit);
+
+      let cursor = db.collection("products").find(matchStage);
+      if (sort) {
+        cursor = cursor.sort(sort);
+      } else {
+        cursor = cursor.sort({ name: 1 });
+      }
+
+      const results = await cursor.skip(skip).limit(limit).toArray();
+
+      log("[search] brand-only results", {
+        brands: filters.brands,
+        totalResults,
+        returnedCount: results.length,
+        durationMs: Date.now() - startedAt,
+      });
+
+      return NextResponse.json(
+        {
+          results,
+          totalResults,
+          totalPages,
+          currentPage: page,
+          queryVariants: [],
+        },
+        { status: 200 },
+      );
+    }
 
     if (searchType === "autocomplete") {
-      const skip = (page - 1) * limit;
       const autocompleteSearch = buildAutocompleteSearch(queryVariants);
 
       const totalAgg = [
@@ -181,7 +218,6 @@ export async function GET(req: NextRequest) {
     }
 
     if (searchType === "search") {
-      const skip = (page - 1) * limit;
       const textQuery = expandTextSearchQuery(query);
 
       const findQuery = {
