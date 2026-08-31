@@ -6,7 +6,7 @@ class RedisClient {
   public static async getInstance(): Promise<RedisInstance> {
     if (!RedisClient.instance) {
       const client = createClient({
-        url: process.env.REDIS_URL,
+        url: process.env.REDIS_URL_REDIS_URL,
       });
       client.on("error", (err) => console.error("Redis Client Error", err));
       await client.connect();
