@@ -3,6 +3,7 @@ import { connectDB } from "@/app/api/lib/dbconnection";
 import { requireAdmin } from "@/app/api/admin/requireAdmin";
 import {
   enrichJiomartSyncCategories,
+  getJiomartLastSync,
   listJiomartSyncCategories,
   resolveSyncCategories,
   syncJiomartCategories,
@@ -26,16 +27,24 @@ export async function GET(req: Request) {
         total: categories.length,
         syncAvailableCount: categories.filter((c) => c.syncAvailable).length,
         categories,
+        lastSync: null,
       });
     }
 
     const db = await connectDB(req);
-    const categories = await enrichJiomartSyncCategories(db);
+    const [categories, { lastSync, categorySyncedAt }] = await Promise.all([
+      enrichJiomartSyncCategories(db),
+      getJiomartLastSync(db),
+    ]);
 
     return NextResponse.json({
       total: categories.length,
       syncAvailableCount: categories.filter((c) => c.syncAvailable).length,
-      categories,
+      categories: categories.map((category) => ({
+        ...category,
+        lastSyncedAt: categorySyncedAt[category.name],
+      })),
+      lastSync,
     });
   } catch (error) {
     console.error("[admin/products/jiomart-sync] GET error:", error);
@@ -75,6 +84,8 @@ export async function POST(req: Request) {
           requested: result.requested.length,
           succeeded: succeeded.length,
           failed: failed.length,
+          syncedProducts: result.lastSync.syncedProducts,
+          durationMs: result.lastSync.durationMs,
         },
       },
       { status: failed.length === result.results.length ? 422 : 200 },

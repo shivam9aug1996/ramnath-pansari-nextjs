@@ -70,7 +70,9 @@ type VariantPrice = {
 const VERTEX_BASE_URL =
   "https://www.jiomart.com/ext/vertex/application/api/v1.0/products";
 
-const DETAIL_CONCURRENCY = 5;
+const DETAIL_CONCURRENCY = 1;
+const VERTEX_PAGE_DELAY_MS = 1500;
+const VERTEX_DETAIL_DELAY_MS = 1000;
 
 function buildFilter(config: VertexCategoryConfig, storeId: string): string {
   return [
@@ -340,6 +342,9 @@ async function mapWithConcurrency<T, R>(
     while (index < items.length) {
       const currentIndex = index++;
       results[currentIndex] = await mapper(items[currentIndex]);
+      if (VERTEX_DETAIL_DELAY_MS > 0 && index < items.length) {
+        await sleep(VERTEX_DETAIL_DELAY_MS);
+      }
     }
   }
 
@@ -852,6 +857,10 @@ export async function fetchVertexProducts(
   const MAX_PAGES = 50;
 
   for (let pageNo = 1; pageNo <= MAX_PAGES; pageNo++) {
+    if (pageNo > 1 && VERTEX_PAGE_DELAY_MS > 0) {
+      await sleep(VERTEX_PAGE_DELAY_MS);
+    }
+
     const params = new URLSearchParams({
       f: filter,
       page_id: "*",
