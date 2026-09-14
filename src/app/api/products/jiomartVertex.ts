@@ -843,13 +843,19 @@ export async function fetchVertexProducts(
   const filter = buildFilter(config, storeId);
   const headers = getVertexHeaders();
   const allItems: VertexProductItem[] = [];
+  const seenUids = new Set<number>();
 
-  let pageId = "*";
+  // Vertex advertises cursor pagination via page.next_id, but passing that
+  // value back as page_id repeats page 1 forever. page_no is what actually
+  // advances. Categories with >12 products (Agarbatti, Namkeen, etc.) hung
+  // the admin sync until Vercel killed the request.
+  const MAX_PAGES = 50;
 
-  while (true) {
+  for (let pageNo = 1; pageNo <= MAX_PAGES; pageNo++) {
     const params = new URLSearchParams({
       f: filter,
-      page_id: pageId,
+      page_id: "*",
+      page_no: String(pageNo),
       page_size: String(pageSize),
       sort_on: "popular",
     });
@@ -867,11 +873,21 @@ export async function fetchVertexProducts(
 
     const data = await response.json();
     const items = (data.items || []) as VertexProductItem[];
-    allItems.push(...items);
+    let newCount = 0;
+    for (const item of items) {
+      if (seenUids.has(item.uid)) continue;
+      seenUids.add(item.uid);
+      allItems.push(item);
+      newCount += 1;
+    }
 
     const page = data.page;
-    if (!page?.has_next || !page?.next_id) break;
-    pageId = page.next_id;
+    const itemTotal =
+      typeof page?.item_total === "number" ? page.item_total : undefined;
+
+    if (!items.length || newCount === 0) break;
+    if (itemTotal !== undefined && allItems.length >= itemTotal) break;
+    if (!page?.has_next) break;
   }
 
   return allItems;
