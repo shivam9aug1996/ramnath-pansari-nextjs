@@ -26,6 +26,7 @@ export type JiomartSyncCategoryInfo = {
   };
   productCount: number;
   storeCategoryFound: boolean;
+  lastSyncedAt?: string;
 };
 
 export type JiomartSyncCategoryResult = {
@@ -40,7 +41,116 @@ export type JiomartSyncResult = {
   wipeAll: boolean;
   requested: string[];
   results: JiomartSyncCategoryResult[];
+  lastSync: JiomartLastSync;
 };
+
+export type JiomartLastSync = {
+  finishedAt: string;
+  durationMs: number;
+  wipeAll: boolean;
+  requested: number;
+  succeeded: number;
+  failed: number;
+  syncedProducts: number;
+};
+
+const LAST_SYNC_ID = "jiomart-sync-last";
+
+type JiomartLastSyncDoc = {
+  _id: typeof LAST_SYNC_ID;
+  finishedAt: Date;
+  durationMs: number;
+  wipeAll: boolean;
+  requested: number;
+  succeeded: number;
+  failed: number;
+  syncedProducts: number;
+  categorySyncedAt?: Record<string, Date>;
+};
+
+function lastSyncCollection(db: Db) {
+  return db.collection<JiomartLastSyncDoc>("storeSettings");
+}
+
+function toIso(value: unknown): string | null {
+  if (!value) return null;
+  const date = value instanceof Date ? value : new Date(String(value));
+  if (Number.isNaN(date.getTime())) return null;
+  return date.toISOString();
+}
+
+export async function getJiomartLastSync(db: Db): Promise<{
+  lastSync: JiomartLastSync | null;
+  categorySyncedAt: Record<string, string>;
+}> {
+  const doc = await lastSyncCollection(db).findOne({ _id: LAST_SYNC_ID });
+  if (!doc?.finishedAt) {
+    return { lastSync: null, categorySyncedAt: {} };
+  }
+
+  const categorySyncedAt: Record<string, string> = {};
+  const rawMap = (doc.categorySyncedAt ?? {}) as Record<string, unknown>;
+  for (const [name, at] of Object.entries(rawMap)) {
+    const iso = toIso(at);
+    if (iso) categorySyncedAt[name] = iso;
+  }
+
+  return {
+    lastSync: {
+      finishedAt: toIso(doc.finishedAt) ?? new Date().toISOString(),
+      durationMs: Number(doc.durationMs) || 0,
+      wipeAll: Boolean(doc.wipeAll),
+      requested: Number(doc.requested) || 0,
+      succeeded: Number(doc.succeeded) || 0,
+      failed: Number(doc.failed) || 0,
+      syncedProducts: Number(doc.syncedProducts) || 0,
+    },
+    categorySyncedAt,
+  };
+}
+
+async function saveJiomartLastSync(
+  db: Db,
+  result: Omit<JiomartSyncResult, "lastSync">,
+  durationMs: number,
+): Promise<JiomartLastSync> {
+  const succeeded = result.results.filter((row) => !row.error);
+  const failed = result.results.filter((row) => row.error);
+  const finishedAt = new Date();
+  const lastSync: JiomartLastSync = {
+    finishedAt: finishedAt.toISOString(),
+    durationMs,
+    wipeAll: result.wipeAll,
+    requested: result.requested.length,
+    succeeded: succeeded.length,
+    failed: failed.length,
+    syncedProducts: succeeded.reduce(
+      (sum, row) => sum + (row.syncedProducts ?? 0),
+      0,
+    ),
+  };
+
+  const $set: Record<string, unknown> = {
+    finishedAt,
+    durationMs: lastSync.durationMs,
+    wipeAll: lastSync.wipeAll,
+    requested: lastSync.requested,
+    succeeded: lastSync.succeeded,
+    failed: lastSync.failed,
+    syncedProducts: lastSync.syncedProducts,
+  };
+  for (const row of succeeded) {
+    $set[`categorySyncedAt.${row.category}`] = finishedAt;
+  }
+
+  await lastSyncCollection(db).updateOne(
+    { _id: LAST_SYNC_ID },
+    { $set },
+    { upsert: true },
+  );
+
+  return lastSync;
+}
 
 type CategoryDoc = {
   _id?: { toString(): string };
@@ -194,6 +304,12 @@ export async function enrichJiomartSyncCategories(
   return counts;
 }
 
+const CATEGORY_SYNC_DELAY_MS = 2500;
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export async function syncJiomartCategories(
   db: Db,
   options: { categories: string[]; wipeAll?: boolean },
@@ -223,7 +339,12 @@ export async function syncJiomartCategories(
     });
   }
 
-  for (const categoryName of options.categories) {
+  for (let i = 0; i < options.categories.length; i++) {
+    const categoryName = options.categories[i];
+    if (i > 0 && CATEGORY_SYNC_DELAY_MS > 0) {
+      await sleep(CATEGORY_SYNC_DELAY_MS);
+    }
+
     const categoryStartedAt = Date.now();
     try {
       const config =
@@ -471,10 +592,18 @@ export async function syncJiomartCategories(
     ),
   });
 
+  const lastSync = await saveJiomartLastSync(db, {
+    message: "Categories sync completed",
+    wipeAll,
+    requested: options.categories,
+    results,
+  }, Date.now() - startedAt);
+
   return {
     message: "Categories sync completed",
     wipeAll,
     requested: options.categories,
     results,
+    lastSync,
   };
 }
