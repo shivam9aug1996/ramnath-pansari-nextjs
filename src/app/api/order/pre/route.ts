@@ -4,7 +4,7 @@ import { encode } from "js-base64";
 import { connectDB } from "@/app/api/lib/dbconnection";
 import { validateCheckoutHoldsForPayment } from "@/app/api/utils/productPendingLock";
 import { logError } from "@/app/api/lib/logger";
-import { requireSameUser } from "@/app/api/lib/requireAuth";
+import { requireSameUserForCheckout } from "@/app/api/lib/requireAuth";
 import { rehydrateCartItemsFromDb } from "@/app/api/utils/secureCart";
 import { applyOffersToCart } from "@/app/api/offers/applyOffers";
 import { getDeliverySettings } from "@/app/api/delivery/deliverySettingsUtils";
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const auth = await requireSameUser(req, requestedUserId);
+    const auth = await requireSameUserForCheckout(req, requestedUserId);
     if (auth instanceof NextResponse) return auth;
     const userId = auth.userId;
 

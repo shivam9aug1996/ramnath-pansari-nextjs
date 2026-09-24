@@ -41,19 +41,14 @@ export const RATE_LIMIT_POLICIES = {
     enabled: true,
   },
 
-  /**
-   * Example for later — enable + set matchPath or call enforceRateLimit in routes.
-   *
-   * authStrict: {
-   *   id: "authStrict",
-   *   description: "OTP / login — tight limit",
-   *   windowMs: 60_000,
-   *   max: 15,
-   *   keyPrefix: "rl:auth",
-   *   matchPath: (p) => p.startsWith("/api/auth") || p.startsWith("/api/logout"),
-   *   enabled: false,
-   * },
-   */
+  guestCreate: {
+    id: "guestCreate",
+    description: "Anonymous guest session create — 10 req / 60s / IP",
+    windowMs: 60_000,
+    max: 10,
+    keyPrefix: "rl:auth:guest",
+    enabled: true,
+  },
 } as const satisfies Record<string, RateLimitPolicy>;
 
 export type RateLimitPolicyId = keyof typeof RATE_LIMIT_POLICIES;

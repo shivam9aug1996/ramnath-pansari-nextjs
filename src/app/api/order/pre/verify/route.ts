@@ -26,7 +26,7 @@ import {
   releaseProductLocksAfterFailedInsert,
 } from "@/app/api/utils/productPendingLock";
 import { logError } from "@/app/api/lib/logger";
-import { requireSameUser } from "@/app/api/lib/requireAuth";
+import { requireSameUserForCheckout } from "@/app/api/lib/requireAuth";
 import {
   rehydrateCartItemsFromDb,
   sanitizeAddressData,
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
       userId: requestedUserId,
     } = await req.json();
 
-    const auth = await requireSameUser(req, requestedUserId);
+    const auth = await requireSameUserForCheckout(req, requestedUserId);
     if (auth instanceof NextResponse) return auth;
     const userId = auth.userId;
 

@@ -121,12 +121,37 @@ export async function requireSameUser(
   req: Request,
   requestedUserId: string | null | undefined,
   options: RequireAuthOptions = {},
-): Promise<{ userId: string } | NextResponse> {
+): Promise<{ userId: string; user: AuthUser } | NextResponse> {
   const auth = await requireAuthUser(req, options);
   if (auth instanceof NextResponse) return auth;
   const mismatch = assertSameUser(auth.user.id, requestedUserId);
   if (mismatch) return mismatch;
-  return { userId: auth.user.id };
+  return { userId: auth.user.id, user: auth.user };
+}
+
+export function guestCheckoutForbidden(): NextResponse {
+  return NextResponse.json(
+    {
+      success: false,
+      error: {
+        code: "ACCOUNT_REQUIRED",
+        message: "Create an account to place an order",
+      },
+    },
+    { status: 403 },
+  );
+}
+
+/** Same-user auth that rejects anonymous guest JWTs at checkout. */
+export async function requireSameUserForCheckout(
+  req: Request,
+  requestedUserId: string | null | undefined,
+  options: RequireAuthOptions = {},
+): Promise<{ userId: string; user: AuthUser } | NextResponse> {
+  const auth = await requireSameUser(req, requestedUserId, options);
+  if (auth instanceof NextResponse) return auth;
+  if (auth.user.isGuestUser) return guestCheckoutForbidden();
+  return auth;
 }
 
 export async function getOptionalAuthUser(

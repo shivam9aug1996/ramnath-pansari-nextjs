@@ -14,6 +14,7 @@ export type UserDocument = {
   khataUrl?: string;
   isAdminUser?: boolean;
   isDriverUser?: boolean;
+  isGuestUser?: boolean;
   createdAt?: Date;
   [key: string]: unknown;
 };
@@ -49,7 +50,7 @@ export function resolveIsAdmin(user: UserDocument) {
 }
 
 export function resolveIsGuest(user: UserDocument) {
-  return user.mobileNumber === GUEST_MOBILE;
+  return Boolean(user.isGuestUser) || user.mobileNumber === GUEST_MOBILE;
 }
 
 export function resolveIsDriver(user: UserDocument) {
@@ -103,11 +104,12 @@ export function buildUserListFilter(role?: string) {
   } else if (role === "customer") {
     filter.isAdminUser = { $ne: true };
     filter.isDriverUser = { $ne: true };
+    filter.isGuestUser = { $ne: true };
     filter.mobileNumber = {
       $nin: [ADMIN_MOBILE_FALLBACK, GUEST_MOBILE, DRIVER_MOBILE_FALLBACK],
     };
   } else if (role === "guest") {
-    filter.mobileNumber = GUEST_MOBILE;
+    filter.$or = [{ mobileNumber: GUEST_MOBILE }, { isGuestUser: true }];
   } else if (role === "driver") {
     filter.isDriverUser = true;
   }
