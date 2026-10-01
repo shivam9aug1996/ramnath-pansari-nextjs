@@ -68,7 +68,9 @@ async function sendBlackSms(mobileNumber: string, otp: string) {
   if (!config) {
     log("[sms-otp] BLACKSMS_AUTH_KEY not set. Dev OTP:", otp);
     if (process.env.NODE_ENV === "production") {
-      throw new Error("SMS provider is not configured");
+      throw new Error(
+        "SMS provider is not configured (set BLACKSMS_AUTH_KEY)",
+      );
     }
     return;
   }
@@ -157,16 +159,17 @@ export async function createAndSendLoginOtp(
     sendCount,
   };
 
-  await db
-    .collection<LoginOtpRecord>(LOGIN_OTPS)
-    .updateOne({ mobileNumber }, { $set: record }, { upsert: true });
-
   try {
     await sendBlackSms(mobileNumber, otp);
   } catch (error) {
-    logWarn("[sms-otp] send failed after storing OTP", error);
+    logWarn("[sms-otp] send failed; OTP not committed", error);
     throw error;
   }
+
+  // Persist only after SMS succeeds so failed sends don't burn cooldown.
+  await db
+    .collection<LoginOtpRecord>(LOGIN_OTPS)
+    .updateOne({ mobileNumber }, { $set: record }, { upsert: true });
 
   return { ok: true };
 }
