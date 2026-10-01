@@ -59,10 +59,53 @@ function getBlackSmsConfig() {
     authKey,
     senderId: process.env.BLACKSMS_SENDER_ID?.trim() || "697",
     route: process.env.BLACKSMS_ROUTE?.trim() || "1",
+    fallbackRoute: process.env.BLACKSMS_FALLBACK_ROUTE?.trim() || "2",
     url: process.env.BLACKSMS_URL?.trim() || "https://blacksms.in/sms",
   };
 }
 
+async function sendBlackSmsOnce(
+  config: {
+    authKey: string;
+    senderId: string;
+    url: string;
+  },
+  mobileNumber: string,
+  otp: string,
+  route: string,
+) {
+  const res = await fetch(config.url, {
+    method: "POST",
+    headers: {
+      Authorization: config.authKey,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender_id: config.senderId,
+      route,
+      variables_values: otp,
+      numbers: mobileNumber,
+    }),
+  });
+
+  const bodyText = await res.text();
+  if (!res.ok) {
+    logError(
+      "[sms-otp] BlackSMS failed",
+      `route=${route}`,
+      res.status,
+      bodyText.slice(0, 300),
+    );
+    throw new Error(`Failed to send OTP SMS (route ${route})`);
+  }
+}
+
+/**
+ * Try BLACKSMS_ROUTE first (full wait — no short abort).
+ * On failure, retry once with BLACKSMS_FALLBACK_ROUTE (default "2").
+ * Same OTP is used for both attempts.
+ */
 async function sendBlackSms(mobileNumber: string, otp: string) {
   const config = getBlackSmsConfig();
   if (!config) {
@@ -75,25 +118,23 @@ async function sendBlackSms(mobileNumber: string, otp: string) {
     return;
   }
 
-  const res = await fetch(config.url, {
-    method: "POST",
-    headers: {
-      Authorization: config.authKey,
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      sender_id: config.senderId,
-      route: config.route,
-      variables_values: otp,
-      numbers: mobileNumber,
-    }),
-  });
+  const primaryRoute = config.route;
+  const fallbackRoute = config.fallbackRoute;
 
-  const bodyText = await res.text();
-  if (!res.ok) {
-    logError("[sms-otp] BlackSMS failed", res.status, bodyText.slice(0, 300));
-    throw new Error("Failed to send OTP SMS");
+  try {
+    await sendBlackSmsOnce(config, mobileNumber, otp, primaryRoute);
+    return;
+  } catch (primaryError) {
+    if (primaryRoute === fallbackRoute) {
+      throw primaryError;
+    }
+    logWarn(
+      "[sms-otp] primary route failed; retrying fallback route",
+      `primary=${primaryRoute}`,
+      `fallback=${fallbackRoute}`,
+      primaryError,
+    );
+    await sendBlackSmsOnce(config, mobileNumber, otp, fallbackRoute);
   }
 }
 
