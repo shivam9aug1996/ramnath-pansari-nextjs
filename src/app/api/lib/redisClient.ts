@@ -34,7 +34,7 @@ class RedisClient {
   }
 
   private static async connect(): Promise<RedisInstance> {
-    const url = process.env.REDIS_URL;
+    const url = process.env.REDIS_URL_REDIS_REDIS_URL;
     if (!url) {
       RedisClient.markUnavailable("REDIS_URL is not set");
       throw new Error("REDIS_URL is not set");
