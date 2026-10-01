@@ -49,6 +49,36 @@ export const RATE_LIMIT_POLICIES = {
     keyPrefix: "rl:auth:guest",
     enabled: true,
   },
+
+  /** SMS OTP send — per IP (extra to per-mobile cooldown in smsOtpUtils). */
+  smsOtpSendIp: {
+    id: "smsOtpSendIp",
+    description: "SMS OTP send — 10 req / hour / IP",
+    windowMs: 60 * 60 * 1000,
+    max: 10,
+    keyPrefix: "rl:auth:sms-otp:send:ip",
+    enabled: true,
+  },
+
+  /** SMS OTP send — per mobile (backs utils hourly cap). */
+  smsOtpSendMobile: {
+    id: "smsOtpSendMobile",
+    description: "SMS OTP send — 5 req / hour / mobile",
+    windowMs: 60 * 60 * 1000,
+    max: 5,
+    keyPrefix: "rl:auth:sms-otp:send:mobile",
+    enabled: true,
+  },
+
+  /** SMS OTP verify — per IP. */
+  smsOtpVerifyIp: {
+    id: "smsOtpVerifyIp",
+    description: "SMS OTP verify — 30 req / 10 min / IP",
+    windowMs: 10 * 60 * 1000,
+    max: 30,
+    keyPrefix: "rl:auth:sms-otp:verify:ip",
+    enabled: true,
+  },
 } as const satisfies Record<string, RateLimitPolicy>;
 
 export type RateLimitPolicyId = keyof typeof RATE_LIMIT_POLICIES;
