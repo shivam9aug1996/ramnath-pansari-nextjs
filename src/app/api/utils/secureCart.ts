@@ -126,6 +126,7 @@ export function sanitizeAddressData(
   const street = clip(address.street);
   const addressType = clip(address.addressType, 40);
   const addressLine = clip(address.address, 500);
+  const mapAddress = clip(address.mapAddress, 500);
 
   if (houseNumber) sanitized.houseNumber = houseNumber;
   if (buildingName) sanitized.buildingName = buildingName;
@@ -148,6 +149,7 @@ export function sanitizeAddressData(
   if (street) sanitized.street = street;
   if (addressType) sanitized.addressType = addressType;
   if (addressLine) sanitized.address = addressLine;
+  if (mapAddress) sanitized.mapAddress = mapAddress;
   if (Number.isFinite(latitude)) sanitized.latitude = latitude;
   if (Number.isFinite(longitude)) sanitized.longitude = longitude;
   if (address._id) sanitized._id = address._id;

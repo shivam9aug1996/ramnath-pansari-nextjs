@@ -9,6 +9,7 @@ import { sanitizeAddressData } from "@/app/api/utils/secureCart";
 const getGoogleImage = (address: {
   latitude?: number;
   longitude?: number;
+  mapAddress?: string;
   colonyArea?: string;
   city?: string;
   state?: string;
@@ -18,7 +19,10 @@ const getGoogleImage = (address: {
   if (address?.latitude) {
     str = `&markers=color:red%7Clabel:A%7C${address?.latitude},${address?.longitude}`;
   }
-  const mapImage = `https://maps.googleapis.com/maps/api/staticmap?center=${address?.colonyArea}+${address?.city}+${address?.state}${str}&zoom=13&size=300x150&key=${apiKey}`;
+  const centerLabel =
+    address.mapAddress?.trim() ||
+    [address.colonyArea, address.city, address.state].filter(Boolean).join(" ");
+  const mapImage = `https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(centerLabel)}${str}&zoom=13&size=300x150&key=${apiKey}`;
   return mapImage;
 };
 
